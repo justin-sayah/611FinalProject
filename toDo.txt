@@ -1,0 +1,5 @@
+Design Things Needed:
+- some system for users to see all possible stocks (Marketplace) and add items to their portfolio
+- a watchlist for each user?
+- login system?
+- manager system for managing individual stocks and for adding to the market
