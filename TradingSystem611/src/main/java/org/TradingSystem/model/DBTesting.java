@@ -2,14 +2,7 @@ package org.TradingSystem.model;
 
 import java.sql.*;
 
-/**
- *
- * @author sqlitetutorial.net
- */
-public class Main {
-    /**
-     * Connect to a sample database
-     */
+public class DBTesting {
     public static void connect() {
         Connection conn = null;
         try {
@@ -22,15 +15,15 @@ public class Main {
 
             String sql = "SELECT * FROM albums";
 
-                 Statement stmt  = conn.createStatement();
-                 ResultSet rs    = stmt.executeQuery(sql);
+            Statement stmt  = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
 
-                // loop through the result set
-                while (rs.next()) {
-                    System.out.println(rs.getString("Title"));
-                }
+            // loop through the result set
+            while (rs.next()) {
+                System.out.println(rs.getString("Title"));
+            }
 
-        System.out.println("Connection to SQLite has been established.");
+            System.out.println("Connection to SQLite has been established.");
 
         } catch (Exception e) {
             System.out.println(e.getMessage());

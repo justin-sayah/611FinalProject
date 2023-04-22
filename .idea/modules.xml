@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/611FinalProject.iml" filepath="$PROJECT_DIR$/.idea/611FinalProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TradingSystem611/TradingSystem611.iml" filepath="$PROJECT_DIR$/TradingSystem611/TradingSystem611.iml" />
+    </modules>
+  </component>
+</project>
