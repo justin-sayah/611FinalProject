@@ -15,7 +15,9 @@ public class Main {
         try {
             // db parameters
             System.out.println();
-            String url = "jdbc:sqlite:TradingSystem611\\src\\main\\java\\org\\TradingSystem\\database\\chinook.db";
+            //String url = "jdbc:sqlite:TradingSystem611\\src\\main\\java\\org\\TradingSystem\\database\\chinook.db";
+            //Shangzhou path
+            String url = "jdbc:sqlite:src/main/java/org/TradingSystem/database/chinook.db";
             // create a connection to the database
             conn = DriverManager.getConnection(url);
 //            conn.createStatement()
