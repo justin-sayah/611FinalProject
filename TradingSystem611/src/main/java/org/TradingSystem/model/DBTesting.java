@@ -6,11 +6,8 @@ public class DBTesting {
     public static void connect() {
         Connection conn = null;
         try {
-            // db parameters
-            System.out.println();
-            String url = "jdbc:sqlite:TradingSystem611\\src\\main\\java\\org\\TradingSystem\\database\\chinook.db";
             // create a connection to the database
-            conn = DriverManager.getConnection(url);
+            conn = DriverManager.getConnection(Config.DBPATH);
 //            conn.createStatement()
 
             String sql = "SELECT * FROM albums";
