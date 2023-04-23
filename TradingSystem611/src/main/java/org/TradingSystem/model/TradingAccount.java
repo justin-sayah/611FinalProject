@@ -4,10 +4,22 @@ public class TradingAccount implements Account{
     protected int accountNumber;
     protected double balance;
 
+    protected double unrealizedProfitLoss;
+    protected double realizedProfitLoss;
+
 //Trading Account constructor with two variables: Account Number and Balance
     public TradingAccount(int accountNumber) {
         this.accountNumber = accountNumber;
         balance = 0.0;
+        unrealizedProfitLoss = 0.0;
+        realizedProfitLoss = 0.0;
+    }
+
+    public TradingAccount(int accountNumber, double balance, double unrealizedProfitLoss, double realizedProfitLoss) {
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+        this.unrealizedProfitLoss = unrealizedProfitLoss;
+        this.realizedProfitLoss = realizedProfitLoss;
     }
 
     //update the balance by adding the amount of deposit
