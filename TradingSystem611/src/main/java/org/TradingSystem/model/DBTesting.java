@@ -46,6 +46,10 @@ public class DBTesting {
         TradingAccount testAccount = tradingAccountDao.getAccount(1,1);
         System.out.println(testAccount);
 
+        testAccount.deposit(5);
+        tradingAccountDao.update(testAccount);
+        System.out.println(testAccount);
+
         System.out.println("Printing all accounts for customerId 1 \n\n");
 
         //trying to get all accounts

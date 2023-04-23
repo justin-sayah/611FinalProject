@@ -112,15 +112,16 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
     @Override
     public void update(TradingAccount tradingAccount) {
         String sql = "UPDATE activeAccounts SET balance = ? , "
-                + "unrealizedLoss = ?,"
-                + "realizedLoss = ?"
-                + "WHERE accountId = ?";
+                + "unrealizedPL = ?,"
+                + "realizedPL = ?"
+                + "WHERE accountNumber = ?";
 
         try{
             PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setDouble(1,tradingAccount.getUnrealizedProfitLoss());
-            pstmt.setDouble(2, tradingAccount.getRealizedProfitLoss());
-            pstmt.setInt(3, tradingAccount.getAccountNumber());
+            pstmt.setDouble(1,tradingAccount.getBalance());
+            pstmt.setDouble(2,tradingAccount.getUnrealizedProfitLoss());
+            pstmt.setDouble(3, tradingAccount.getRealizedProfitLoss());
+            pstmt.setInt(4, tradingAccount.getAccountNumber());
 
             pstmt.executeUpdate();
         } catch (Exception e){
@@ -148,7 +149,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
 
     @Override
     public void addPendingAccount(int customerId, String type) {
-        
+
     }
 
     @Override
