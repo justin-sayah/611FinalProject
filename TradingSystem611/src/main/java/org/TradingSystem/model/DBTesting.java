@@ -7,20 +7,20 @@ public class DBTesting {
         Connection conn = null;
         try {
             // create a connection to the database
-            conn = DriverManager.getConnection(Config.DBPATH);
+            conn = DatabaseConnection.getConnection();
 //            conn.createStatement()
 
-            String sql = "SELECT * FROM albums";
+            String sql = "SELECT * FROM activeAccounts";
 
             Statement stmt  = conn.createStatement();
             ResultSet rs    = stmt.executeQuery(sql);
 
             // loop through the result set
             while (rs.next()) {
-                System.out.println(rs.getString("Title"));
+                System.out.println(rs.getString("type"));
             }
 
-            System.out.println("Connection to SQLite has been established.");
+//            System.out.println("Connection to SQLite has been established.");
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
