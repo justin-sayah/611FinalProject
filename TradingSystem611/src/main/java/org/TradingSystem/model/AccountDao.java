@@ -19,7 +19,7 @@ public interface AccountDao<T extends Account> {
 
     List<T> getAllPending(int customerId);
 
-    void save(T t);
+    void update(T t);
 
 
     void delete(T t);

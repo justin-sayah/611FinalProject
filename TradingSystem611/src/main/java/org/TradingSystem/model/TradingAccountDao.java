@@ -7,6 +7,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+Date: 4/22/23
+Class: CS611 Final Project
+Author: Justin Sayah, jsayah@bu.edu
+Purpose: Data Access Object to perform CRUD on TradingAccounts across DB
+ */
 public class TradingAccountDao implements AccountDao<TradingAccount>{
     private Connection connection;
     public TradingAccountDao(){
@@ -26,7 +32,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
 
             ResultSet rs    = pstmt.executeQuery();
             if(rs.next()){
-                return new TradingAccount(accountId, rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
+                return new TradingAccount(accountId, customerId, rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
             }
         }catch (Exception e){
             System.out.println(e.toString());
@@ -48,7 +54,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
 
             ResultSet rs    = pstmt.executeQuery();
             if(rs.next()){
-                return new TradingAccount(accountId, rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
+                return new TradingAccount(accountId, customerId, rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
             }
         }catch (Exception e){
             System.out.println(e.toString());
@@ -71,7 +77,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
 
             ArrayList<TradingAccount> accounts = new ArrayList<TradingAccount>();
             while(rs.next()){
-                accounts.add(new TradingAccount(rs.getInt("accountNumber"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL")));
+                accounts.add(new TradingAccount(rs.getInt("accountNumber"), rs.getInt("customerId"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL")));
             }
             return accounts;
         }catch (Exception e){
@@ -94,7 +100,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
             ResultSet rs    = pstmt.executeQuery();
             ArrayList<TradingAccount> accounts = new ArrayList<TradingAccount>();
             while(rs.next()){
-                accounts.add(new TradingAccount(rs.getInt("accountNumber"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL")));
+                accounts.add(new TradingAccount(rs.getInt("accountNumber"), rs.getInt("customerId"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL")));
             }
             return accounts;
         }catch (Exception e){
@@ -104,7 +110,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
     }
 
     @Override
-    public void save(TradingAccount tradingAccount) {
+    public void update(TradingAccount tradingAccount) {
         String sql = "UPDATE activeAccounts SET balance = ? , "
                 + "unrealizedLoss = ?,"
                 + "realizedLoss = ?"
@@ -126,12 +132,23 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
 
     @Override
     public void delete(TradingAccount tradingAccount) {
+        String sql = "DELETE FROM activeAccounts WHERE accountNumber = ?"
+                + "AND customerId = ?";
 
+        try{
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1,tradingAccount.getAccountNumber());
+            pstmt.setDouble(2, tradingAccount.getCustomerId());
+
+            pstmt.executeUpdate();
+        } catch (Exception e){
+            System.out.println(e.toString());
+        }
     }
 
     @Override
     public void addPendingAccount(int customerId, String type) {
-
+        
     }
 
     @Override

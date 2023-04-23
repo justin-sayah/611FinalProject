@@ -2,6 +2,7 @@ package org.TradingSystem.model;
 
 public class TradingAccount implements Account{
     protected int accountNumber;
+    protected int customerId;
     protected double balance;
 
     protected double unrealizedProfitLoss;
@@ -15,7 +16,7 @@ public class TradingAccount implements Account{
         realizedProfitLoss = 0.0;
     }
 
-    public TradingAccount(int accountNumber, double balance, double unrealizedProfitLoss, double realizedProfitLoss) {
+    public TradingAccount(int accountNumber, int customerId, double balance, double unrealizedProfitLoss, double realizedProfitLoss) {
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.unrealizedProfitLoss = unrealizedProfitLoss;
@@ -55,6 +56,10 @@ public class TradingAccount implements Account{
     @Override
     public int getAccountNumber() {
         return accountNumber;
+    }
+
+    public int getCustomerId() {
+        return customerId;
     }
 
     //FOR TESTING PURPOSES
