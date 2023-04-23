@@ -163,8 +163,24 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         }
     }
 
+    //only the manager should use this to approve pending accounts, just takes the "pending" account and adds it to active table
     @Override
-    public void addTradingAccount(int accountId, int customerId, String type) {
+    public void addTradingAccount(TradingAccount tradingAccount) {
+        String sql = "INSERT INTO activeAccounts (accountNumber, customerId, type, balance, unrealizedPL, realizedPL)"
+                + "VALUES (?,?,?,?,?,?)";
 
+        try{
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1,tradingAccount.getAccountNumber());
+            pstmt.setInt(2, tradingAccount.getCustomerId());
+            pstmt.setString(3,"tradingAccount");
+            pstmt.setDouble(4,tradingAccount.getBalance());
+            pstmt.setDouble(5,tradingAccount.getUnrealizedProfitLoss());
+            pstmt.setDouble(6,tradingAccount.getRealizedProfitLoss());
+
+            pstmt.executeUpdate();
+        } catch (Exception e){
+            System.out.println(e.toString());
+        }
     }
 }

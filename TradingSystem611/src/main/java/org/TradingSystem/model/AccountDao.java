@@ -26,5 +26,5 @@ public interface AccountDao<T extends Account> {
 
     void addPendingAccount(int customerId, String type);
 
-    void addTradingAccount(int accountId, int customerId, String type);
+    void addTradingAccount(TradingAccount tradingAccount);
 }
