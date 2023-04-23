@@ -54,7 +54,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
 
             ResultSet rs    = pstmt.executeQuery();
             if(rs.next()){
-                return new TradingAccount(accountId, customerId, rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
+                return new TradingAccount(accountId, customerId, 0, 0, 0);
             }
         }catch (Exception e){
             System.out.println(e.toString());
@@ -89,7 +89,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
     @Override
     public List<TradingAccount> getAllPending(int customerId) {
         try{
-            String sql = "SELECT * FROM activeAccounts WHERE"
+            String sql = "SELECT * FROM pendingAccounts WHERE"
                     + " customerId = ?"
                     + " AND type = ?";
 
@@ -100,7 +100,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
             ResultSet rs    = pstmt.executeQuery();
             ArrayList<TradingAccount> accounts = new ArrayList<TradingAccount>();
             while(rs.next()){
-                accounts.add(new TradingAccount(rs.getInt("accountNumber"), rs.getInt("customerId"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL")));
+                accounts.add(new TradingAccount(rs.getInt("accountNumber"), rs.getInt("customerId"), 0, 0, 0));
             }
             return accounts;
         }catch (Exception e){
@@ -149,7 +149,18 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
 
     @Override
     public void addPendingAccount(int customerId, String type) {
+        String sql = "INSERT INTO pendingAccounts (customerId, type)"
+                + "VALUES (?,?)";
 
+        try{
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1,customerId);
+            pstmt.setString(2, type);
+
+            pstmt.executeUpdate();
+        } catch (Exception e){
+            System.out.println(e.toString());
+        }
     }
 
     @Override

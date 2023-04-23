@@ -57,5 +57,13 @@ public class DBTesting {
         for(TradingAccount account: accounts){
             System.out.println(account);
         }
+
+        //make a pending account for customer 1
+        tradingAccountDao.addPendingAccount(1,"tradingAccount");
+        System.out.println("\nPrinting all pending accounts for customerId 1\n");
+        //try printing out the pending accounts
+        for (TradingAccount pending: tradingAccountDao.getAllPending(1)){
+            System.out.println(pending);
+        }
     }
 }
