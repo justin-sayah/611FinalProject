@@ -44,8 +44,22 @@ public class TradingAccount implements Account{
         return balance;
     }
 
+    public double getRealizedProfitLoss() {
+        return realizedProfitLoss;
+    }
+
+    public double getUnrealizedProfitLoss() {
+        return unrealizedProfitLoss;
+    }
+
     @Override
     public int getAccountNumber() {
         return accountNumber;
+    }
+
+    //FOR TESTING PURPOSES
+    @Override
+    public String toString() {
+        return "Account Number: " + accountNumber + "    Balance: " + balance;
     }
 }
