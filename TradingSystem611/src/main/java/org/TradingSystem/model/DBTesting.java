@@ -41,29 +41,56 @@ public class DBTesting {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //Trying to get one account
-        TradingAccountDao tradingAccountDao = new TradingAccountDao();
-        TradingAccount testAccount = tradingAccountDao.getAccount(1,1);
-        System.out.println(testAccount);
+//        //Trying to get one account
+//        TradingAccountDao tradingAccountDao = new TradingAccountDao();
+//        TradingAccount testAccount = tradingAccountDao.getAccount(1,1);
+//        System.out.println(testAccount);
+//
+//        testAccount.deposit(5);
+//        tradingAccountDao.update(testAccount);
+//        System.out.println(testAccount);
+//
+//        System.out.println("Printing all accounts for customerId 1 \n\n");
+//
+//        //trying to get all accounts
+//        List<TradingAccount> accounts = tradingAccountDao.getAllActive(1);
+//        for(TradingAccount account: accounts){
+//            System.out.println(account);
+//        }
+//
+//        //make a pending account for customer 1
+//        tradingAccountDao.addPendingAccount(1,"tradingAccount");
+//        System.out.println("\nPrinting all pending accounts for customerId 1\n");
+//        //try printing out the pending accounts
+//        for (TradingAccount pending: tradingAccountDao.getAllPending(1)){
+//            System.out.println(pending);
+//        }
 
-        testAccount.deposit(5);
-        tradingAccountDao.update(testAccount);
-        System.out.println(testAccount);
+        //testing messages
 
-        System.out.println("Printing all accounts for customerId 1 \n\n");
-
-        //trying to get all accounts
-        List<TradingAccount> accounts = tradingAccountDao.getAllActive(1);
-        for(TradingAccount account: accounts){
-            System.out.println(account);
+        //get all messages for customerId 1 and print them
+        MessageCenter messageCenter = MessageCenter.getInstance();
+        System.out.println(messageCenter.getMessagesInInbox(1));
+        System.out.println();
+        //send a message from 1 to 2
+        messageCenter.sendMessage(1,2,"hello! I just sent this now!");
+        //print out all messsages for 2
+        System.out.println();
+        List<Message> messages = messageCenter.getMessagesInInbox(2);
+        for (Message message:
+             messages) {
+            System.out.println(message);
+            //deleting this message
+            System.out.println("\ndeleting this message\n");
+            messageCenter.deleteMessage(message);
         }
 
-        //make a pending account for customer 1
-        tradingAccountDao.addPendingAccount(1,"tradingAccount");
-        System.out.println("\nPrinting all pending accounts for customerId 1\n");
-        //try printing out the pending accounts
-        for (TradingAccount pending: tradingAccountDao.getAllPending(1)){
-            System.out.println(pending);
+        //check to see whats in inbox for 2
+        List<Message> messages2 = messageCenter.getMessagesInInbox(2);
+        for (Message message:
+                messages2) {
+            System.out.println(message);
         }
+
     }
 }
