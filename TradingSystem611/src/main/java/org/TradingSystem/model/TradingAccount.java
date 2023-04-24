@@ -20,6 +20,7 @@ public class TradingAccount implements Account{
 
     public TradingAccount(int accountNumber, int customerId, double balance, double unrealizedProfitLoss, double realizedProfitLoss) {
         this.accountNumber = accountNumber;
+        this.customerId = customerId;
         this.balance = balance;
         this.unrealizedProfitLoss = unrealizedProfitLoss;
         this.realizedProfitLoss = realizedProfitLoss;
