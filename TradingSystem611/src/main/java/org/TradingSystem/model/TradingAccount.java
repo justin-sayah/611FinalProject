@@ -62,7 +62,7 @@ public class TradingAccount implements Account{
     public int getCustomerId() {
         return customerId;
     }
-    
+
 
     //FOR TESTING PURPOSES
     @Override
