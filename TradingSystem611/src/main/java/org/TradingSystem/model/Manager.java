@@ -4,27 +4,22 @@ import java.util.ArrayList;
 
 public class Manager extends Person {
 
-    private int profit;
     private ArrayList<TradingAccount> accounts;
     private ArrayList<Customer> customers;
     public Manager(int id, String username, String password, String ssn){
         super(id, username, password, ssn);
-        this.profit = 0;
         this.accounts = new ArrayList<>();
         this.customers = new ArrayList<>();
     }
 
-    public int getProfit(){
-        return profit;
-    }
 
-    public void createNewAccount(String accountType, int accountNumber){
-        if(!accountType.equals("TradingAccount")){
-            return;
-        }
-        TradingAccount account = new TradingAccount(accountNumber);
-        accounts.add(account);
-    }
+//    public void createNewAccount(String accountType, int accountNumber){
+//        if(!accountType.equals("TradingAccount")){
+//            return;
+//        }
+//        TradingAccount account = new TradingAccount(accountNumber);
+//        accounts.add(account);
+//    }
 
 //    public boolean activateAccount(TradingAccount account){
 //        if(account.getActive() == false){
@@ -81,13 +76,6 @@ public class Manager extends Person {
 
     public ArrayList<Customer> getCustomers(){
         return customers;
-    }
-
-    public boolean get10KProfit(){
-        if(profit >= 10000){
-            return true;
-        }
-        return false;
     }
 
     public void sendMessage(Customer customer, Message message){
