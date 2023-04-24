@@ -3,7 +3,6 @@ package org.TradingSystem.model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,7 +138,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         try{
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1,tradingAccount.getAccountNumber());
-            pstmt.setDouble(2, tradingAccount.getCustomerId());
+            pstmt.setDouble(2, tradingAccount.getPersonId());
 
             pstmt.executeUpdate();
         } catch (Exception e){
@@ -172,7 +171,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         try{
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1,tradingAccount.getAccountNumber());
-            pstmt.setInt(2, tradingAccount.getCustomerId());
+            pstmt.setInt(2, tradingAccount.getPersonId());
             pstmt.setString(3,"tradingAccount");
             pstmt.setDouble(4,tradingAccount.getBalance());
             pstmt.setDouble(5,tradingAccount.getUnrealizedProfitLoss());

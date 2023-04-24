@@ -3,3 +3,5 @@ activeAccounts - accountNumber (integer PRIMARY KEY), cusomterID (integer NOT NU
 pendingAccounts - accountNumber(integer PRIMARY KEY AUTOINCREMENT), customerID (integer NOT NULL), type (text NOT NULL)
 
 messages - messageId (integer PRIMARY KEY AUTOINCREMENT), customerId (integer), message (text)
+
+people - personId(integer PRIMARY KEY AUTOINRCEMENT), type (text), username (text NOT NULL), password (text NOT NULL), dob (text), ssn (text) 

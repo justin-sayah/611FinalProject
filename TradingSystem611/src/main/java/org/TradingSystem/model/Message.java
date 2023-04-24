@@ -9,14 +9,14 @@ Purpose: Object representing behavior of a Message
 public class Message {
     private String message;
     private int messageId;
-    private int customerIdFrom;
-    private int customerIdTo;
+    private int personIdFrom;
+    private int personIdTo;
 
-    public Message(int messageId, int customerIdFrom, int customerIdTo, String message){
+    public Message(int messageId, int personIdFrom, int personIdTo, String message){
         setMessage(message);
         setMessageId(messageId);
-        setCustomerIdFrom(customerIdFrom);
-        setCustomerIdTo(customerIdTo);
+        setPersonIdFrom(personIdFrom);
+        setPersonIdTo(personIdTo);
     }
 
 
@@ -28,12 +28,12 @@ public class Message {
         this.messageId = messageId;
     }
 
-    public void setCustomerIdFrom(int customerIdFrom) {
-        this.customerIdFrom = customerIdFrom;
+    public void setPersonIdFrom(int personIdFrom) {
+        this.personIdFrom = personIdFrom;
     }
 
-    public void setCustomerIdTo(int customerIdTo) {
-        this.customerIdTo = customerIdTo;
+    public void setPersonIdTo(int personIdTo) {
+        this.personIdTo = personIdTo;
     }
 
     public int getMessageId() {
@@ -44,18 +44,18 @@ public class Message {
         return message;
     }
 
-    public int getCustomerIdFrom() {
-        return customerIdFrom;
+    public int getPersonIdFrom() {
+        return personIdFrom;
     }
 
-    public int getCustomerIdTo() {
-        return customerIdTo;
+    public int getPersonIdTo() {
+        return personIdTo;
     }
 
     @Override
     public String toString() {
-        return "To CustomerID: " + customerIdTo + "\n" +
-                        "From CustomerID: " + customerIdFrom + "\n" +
+        return "To CustomerID: " + personIdTo + "\n" +
+                        "From CustomerID: " + personIdFrom + "\n" +
                         "Body: " + message;
     }
 }

@@ -23,13 +23,13 @@ public class MessageCenter {
         return messageCenter;
     }
 
-    public void sendMessage(int customerIdFrom, int customerIdTo, String message){
-        messageDao.postMessage(customerIdFrom, customerIdTo, message);
+    public void sendMessage(int customerIdFrom, int personIdTo, String message){
+        messageDao.postMessage(customerIdFrom, personIdTo, message);
     }
 
-    public List<Message> getMessagesInInbox(int customerId){
+    public List<Message> getMessagesInInbox(int personId){
         //invoke MessageDao to get all messages as a list
-        return messageDao.getMessages(customerId);
+        return messageDao.getMessages(personId);
     }
 
     public void deleteMessage(Message message){

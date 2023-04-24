@@ -26,49 +26,49 @@ public class Manager extends Person {
         accounts.add(account);
     }
 
-    public boolean activateAccount(TradingAccount account){
-        if(account.getActive() == false){
-            account.setActive(true);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean deactivateAccount(TradingAccount account){
-        if(account.getActive() == true){
-            account.setActive(false);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean deleteAccount(TradingAccount account){
-        if(accounts.contains(account)){
-            accounts.remove(account);
-            return true;
-        }
-        return false;
-    }
-
-    public ArrayList<TradingAccount> getPendingAccounts(){
-        ArrayList<TradingAccount> list = new ArrayList<TradingAccount>();
-        for(int i = 0; i < accounts.size(); i++){
-            if(accounts.get(i).getActive() == false){
-                list.add(accounts.get(i));
-            }
-        }
-        return list;
-    }
-
-    public ArrayList<TradingAccount> getActiveAccounts(){
-        ArrayList<TradingAccount> list = new ArrayList<TradingAccount>();
-        for(int i = 0; i < accounts.size(); i++){
-            if(accounts.get(i).getActive() == true){
-                list.add(accounts.get(i));
-            }
-        }
-        return list;
-    }
+//    public boolean activateAccount(TradingAccount account){
+//        if(account.getActive() == false){
+//            account.setActive(true);
+//            return true;
+//        }
+//        return false;
+//    }
+//
+//    public boolean deactivateAccount(TradingAccount account){
+//        if(account.getActive() == true){
+//            account.setActive(false);
+//            return true;
+//        }
+//        return false;
+//    }
+//
+//    public boolean deleteAccount(TradingAccount account){
+//        if(accounts.contains(account)){
+//            accounts.remove(account);
+//            return true;
+//        }
+//        return false;
+//    }
+//
+//    public ArrayList<TradingAccount> getPendingAccounts(){
+//        ArrayList<TradingAccount> list = new ArrayList<TradingAccount>();
+//        for(int i = 0; i < accounts.size(); i++){
+//            if(accounts.get(i).getActive() == false){
+//                list.add(accounts.get(i));
+//            }
+//        }
+//        return list;
+//    }
+//
+//    public ArrayList<TradingAccount> getActiveAccounts(){
+//        ArrayList<TradingAccount> list = new ArrayList<TradingAccount>();
+//        for(int i = 0; i < accounts.size(); i++){
+//            if(accounts.get(i).getActive() == true){
+//                list.add(accounts.get(i));
+//            }
+//        }
+//        return list;
+//    }
 
     public Customer getCustomer(int id){
         for(int i = 0; i < customers.size(); i++){
