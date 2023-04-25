@@ -6,8 +6,8 @@ public class Manager extends Person {
 
     private ArrayList<TradingAccount> accounts;
     private ArrayList<Customer> customers;
-    public Manager(int id, String username, String password, String ssn){
-        super(id, username, password, ssn);
+    public Manager(int id, String name, String username, String password, String dob, String ssn){
+        super(id, name, username, password, dob, ssn);
         this.accounts = new ArrayList<>();
         this.customers = new ArrayList<>();
     }
@@ -80,5 +80,10 @@ public class Manager extends Person {
 
     public void sendMessage(Customer customer, Message message){
         customer.receiveMessage(message);
+    }
+
+    @Override
+    public String toString() {
+        return "Manager! PersonId: " + getID() + "     Name: " + getName();
     }
 }

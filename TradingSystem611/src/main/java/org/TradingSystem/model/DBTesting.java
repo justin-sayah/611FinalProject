@@ -69,28 +69,46 @@ public class DBTesting {
         //testing messages
 
         //get all messages for customerId 1 and print them
-        MessageCenter messageCenter = MessageCenter.getInstance();
-        System.out.println(messageCenter.getMessagesInInbox(1));
-        System.out.println();
-        //send a message from 1 to 2
-        messageCenter.sendMessage(1,2,"hello! I just sent this now!");
-        //print out all messsages for 2
-        System.out.println();
-        List<Message> messages = messageCenter.getMessagesInInbox(2);
-        for (Message message:
-             messages) {
-            System.out.println(message);
-            //deleting this message
-            System.out.println("\ndeleting this message\n");
-            messageCenter.deleteMessage(message);
-        }
+//        MessageCenter messageCenter = MessageCenter.getInstance();
+//        System.out.println(messageCenter.getMessagesInInbox(1));
+//        System.out.println();
+//        //send a message from 1 to 2
+//        messageCenter.sendMessage(1,2,"hello! I just sent this now!");
+//        //print out all messsages for 2
+//        System.out.println();
+//        List<Message> messages = messageCenter.getMessagesInInbox(2);
+//        for (Message message:
+//             messages) {
+//            System.out.println(message);
+//            //deleting this message
+//            System.out.println("\ndeleting this message\n");
+//            messageCenter.deleteMessage(message);
+//        }
+//
+//        //check to see whats in inbox for 2
+//        List<Message> messages2 = messageCenter.getMessagesInInbox(2);
+//        for (Message message:
+//                messages2) {
+//            System.out.println(message);
+//        }
 
-        //check to see whats in inbox for 2
-        List<Message> messages2 = messageCenter.getMessagesInInbox(2);
-        for (Message message:
-                messages2) {
-            System.out.println(message);
-        }
+        //testing people
+        Customer test = new Customer(999, "Justin", "jsayah", "611project", "09/30/2000", "000-00-0001");
+        PeopleDao peopleDao = new PeopleDao();
+        peopleDao.addCustomer(test);
+        System.out.println("made it here");
 
+        //retrieve to see if this person was added and print them out
+        System.out.println(peopleDao.getCustomer(999));
+        System.out.println("after fetching");
+//        //also try logging in to see if it is retrieved
+        System.out.println(peopleDao.login("jsayah", "611project"));
+//
+//
+        //try deleting person from database
+        peopleDao.deleteCustomer(test);
+        //retrieve to see if this person was added and print them out
+        System.out.println("should print out null");
+        System.out.println(peopleDao.getCustomer(999));
     }
 }
