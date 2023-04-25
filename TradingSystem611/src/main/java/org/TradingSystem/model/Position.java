@@ -21,9 +21,9 @@ public class Position {
         this.quantitySold = quantitySold;
     }
 
-    public void updatePosition(int addToPosition, double buyPrice){
-        double totalCost = avgBuyPrice * quantity + buyPrice * addToPosition;
-        quantity += addToPosition;
+    public void addToPosition(int quantityToAdd, double buyPrice){
+        double totalCost = avgBuyPrice * quantity + buyPrice * quantityToAdd;
+        quantity += quantityToAdd;
         avgBuyPrice = totalCost/quantity;
     }
 
