@@ -50,7 +50,6 @@ public class LoginFrame extends JFrame implements ActionListener {
         loginButton.addActionListener(this);
         signupButton.addActionListener(this);
         showPassword.addActionListener(this);
-        signupButton.addActionListener(e -> signup());
     }
 
     private void addComponentsToContainer() {
@@ -82,6 +81,7 @@ public class LoginFrame extends JFrame implements ActionListener {
         SignUpFrame signUpFrame = new SignUpFrame();
         signUpFrame.setVisible(true);
         this.setVisible(false);
+
     }
 
     //    TODO

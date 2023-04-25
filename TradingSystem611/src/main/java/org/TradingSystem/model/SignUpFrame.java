@@ -33,7 +33,6 @@ public class SignUpFrame extends JFrame implements ActionListener {
     SignUpFrame(){
         peopleDao = new PeopleDao();
         setTitle("Sign Up");
-        setVisible(true);
         setLocation(10,10);
         setSize(1000,800);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -191,8 +190,5 @@ public class SignUpFrame extends JFrame implements ActionListener {
         }
     }
 
-    public static void main(String[] args) {
-//        SignUpFrame signUpFrame = new SignUpFrame();
-//        signUpFrame.setVisible(true);
-    }
+
 }
