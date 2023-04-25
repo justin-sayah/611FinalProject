@@ -8,9 +8,9 @@ public class Position {
     protected double realizedProfitLoss;
     protected double unrealizedProfitLoss;
     protected int securityId;
-    protected int quantityToSell;
+    protected int quantitySold;
 
-    public Position(int accountID, int quantity, double currentSellPrice, double avgBuyPrice, double realizedProfitLoss, double unrealizedProfitLoss, int securityId) {
+    public Position(int accountID, int quantity, double currentSellPrice, double avgBuyPrice, double realizedProfitLoss, double unrealizedProfitLoss, int securityId, int quantitySold) {
         this.accountID = accountID;
         this.quantity = quantity;
         this.currentSellPrice = currentSellPrice;
@@ -18,11 +18,12 @@ public class Position {
         this.realizedProfitLoss = realizedProfitLoss;
         this.unrealizedProfitLoss = unrealizedProfitLoss;
         this.securityId = securityId;
+        this.quantitySold = quantitySold;
     }
 
-    public void updatePosition(int quantityToAdd, double buyPrice){
-        double totalCost = avgBuyPrice * quantity + buyPrice * quantityToAdd;
-        quantity += quantityToAdd;
+    public void updatePosition(int addToPosition, double buyPrice){
+        double totalCost = avgBuyPrice * quantity + buyPrice * addToPosition;
+        quantity += addToPosition;
         avgBuyPrice = totalCost/quantity;
     }
 
@@ -59,7 +60,7 @@ public class Position {
     }
 
     public double getRealizedProfitLoss() {
-        return quantityToSell*(currentSellPrice - avgBuyPrice);
+        return quantitySold *(currentSellPrice - avgBuyPrice);
     }
 
     public void setRealizedProfitLoss(double realizedProfitLoss) {
@@ -67,7 +68,7 @@ public class Position {
     }
 
     public double getUnrealizedProfitLoss() {
-        return (quantity - quantityToSell)*(currentSellPrice - avgBuyPrice);
+        return (quantity - quantitySold)*(currentSellPrice - avgBuyPrice);
     }
 
     public void setUnrealizedProfitLoss(double unrealizedProfitLoss) {
@@ -82,9 +83,9 @@ public class Position {
         this.securityId = securityId;
     }
 
-    public void sell(int quantityToSell){
-        if(quantityToSell < quantity){
-            quantity -= quantityToSell;
+    public void sell(){
+        if(quantitySold < quantity){
+            quantity -= quantitySold;
         }else{
             System.out.println("Quantity to sell is greater than the quantity that customer has");
         }
