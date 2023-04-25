@@ -24,6 +24,8 @@ public interface AccountDao<T extends Account> {
 
     void delete(T t);
 
+    void deleteFromPending(T t);
+
     void addPendingAccount(int customerId, String type);
 
     void addTradingAccount(TradingAccount tradingAccount);

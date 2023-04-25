@@ -39,6 +39,8 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         return null;
     }
 
+
+
     @Override
     public TradingAccount getPendingAccount(int accountId, int customerId) {
         try{
@@ -133,6 +135,22 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
     @Override
     public void delete(TradingAccount tradingAccount) {
         String sql = "DELETE FROM activeAccounts WHERE accountNumber = ?"
+                + "AND customerId = ?";
+
+        try{
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1,tradingAccount.getAccountNumber());
+            pstmt.setDouble(2, tradingAccount.getPersonId());
+
+            pstmt.executeUpdate();
+        } catch (Exception e){
+            System.out.println(e.toString());
+        }
+    }
+
+    @Override
+    public void deleteFromPending(TradingAccount tradingAccount) {
+        String sql = "DELETE FROM pendingAccounts WHERE accountNumber = ?"
                 + "AND customerId = ?";
 
         try{

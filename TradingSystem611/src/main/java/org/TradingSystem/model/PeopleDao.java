@@ -38,6 +38,24 @@ public class PeopleDao {
         return null;
     }
 
+    public List<Customer> getAllCustomers(){
+        List<Customer> list = new ArrayList<>();
+        try{
+            String sql = "SELECT * FROM people";
+
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+
+
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+                list.add(new Customer(rs.getInt("personId"), rs.getString("name"), rs.getString("username"), rs.getString("password"), rs.getString("dob"), rs.getString("ssn")));
+            }
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+        return list;
+    }
+
     //gets manager from db if it exists
     public Manager getManager(int personId){
         try{
