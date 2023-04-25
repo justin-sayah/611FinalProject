@@ -27,6 +27,10 @@ public class Position {
         avgBuyPrice = totalCost/quantity;
     }
 
+    public void updatePosition(){
+        PositionDao pd = new PositionDao();
+        pd.updatePosition(this);
+    }
     public int getAccountID() {
         return accountID;
     }
