@@ -17,12 +17,14 @@ public class LoginFrame extends JFrame implements ActionListener {
     private final JButton loginButton;
     private final JButton signupButton;
     private final JCheckBox showPassword;
+    private PeopleDao peopleDao;
 
 //    private JRadioButton radioButton1;
 //    private JPanel panel1;
 
 
     public LoginFrame() {
+        peopleDao = new PeopleDao();
         setTitle("Login");
         setVisible(true);
         setLocation(10,10);
@@ -48,6 +50,7 @@ public class LoginFrame extends JFrame implements ActionListener {
         loginButton.addActionListener(this);
         signupButton.addActionListener(this);
         showPassword.addActionListener(this);
+        signupButton.addActionListener(e -> signup());
     }
 
     private void addComponentsToContainer() {
@@ -76,8 +79,9 @@ public class LoginFrame extends JFrame implements ActionListener {
     }
 
     public void signup() {
-        userTextField.setText("");
-        passwordField.setText("");
+        SignUpFrame signUpFrame = new SignUpFrame();
+        signUpFrame.setVisible(true);
+        this.setVisible(false);
     }
 
     //    TODO
@@ -99,7 +103,11 @@ public class LoginFrame extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(this, "Login Successful");
                     dispose();
                     // replace this with your own code to open the main menu or dashboard
-                } else {
+                } else if(peopleDao.login(userText,pwdText)!= null){
+                    JOptionPane.showMessageDialog(this, "Login Successful");
+                    dispose();
+                }
+                else {
                     JOptionPane.showMessageDialog(this, "Invalid username or password");
                 }
             }
