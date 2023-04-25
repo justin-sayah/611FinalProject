@@ -172,14 +172,15 @@ public class SignUpFrame extends JFrame implements ActionListener {
             }else if(peopleDao.createCustomer(lastname,userName,pw,dob,ssnText)){
                 JOptionPane.showMessageDialog(this, "Sign up Successful");
                 dispose();
-            }
-            else{
-                // Replace this with your own code to handle sign up
-                JOptionPane.showMessageDialog(this,
-                        "Account created! Please login to your account");
-                dispose();
                 new LoginFrame();
             }
+//            else{
+//                // Replace this with your own code to handle sign up
+//                JOptionPane.showMessageDialog(this,
+//                        "Account created! Please login to your account");
+//                dispose();
+//                new LoginFrame();
+//            }
         }
         //Coding Part of reset button
         if (e.getSource() == resetButton) {
