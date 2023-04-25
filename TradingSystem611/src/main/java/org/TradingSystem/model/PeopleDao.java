@@ -35,7 +35,7 @@ public class PeopleDao {
 
             ResultSet rs = pstmt.executeQuery();
             if(rs.next()){
-                return new Manager(personId, rs.getString("username"), rs.getString("password"), rs.getString("ssn"));
+                return new Manager(personId, rs.getString("name"), rs.getString("username"), rs.getString("password"), rs.getString("dob"), rs.getString("ssn"));
             }
         }catch (Exception e){
             System.out.println(e.toString());
@@ -58,7 +58,7 @@ public class PeopleDao {
 
             ResultSet rs = pstmt.executeQuery();
             if(rs.next()){
-                return new Customer(rs.getInt("personId"), rs.getString("username"), rs.getString("password"),rs.getString("dob"),rs.getString("ssn"));
+                return new Customer(rs.getInt("personId"), rs.getString("name"), rs.getString("username"), rs.getString("password"),rs.getString("dob"),rs.getString("ssn"));
             }
         }catch (Exception e){
             System.out.println(e.toString());
@@ -80,7 +80,7 @@ public class PeopleDao {
 
             ResultSet rs = pstmt.executeQuery();
             if(rs.next()){
-                return new Manager(rs.getInt("personId"), rs.getString("username"), rs.getString("password"), rs.getString("ssn"));
+                return new Manager(rs.getInt("personId"), rs.getString("name"), rs.getString("username"), rs.getString("password"), rs.getString("dob"), rs.getString("ssn"));
             }
         }catch (Exception e){
             System.out.println(e.toString());
@@ -89,6 +89,45 @@ public class PeopleDao {
     }
 
     public boolean addCustomer(Customer customer){
+        String sql = "INSERT INTO people (personId, name, type, username, password, dob, ssn)"
+                + "VALUES (?,?,?,?,?,?,?)";
+
+        try{
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, customer.getID());
+            pstmt.setString(2, customer.getName());
+            pstmt.setString(3, "customer");
+            pstmt.setString(4,customer.getUsername());
+            pstmt.setString(5,customer.getPassword());
+            pstmt.setString(6, customer.getDob());
+            pstmt.setString(7, customer.getSsn());
+
+            pstmt.executeUpdate();
+            return true;
+        } catch (Exception e){
+            System.out.println(e.toString());
+        }
+        return false;
+    }
+
+    public boolean createCustomer(String name, String username, String password, String dob, String ssn){
+        String sql = "INSERT INTO people (name, type, username, password, dob, ssn)"
+                + "VALUES (?,?,?,?,?,?)";
+
+        try{
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, name);
+            pstmt.setString(2, "customer");
+            pstmt.setString(3, username);
+            pstmt.setString(4, password);
+            pstmt.setString(5, dob);
+            pstmt.setString(6, ssn);
+
+            pstmt.executeUpdate();
+            return true;
+        } catch (Exception e){
+            System.out.println(e.toString());
+        }
         return false;
     }
 
