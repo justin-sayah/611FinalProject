@@ -81,4 +81,9 @@ public class Manager extends Person {
     public void sendMessage(Customer customer, Message message){
         customer.receiveMessage(message);
     }
+
+    @Override
+    public String toString() {
+        return "Manager! PersonId: " + getID() + "     Name: " + getName();
+    }
 }
