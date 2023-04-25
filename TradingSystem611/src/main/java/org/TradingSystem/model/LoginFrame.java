@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class LoginFrame extends JFrame implements ActionListener {
 
-    private final Container container;
+    private final JPanel container;
     private final JLabel userLabel;
     private final JLabel passwordLabel;
     private final JTextField userTextField;
@@ -18,8 +18,8 @@ public class LoginFrame extends JFrame implements ActionListener {
     private final JButton signupButton;
     private final JCheckBox showPassword;
 
-    private JRadioButton radioButton1;
-    private JPanel panel1;
+//    private JRadioButton radioButton1;
+//    private JPanel panel1;
 
 
     public LoginFrame() {
@@ -29,7 +29,8 @@ public class LoginFrame extends JFrame implements ActionListener {
         setSize(1000,800);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);//User cannot resize the frame
-        container = getContentPane();
+//        container = getContentPane();
+        container = new JPanel();
         userLabel = new JLabel("USERNAME");
         passwordLabel = new JLabel("PASSWORD");
         userTextField = new JTextField();
@@ -57,6 +58,7 @@ public class LoginFrame extends JFrame implements ActionListener {
         container.add(showPassword);
         container.add(loginButton);
         container.add(signupButton);
+        add(container);
     }
 
     private void setLocationAndSize() {

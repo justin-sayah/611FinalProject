@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class SignUpFrame extends JFrame implements ActionListener {
 
-    private final Container container;
+    private final JPanel container;
     private final JLabel firstNameLabel;
     private final JLabel lastNameLabel;
     private final JLabel usernameLabel;
@@ -31,7 +31,7 @@ public class SignUpFrame extends JFrame implements ActionListener {
         setSize(1000,800);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);//User cannot resize the frame
-        container = getContentPane();
+        container = new JPanel();
         firstNameLabel = new JLabel("First Name");
         lastNameLabel = new JLabel("Last Name");
         usernameLabel = new JLabel("Username");
@@ -68,6 +68,7 @@ public class SignUpFrame extends JFrame implements ActionListener {
         container.add(passwordConfirm);
         container.add(createButton);
         container.add(resetButton);
+        add(container);
     }
 
     private void setLocationAndSize() {
