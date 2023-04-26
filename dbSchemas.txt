@@ -5,3 +5,5 @@ pendingAccounts - accountNumber(integer PRIMARY KEY AUTOINCREMENT), customerID (
 messages - messageId (integer PRIMARY KEY AUTOINCREMENT), customerId (integer), message (text)
 
 people - personId(integer PRIMARY KEY AUTOINRCEMENT), firstName text, lastName (text), type (text), username (text NOT NULL), password (text NOT NULL), dob (text), ssn (text) 
+
+positions - accountId integer PRIMARY KEY NOT NULL, securityId integer, quantity integer, quantitySold (integer), currentSellPrice (real), avgBuyPrice (real), realizedPL (real), urealizedPL (real)

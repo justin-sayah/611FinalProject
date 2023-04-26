@@ -10,7 +10,7 @@ public class Position {
     protected int securityId;
     protected int quantitySold;
 
-    public Position(int accountID, int quantity, double currentSellPrice, double avgBuyPrice, double realizedProfitLoss, double unrealizedProfitLoss, int securityId, int quantitySold) {
+    public Position(int accountID, int securityId, int quantity, int quantitySold, double currentSellPrice, double avgBuyPrice, double realizedProfitLoss, double unrealizedProfitLoss) {
         this.accountID = accountID;
         this.quantity = quantity;
         this.currentSellPrice = currentSellPrice;
@@ -85,6 +85,10 @@ public class Position {
 
     public void setSecurityId(int securityId) {
         this.securityId = securityId;
+    }
+
+    public int getQuantitySold() {
+        return quantitySold;
     }
 
     public void sell(){

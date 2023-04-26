@@ -93,22 +93,35 @@ public class DBTesting {
 //        }
 
         //testing people
-        Customer test = new Customer(999, "Justin", "Sayah","jsayah", "611project", "09/30/2000", "000-00-0001");
-        PeopleDao peopleDao = new PeopleDao();
-        peopleDao.addCustomer(test);
-        System.out.println("made it here");
+//        Customer test = new Customer(999, "Justin", "Sayah","jsayah", "611project", "09/30/2000", "000-00-0001");
+//        PeopleDao peopleDao = new PeopleDao();
+//        peopleDao.addCustomer(test);
+//        System.out.println("made it here");
+//
+//        //retrieve to see if this person was added and print them out
+//        System.out.println(peopleDao.getCustomer(999));
+//        System.out.println("after fetching");
+////        //also try logging in to see if it is retrieved
+//        System.out.println(peopleDao.login("jsayah", "611project"));
+////
+////
+//        //try deleting person from database
+//        peopleDao.deleteCustomer(test);
+//        //retrieve to see if this person was added and print them out
+//        System.out.println("should print out null");
+//        System.out.println(peopleDao.getCustomer(999));
 
-        //retrieve to see if this person was added and print them out
-        System.out.println(peopleDao.getCustomer(999));
-        System.out.println("after fetching");
-//        //also try logging in to see if it is retrieved
-        System.out.println(peopleDao.login("jsayah", "611project"));
-//
-//
-        //try deleting person from database
-        peopleDao.deleteCustomer(test);
-        //retrieve to see if this person was added and print them out
-        System.out.println("should print out null");
-        System.out.println(peopleDao.getCustomer(999));
+
+        //testing positions
+        PositionDao positionDao = new PositionDao();
+        Position p = positionDao.getAllPositions(1).get(0);
+        System.out.println(positionDao.getAllPositions(1));
+
+        System.out.println();
+
+        p.setQuantity(11);
+        positionDao.updatePosition(p);
+
+        System.out.println(positionDao.getPosition(1,1));
     }
 }
