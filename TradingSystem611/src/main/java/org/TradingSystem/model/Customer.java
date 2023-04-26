@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class Customer extends Person {
     ArrayList<TradingAccount> accounts;
     ArrayList<Message> messages;
-    public Customer(int id, String name, String username, String password, String dob, String ssn){
-        super(id, name, username, password, dob, ssn);
+    public Customer(int id, String firstName, String lastName, String username, String password, String dob, String ssn){
+        super(id, firstName, lastName, username, password, dob, ssn);
         accounts = new ArrayList<TradingAccount>();
         messages = new ArrayList<Message>();
     }

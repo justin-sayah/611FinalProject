@@ -4,4 +4,4 @@ pendingAccounts - accountNumber(integer PRIMARY KEY AUTOINCREMENT), customerID (
 
 messages - messageId (integer PRIMARY KEY AUTOINCREMENT), customerId (integer), message (text)
 
-people - personId(integer PRIMARY KEY AUTOINRCEMENT), name text, type (text), username (text NOT NULL), password (text NOT NULL), dob (text), ssn (text) 
+people - personId(integer PRIMARY KEY AUTOINRCEMENT), firstName text, lastName (text), type (text), username (text NOT NULL), password (text NOT NULL), dob (text), ssn (text) 

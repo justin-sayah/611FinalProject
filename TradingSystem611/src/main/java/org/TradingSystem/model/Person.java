@@ -2,19 +2,21 @@ package org.TradingSystem.model;
 
 abstract class Person {
     private int id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String username;
     private String password;
     private String dob;
     private String ssn;
 
-    public Person(int id, String name, String username, String password, String dob, String ssn){
+    public Person(int id, String firstName, String lastName, String username, String password, String dob, String ssn){
         setId(id);
         setUsername(username);
         setPassword(password);
         setDob(dob);
         setSsn(ssn);
-        setName(name);
+        setFirstName(firstName);
+        setLastName(lastName);
     }
     public int getID(){
         return id;
@@ -40,8 +42,12 @@ abstract class Person {
         return ssn;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public void setDob(String dob) {
@@ -64,12 +70,16 @@ abstract class Person {
         this.username = username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Override
     public String toString() {
-        return "PersonId: " + getID() + "   Name: " + getName();
+        return "PersonId: " + getID() + "   Name: " + getFirstName() + " " + getLastName();
     }
 }

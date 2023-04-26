@@ -8,8 +8,8 @@ public class Manager extends Person {
     private ArrayList<TradingAccount> accounts;
     private ArrayList<Customer> customers;
     private TradingAccountDao dao;
-    public Manager(int id, String name, String username, String password, String dob, String ssn){
-        super(id, name, username, password, dob, ssn);
+    public Manager(int id, String firstName, String lastName, String username, String password, String dob, String ssn){
+        super(id, firstName, lastName, username, password, dob, ssn);
         this.accounts = new ArrayList<>();
         this.customers = new ArrayList<>();
         this.dao = new TradingAccountDao();
@@ -132,6 +132,6 @@ public class Manager extends Person {
 
     @Override
     public String toString() {
-        return "Manager! PersonId: " + getID() + "     Name: " + getName();
+        return "Manager! PersonId: " + getID() + "     Name: " + getFirstName() + " " + getLastName();
     }
 }

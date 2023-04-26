@@ -30,7 +30,7 @@ public class PeopleDao {
 
             ResultSet rs = pstmt.executeQuery();
             if(rs.next()){
-                return new Customer(personId, rs.getString("name"), rs.getString("username"), rs.getString("password"), rs.getString("dob"), rs.getString("ssn"));
+                return new Customer(personId, rs.getString("firstName"), rs.getString("lastName"),rs.getString("username"), rs.getString("password"), rs.getString("dob"), rs.getString("ssn"));
             }
         }catch (Exception e){
             System.out.println(e.toString());
@@ -48,7 +48,7 @@ public class PeopleDao {
 
             ResultSet rs = pstmt.executeQuery();
             if(rs.next()){
-                list.add(new Customer(rs.getInt("personId"), rs.getString("name"), rs.getString("username"), rs.getString("password"), rs.getString("dob"), rs.getString("ssn")));
+                list.add(new Customer(rs.getInt("personId"), rs.getString("firstName"), rs.getString("lastName"),rs.getString("username"), rs.getString("password"), rs.getString("dob"), rs.getString("ssn")));
             }
         }catch (Exception e){
             System.out.println(e.toString());
@@ -66,7 +66,7 @@ public class PeopleDao {
 
             ResultSet rs = pstmt.executeQuery();
             if(rs.next()){
-                return new Manager(personId, rs.getString("name"), rs.getString("username"), rs.getString("password"), rs.getString("dob"), rs.getString("ssn"));
+                return new Manager(personId, rs.getString("firstName"), rs.getString("lastName"),rs.getString("username"), rs.getString("password"), rs.getString("dob"), rs.getString("ssn"));
             }
         }catch (Exception e){
             System.out.println(e.toString());
@@ -88,7 +88,7 @@ public class PeopleDao {
 
             ResultSet rs = pstmt.executeQuery();
             if(rs.next()){
-                return new Customer(rs.getInt("personId"), rs.getString("name"), rs.getString("username"), rs.getString("password"),rs.getString("dob"),rs.getString("ssn"));
+                return new Customer(rs.getInt("personId"), rs.getString("firstName"), rs.getString("lastName"),rs.getString("username"), rs.getString("password"),rs.getString("dob"),rs.getString("ssn"));
             }
         }catch (Exception e){
             System.out.println(e.toString());
@@ -110,7 +110,7 @@ public class PeopleDao {
 
             ResultSet rs = pstmt.executeQuery();
             if(rs.next()){
-                return new Manager(rs.getInt("personId"), rs.getString("name"), rs.getString("username"), rs.getString("password"), rs.getString("dob"), rs.getString("ssn"));
+                return new Manager(rs.getInt("personId"), rs.getString("firstName"), rs.getString("lastName"),rs.getString("username"), rs.getString("password"), rs.getString("dob"), rs.getString("ssn"));
             }
         }catch (Exception e){
             System.out.println(e.toString());
@@ -119,18 +119,19 @@ public class PeopleDao {
     }
 
     public boolean addCustomer(Customer customer){
-        String sql = "INSERT INTO people (personId, name, type, username, password, dob, ssn)"
-                + "VALUES (?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO people (personId, firstName, lastName, type, username, password, dob, ssn)"
+                + "VALUES (?,?,?,?,?,?,?,?)";
 
         try{
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, customer.getID());
-            pstmt.setString(2, customer.getName());
-            pstmt.setString(3, "customer");
-            pstmt.setString(4,customer.getUsername());
-            pstmt.setString(5,customer.getPassword());
-            pstmt.setString(6, customer.getDob());
-            pstmt.setString(7, customer.getSsn());
+            pstmt.setString(2, customer.getFirstName());
+            pstmt.setString(3, customer.getLastName());
+            pstmt.setString(4, "customer");
+            pstmt.setString(5,customer.getUsername());
+            pstmt.setString(6,customer.getPassword());
+            pstmt.setString(7, customer.getDob());
+            pstmt.setString(8, customer.getSsn());
 
             pstmt.executeUpdate();
             return true;
@@ -140,18 +141,19 @@ public class PeopleDao {
         return false;
     }
 
-    public boolean createCustomer(String name, String username, String password, String dob, String ssn){
-        String sql = "INSERT INTO people (name, type, username, password, dob, ssn)"
-                + "VALUES (?,?,?,?,?,?)";
+    public boolean createCustomer(String firstName, String lastName, String username, String password, String dob, String ssn){
+        String sql = "INSERT INTO people (firstName, lastName, type, username, password, dob, ssn)"
+                + "VALUES (?,?,?,?,?,?,?)";
 
         try{
             PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, name);
-            pstmt.setString(2, "customer");
-            pstmt.setString(3, username);
-            pstmt.setString(4, password);
-            pstmt.setString(5, dob);
-            pstmt.setString(6, ssn);
+            pstmt.setString(1, firstName);
+            pstmt.setString(2, lastName);
+            pstmt.setString(3, "customer");
+            pstmt.setString(4, username);
+            pstmt.setString(5, password);
+            pstmt.setString(6, dob);
+            pstmt.setString(7, ssn);
 
             pstmt.executeUpdate();
             return true;
@@ -162,7 +164,8 @@ public class PeopleDao {
     }
 
     public void updateCustomer(Customer customer){
-        String sql = "UPDATE people SET name = ? , "
+        String sql = "UPDATE people SET firstName = ? , "
+                + "lastName = ?"
                 + "username = ?,"
                 + "password = ?," +
                 "dob = ?," +
@@ -171,13 +174,14 @@ public class PeopleDao {
 
         try{
             PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, customer.getName());
-            pstmt.setString(2, customer.getUsername());
-            pstmt.setString(3, customer.getPassword());
-            pstmt.setString(4, customer.getDob());
-            pstmt.setString(5,customer.getSSN());
-            pstmt.setInt(6, customer.getID());
-            pstmt.setString(7, "customer");
+            pstmt.setString(1, customer.getFirstName());
+            pstmt.setString(2, customer.getLastName());
+            pstmt.setString(3, customer.getUsername());
+            pstmt.setString(4, customer.getPassword());
+            pstmt.setString(5, customer.getDob());
+            pstmt.setString(6,customer.getSSN());
+            pstmt.setInt(7, customer.getID());
+            pstmt.setString(8, "customer");
 
             pstmt.executeUpdate();
         } catch (Exception e){
@@ -186,7 +190,8 @@ public class PeopleDao {
     }
 
     public void updateManager(Manager manager){
-        String sql = "UPDATE people SET name = ? , "
+        String sql = "UPDATE people SET firstName = ? , "
+                + "lastName = ?,"
                 + "username = ?,"
                 + "password = ?," +
                 "dob = ?," +
@@ -195,13 +200,14 @@ public class PeopleDao {
 
         try{
             PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, manager.getName());
-            pstmt.setString(2, manager.getUsername());
-            pstmt.setString(3, manager.getPassword());
-            pstmt.setString(4, manager.getDob());
-            pstmt.setString(5,manager.getSSN());
-            pstmt.setInt(6, manager.getID());
-            pstmt.setString(7, "customer");
+            pstmt.setString(1, manager.getFirstName());
+            pstmt.setString(2, manager.getLastName());
+            pstmt.setString(3, manager.getUsername());
+            pstmt.setString(4, manager.getPassword());
+            pstmt.setString(5, manager.getDob());
+            pstmt.setString(6,manager.getSSN());
+            pstmt.setInt(7, manager.getID());
+            pstmt.setString(8, "customer");
 
             pstmt.executeUpdate();
         } catch (Exception e){

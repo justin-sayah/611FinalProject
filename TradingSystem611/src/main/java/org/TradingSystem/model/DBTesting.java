@@ -93,7 +93,7 @@ public class DBTesting {
 //        }
 
         //testing people
-        Customer test = new Customer(999, "Justin", "jsayah", "611project", "09/30/2000", "000-00-0001");
+        Customer test = new Customer(999, "Justin", "Sayah","jsayah", "611project", "09/30/2000", "000-00-0001");
         PeopleDao peopleDao = new PeopleDao();
         peopleDao.addCustomer(test);
         System.out.println("made it here");

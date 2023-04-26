@@ -169,7 +169,7 @@ public class SignUpFrame extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Passwords do not match. Please re-enter passwords");
                 password.setText("");
                 passwordConfirm.setText("");
-            }else if(peopleDao.createCustomer(lastname,userName,pw,dob,ssnText)){
+            }else if(peopleDao.createCustomer(firstname, lastname,userName,pw,dob,ssnText)){
                 JOptionPane.showMessageDialog(this, "Sign up Successful");
                 dispose();
                 new LoginFrame();
