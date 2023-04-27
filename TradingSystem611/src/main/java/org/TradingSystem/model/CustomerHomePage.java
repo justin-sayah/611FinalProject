@@ -43,7 +43,7 @@ public class CustomerHomePage extends JFrame implements ActionListener {
         container.setLayout(new BorderLayout());
 
         //set up label, message and button
-        customerNameLabel = new JLabel(customer.getName());
+        customerNameLabel = new JLabel("Welcome Back! "+customer.getLastName() + ", " + customer.getFirstName());
         messageTextArea = new JTextArea();
         messageTextArea.setRows(5);
         messageTextArea.setColumns(50);
