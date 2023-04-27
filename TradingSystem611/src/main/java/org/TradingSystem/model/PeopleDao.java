@@ -12,7 +12,8 @@ Date: 4/23/23
 Class: CS611 Final Project
 Author: Justin Sayah, jsayah@bu.edu
 Purpose: Data Access Object to perform CRUD on People (Manager/Customer)
- */
+*/
+
 public class PeopleDao {
 
     private Connection connection;

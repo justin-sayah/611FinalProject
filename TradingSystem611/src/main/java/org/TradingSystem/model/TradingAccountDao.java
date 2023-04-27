@@ -41,6 +41,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
 
 
 
+
     @Override
     public TradingAccount getPendingAccount(int accountId, int customerId) {
         try{
