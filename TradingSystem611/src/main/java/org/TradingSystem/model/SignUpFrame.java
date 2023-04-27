@@ -191,12 +191,5 @@ public class SignUpFrame extends JFrame implements ActionListener {
         }
     }
 
-    public static void main(String[] args) {
-        SignUpFrame signUpFrame = new SignUpFrame();
-        signUpFrame.setVisible(true);
-//        SignUpFrame signUpFrame = new SignUpFrame();
-//        signUpFrame.setVisible(true);
-    }
-
 
 }
