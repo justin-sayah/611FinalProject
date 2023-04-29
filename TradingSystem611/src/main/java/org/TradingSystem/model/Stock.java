@@ -4,7 +4,7 @@ public class Stock extends Security{
 
     private String ticker;
 
-    public Stock(int stockId, int price, String name, String ticker){
+    public Stock(int stockId, double price, String name, String ticker){
         super(stockId, name, price);
         setTicker(ticker);
     }
@@ -18,12 +18,17 @@ public class Stock extends Security{
     }
 
     @Override
-    public int getPrice() {
+    public double getPrice() {
         return super.getPrice();
     }
 
     @Override
-    public void changePrice(int price) {
+    public void changePrice(double price) {
         super.changePrice(price);
+    }
+
+    @Override
+    public String toString() {
+        return getName() + " Ticker: " + getTicker() + "  Current Price: " + getPrice();
     }
 }

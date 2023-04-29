@@ -2,10 +2,10 @@ package org.TradingSystem.model;
 
 public abstract class  Security implements Tradeable{
     private String name;
-    private int price;
+    private double price;
     private int securityId;
 
-    public Security(int securityId, String name, int price){
+    public Security(int securityId, String name, double price){
         setSecurityId(securityId);
         setName(name);
         changePrice(price);
@@ -15,7 +15,7 @@ public abstract class  Security implements Tradeable{
         this.name = name;
     }
 
-    public void changePrice(int price) {
+    public void changePrice(double price) {
         this.price = price;
     }
 
@@ -27,7 +27,7 @@ public abstract class  Security implements Tradeable{
         return name;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 

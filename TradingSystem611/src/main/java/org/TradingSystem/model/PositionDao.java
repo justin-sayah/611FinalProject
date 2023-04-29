@@ -112,4 +112,23 @@ public class PositionDao {
         }
         return null;
     }
+
+    public void deletePosition(int accountId, int securityId){
+        String sql = "DELETE FROM positions WHERE accountId = ?" +
+                "AND securityId = ?";
+
+        try{
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, accountId);
+            pstmt.setInt(2, securityId);
+
+            pstmt.executeUpdate();
+        } catch (Exception e){
+            System.out.println(e.toString());
+        }
+    }
+
+    public void deletePosition(Position position){
+        deletePosition(position.getAccountID(), position.getSecurityId());
+    }
 }

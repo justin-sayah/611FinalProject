@@ -113,15 +113,27 @@ public class DBTesting {
 
 
         //testing positions
-        PositionDao positionDao = new PositionDao();
-        Position p = positionDao.getAllPositions(1).get(0);
-        System.out.println(positionDao.getAllPositions(1));
+//        PositionDao positionDao = new PositionDao();
+//        Position p = positionDao.getAllPositions(1).get(0);
+//        System.out.println(positionDao.getAllPositions(1));
+//
+//        System.out.println();
+//
+//        p.setQuantity(11);
+//        positionDao.updatePosition(p);
+//
+//        System.out.println(positionDao.getPosition(1,1));
 
+
+        //testing stocks
+        Stock s1 = new Stock(1,100,"Apple Inc", "AAPL");
+        Stock s2 = new Stock(2, 15, "AMC Entertainment", "AMC");
+        StockDao stockDao = new StockDao();
+        stockDao.addStock(s1);
+        stockDao.addStock(s2);
+
+        System.out.println(stockDao.getStock(1));
         System.out.println();
-
-        p.setQuantity(11);
-        positionDao.updatePosition(p);
-
-        System.out.println(positionDao.getPosition(1,1));
+        System.out.println(stockDao.getStocks("a"));
     }
 }
