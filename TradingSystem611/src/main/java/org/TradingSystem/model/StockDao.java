@@ -32,7 +32,7 @@ public class StockDao {
 
     public List<Stock> getAllStocks(){
         try{
-            String sql = "SELECT * FROM stocks"";
+            String sql = "SELECT * FROM stocks";
 
             PreparedStatement pstmt = connection.prepareStatement(sql);
 
