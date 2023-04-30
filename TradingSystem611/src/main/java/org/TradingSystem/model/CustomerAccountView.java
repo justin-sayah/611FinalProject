@@ -176,10 +176,10 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         realizedPL.setText(String.valueOf(tradingAccount.getRealizedProfitLoss()));
         unrealizedPL.setText(String.valueOf(tradingAccount.getUnrealizedProfitLoss()));
     }
-    public static void main(String[] args){
-        CustomerAccountView ca = new CustomerAccountView(1,"Shangzhou" + "Yin",1);
-        ca.setVisible(true);
-    }
+//    public static void main(String[] args){
+//        CustomerAccountView ca = new CustomerAccountView(1,"Shangzhou" + "Yin",1);
+//        ca.setVisible(true);
+//    }
 
 
 
