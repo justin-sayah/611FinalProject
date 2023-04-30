@@ -63,6 +63,9 @@ public class TradingAccount implements Account{
         return personId;
     }
 
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
 
     //FOR TESTING PURPOSES
     @Override
