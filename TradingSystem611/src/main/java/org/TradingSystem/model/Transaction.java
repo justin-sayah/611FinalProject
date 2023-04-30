@@ -19,6 +19,11 @@ public class Transaction {
         setAction(action);
     }
 
+    public void updateTransaction(){
+        TransactionDao tDao = new TransactionDao();
+        tDao.updateTransaction(this);
+    }
+
     public double getPrice() {
         return price;
     }
