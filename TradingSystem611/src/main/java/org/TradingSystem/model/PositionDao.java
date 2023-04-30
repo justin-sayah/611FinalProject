@@ -31,6 +31,7 @@ public class PositionDao {
             ResultSet rs = pstmt.executeQuery();
 
             LinkedList<Position> accounts = new LinkedList<Position>();
+            //TODO: when fetching a Position, consult StockDao to get current sell prices
             while(rs.next()){
                 accounts.add(new Position(accountId, rs.getInt("securityId"),rs.getInt("quantity"),
                         rs.getInt("quantitySold"), rs.getDouble("currentSellPrice"),
@@ -102,6 +103,7 @@ public class PositionDao {
 
             ResultSet rs = pstmt.executeQuery();
 
+            //TODO: when fetching a Position, consult StockDao to get current sell price
             if(rs.next()){
                 return new Position(accountId, securityId ,rs.getInt("quantity"),
                         rs.getInt("quantitySold"), rs.getDouble("currentSellPrice"),

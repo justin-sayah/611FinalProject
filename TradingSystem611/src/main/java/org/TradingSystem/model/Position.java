@@ -21,8 +21,11 @@ public class Position {
         this.quantitySold = quantitySold;
     }
 
-    public void addToPosition(int quantityToAdd, double buyPrice){
-        double totalCost = avgBuyPrice * quantity + buyPrice * quantityToAdd;
+    //adds quantityToAdd shares at the current sellPrice/buyPrice
+    //creates a transaction to cement this purchase
+    //TODO: fix implementation
+    public void addToPosition(int quantityToAdd){
+        double totalCost = avgBuyPrice * quantity + getCurrentSellPrice() * quantityToAdd;
         quantity += quantityToAdd;
         avgBuyPrice = totalCost/quantity;
     }
@@ -63,6 +66,7 @@ public class Position {
         this.avgBuyPrice = avgBuyPrice;
     }
 
+    //TODO: fix this to just be a return and not a calculation
     public double getRealizedProfitLoss() {
         return quantitySold *(currentSellPrice - avgBuyPrice);
     }
@@ -71,6 +75,7 @@ public class Position {
         this.realizedProfitLoss = realizedProfitLoss;
     }
 
+    //TODO: fix this to just be a return and not a calculation
     public double getUnrealizedProfitLoss() {
         return (quantity - quantitySold)*(currentSellPrice - avgBuyPrice);
     }

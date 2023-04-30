@@ -30,6 +30,25 @@ public class StockDao {
         return null;
     }
 
+    public List<Stock> getAllStocks(){
+        try{
+            String sql = "SELECT * FROM stocks"";
+
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            ArrayList<Stock> stocks = new ArrayList<Stock>();
+            while(rs.next()){
+                stocks.add(new Stock(rs.getInt("stockId"), rs.getDouble("price"), rs.getString("name"), rs.getString("ticker")));
+            }
+            return stocks;
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+        return null;
+    }
+
     public void addStock(String name, int price, String ticker){
         String sql = "INSERT INTO stocks (name, " +
                 "price, ticker)" +
