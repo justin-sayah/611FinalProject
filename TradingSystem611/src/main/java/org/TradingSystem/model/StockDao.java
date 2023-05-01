@@ -8,9 +8,18 @@ import java.util.List;
 
 public class StockDao {
     private Connection connection;
+    public static StockDao stockDao;
 
+    //TODO: make private
     public StockDao(){
         connection = DatabaseConnection.getConnection();
+    }
+
+    public static StockDao getInstance() {
+        if(stockDao == null){
+            stockDao = new StockDao();
+        }
+        return stockDao;
     }
 
     public Stock getStock(int stockId){

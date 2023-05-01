@@ -1,5 +1,7 @@
 package org.TradingSystem.model;
 
+import java.util.List;
+
 public class Transaction {
     private int transactionId;
     private int accountId;
@@ -79,6 +81,24 @@ public class Transaction {
     public void setTransactionId(int transactionId) {
         this.transactionId = transactionId;
     }
+
+    public static Transaction getTransaction(int transactionId){
+        return TransactionDao.getInstance().getTransaction(transactionId);
+    }
+
+    public static List<Transaction> getAllTransactionsByAccount(int accountId){
+        return TransactionDao.getInstance().getAllTransactionsByAccount(accountId);
+    }
+
+    public static List<Transaction> getAllTransactionsByStock(int stockId){
+        return TransactionDao.getInstance().getAllTransactionsByStock(stockId);
+    }
+
+    public static void addTransaction(int accountId, int stockId, int quantity, double price, String action){
+        TransactionDao.getInstance().addTransaction(accountId, stockId, quantity, price, action);
+    }
+
+    //TODO: rest of wrapper methods
 
     @Override
     public String toString() {

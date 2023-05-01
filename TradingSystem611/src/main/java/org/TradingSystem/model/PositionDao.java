@@ -15,9 +15,18 @@ Purpose: Data Access Object to perform CRUD on Position objects
  */
 public class PositionDao {
     private Connection connection;
+    public static PositionDao positionDao;
 
+    //TODO: make private
     public PositionDao(){
         connection = DatabaseConnection.getConnection();
+    }
+
+    public static PositionDao getInstance() {
+        if(positionDao == null){
+            positionDao = new PositionDao();
+        }
+        return positionDao;
     }
 
     public List<Position> getAllPositions(int accountId){
@@ -31,11 +40,14 @@ public class PositionDao {
             ResultSet rs = pstmt.executeQuery();
 
             LinkedList<Position> accounts = new LinkedList<Position>();
-            //TODO: when fetching a Position, consult StockDao to get current sell prices
+            StockDao sDao = StockDao.getInstance();
             while(rs.next()){
-                accounts.add(new Position(accountId, rs.getInt("securityId"),rs.getInt("quantity"),
-                        rs.getInt("quantitySold"), rs.getDouble("currentSellPrice"),
-                        rs.getDouble("avgBuyPrice"), rs.getDouble("realizedPL"), rs.getDouble("unrealizedPL")));
+                Position fetched = new Position(accountId, rs.getInt("securityId"),rs.getInt("quantity"),
+                        rs.getInt("quantitySold"), sDao.getStock(rs.getInt("securityId")).getPrice(),
+                        rs.getDouble("avgBuyPrice"), rs.getDouble("realizedPL"), rs.getDouble("unrealizedPL"));
+                accounts.add(fetched);
+                //push new price to the db
+                updatePosition(fetched);
             }
             return accounts;
         }catch (Exception e){
