@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CustomerAccountView extends JFrame implements ActionListener {
+    //labels declarations
     private final JPanel container;
     private final JLabel customerNameLabel;
     private final JLabel accountIDLabel;
@@ -84,12 +85,11 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         updateAccountInformation(accountNumberInt,customerID);
 
     }
-
+//set locations for each label and button: x represents the column, y represents the row
     public void setLocationAndSize() {
 
         accountID.setBounds(0,0,110,40);
         accountIDLabel.setBounds(120, 0, 20, 40);
-
         nameLabel.setBounds(150,0,110,40);
         customerNameLabel.setBounds(260, 0, 200, 40);
         balanceLabel.setBounds(150, 200, 100, 40);
@@ -148,21 +148,22 @@ public class CustomerAccountView extends JFrame implements ActionListener {
             this.setVisible(false);
         }else if(e.getSource() == transacButton){
             //TODO need to implement the transaction page
-        }else if(e.getSource() == depositButton){
+        }else if(e.getSource() == depositButton){ //call the deposit popup window
             if (depositPopup == null) {
                 depositPopup = new DepositPopup(this,tradingAccount); // Create the deposit popup window if it's not already created
             }
             depositPopup.setVisible(true); // Show the deposit popup window
-        }else if(e.getSource() == withdrawButton){
+        }else if(e.getSource() == withdrawButton){ //call the withdraw popup window
             if (withdrawPopup == null) {
                 withdrawPopup = new WithdrawPopup(this,tradingAccount); // Create the deposit popup window if it's not already created
             }
             withdrawPopup.setVisible(true); // Show the deposit popup window
         }else if(e.getSource() == manageButton){
-            //TODO need to implement the manange page
+            //TODO need to implement the manage page
         }else if(e.getSource() == buyButton){
-
-        }else if(e.getSource() == refreshButton){
+            new BuyStockPage(customer.getLastName()+customer.getFirstName(),tradingAccount);
+            this.setVisible(false);
+        }else if(e.getSource() == refreshButton){ //refresh the page and update he balance, realized profit/loss and unrealized profit/loss
             updateAccountInformation(accountNumberInt,customerId);
         }
     }
@@ -176,10 +177,10 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         realizedPL.setText(String.valueOf(tradingAccount.getRealizedProfitLoss()));
         unrealizedPL.setText(String.valueOf(tradingAccount.getUnrealizedProfitLoss()));
     }
-//    public static void main(String[] args){
-//        CustomerAccountView ca = new CustomerAccountView(1,"Shangzhou" + "Yin",1);
-//        ca.setVisible(true);
-//    }
+    public static void main(String[] args){
+        CustomerAccountView ca = new CustomerAccountView(1,"Shangzhou" + "Yin",1);
+        ca.setVisible(true);
+    }
 
 
 
