@@ -17,9 +17,18 @@ Purpose: Data Access Object to perform CRUD on People (Manager/Customer)
 public class PeopleDao {
 
     private Connection connection;
+    public static PeopleDao pDao;
 
+    //TODO: make private
     public PeopleDao(){
         connection = DatabaseConnection.getConnection();
+    }
+
+    public static PeopleDao getInstance() {
+        if(pDao == null){
+            pDao = new PeopleDao();
+        }
+        return  pDao;
     }
 
     public Customer getCustomer(int personId){

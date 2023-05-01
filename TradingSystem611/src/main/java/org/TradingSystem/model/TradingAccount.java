@@ -1,10 +1,11 @@
 package org.TradingSystem.model;
 
+import java.util.List;
+
 public class TradingAccount implements Account{
     protected int accountNumber;
     protected int personId;
     protected double balance;
-
     protected double unrealizedProfitLoss;
     protected double realizedProfitLoss;
 
@@ -50,6 +51,14 @@ public class TradingAccount implements Account{
         return realizedProfitLoss;
     }
 
+    public void setRealizedProfitLoss(double realizedProfitLoss) {
+        this.realizedProfitLoss = realizedProfitLoss;
+    }
+
+    public void setUnrealizedProfitLoss(double unrealizedProfitLoss) {
+        this.unrealizedProfitLoss = unrealizedProfitLoss;
+    }
+
     public double getUnrealizedProfitLoss() {
         return unrealizedProfitLoss;
     }
@@ -65,6 +74,47 @@ public class TradingAccount implements Account{
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public static TradingAccount getAccount(int accountId){
+        return TradingAccountDao.getInstance().getAccount(accountId);
+    }
+
+    //beginning of wrapper methods
+    public static TradingAccount getAccount(int accountId, int customerId){
+        return TradingAccountDao.getInstance().getAccount(accountId, customerId);
+    }
+
+    public static TradingAccount getPendingAccount(int accountId, int customerId){
+        return TradingAccountDao.getInstance().getPendingAccount(accountId, customerId);
+    }
+
+    public static List<TradingAccount> getAllActive(int customerId){
+        return TradingAccountDao.getInstance().getAllActive(customerId);
+    }
+
+    public static List<TradingAccount> getPendingActive(int customerId){
+        return TradingAccountDao.getInstance().getAllPending(customerId);
+    }
+
+    public static void update(TradingAccount tradingAccount){
+        TradingAccountDao.getInstance().update(tradingAccount);
+    }
+
+    public static void delete(TradingAccount tradingAccount){
+        TradingAccountDao.getInstance().delete(tradingAccount);
+    }
+
+    public static void deleteFromPending(TradingAccount tradingAccount){
+        TradingAccountDao.getInstance().deleteFromPending(tradingAccount);
+    }
+
+    public static void addPendingAccount(int customerId, String type){
+        TradingAccountDao.getInstance().addPendingAccount(customerId, type);
+    }
+
+    public static void addTradingAccount(TradingAccount tradingAccount){
+        TradingAccountDao.getInstance().addTradingAccount(tradingAccount);
     }
 
     //FOR TESTING PURPOSES

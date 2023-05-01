@@ -26,4 +26,27 @@ public class Customer extends Person {
     public ArrayList<Message> getAllMessages(){
         return messages;
     }
-}
+
+    public static Customer getCustomer(int personId){
+        PeopleDao pDao = PeopleDao.getInstance();
+        return pDao.getCustomer(personId);
+    }
+
+    public static Customer customerLogin(String username, String password){
+        return PeopleDao.getInstance().login(username, password);
+    }
+
+    public static void updateCustomer(Customer customer){
+        PeopleDao.getInstance().updateCustomer(customer);
+    }
+
+    public static void changePassword(String ssn, String username, String password){
+        PeopleDao.getInstance().changePassword(ssn, username, password);
+    }
+
+    public static void deleteCustomer(Customer customer){
+        PeopleDao.getInstance().deleteCustomer(customer);
+    }
+
+
+    }

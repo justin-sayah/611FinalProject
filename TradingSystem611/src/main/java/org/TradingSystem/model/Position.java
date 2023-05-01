@@ -30,30 +30,86 @@ public class Position {
         updatePosition();
     }
 
+    //attempts to sell quantityToSell, updates PL and DB, and if quantity is 0, closes position in DB
+    public void sell(int quantityToSell){
+        if(quantityToSell <= 0){
+            System.out.println("Can't sell 0 or less shares.");
+        }
+        else if(quantityToSell > quantity){
+            System.out.println("Can't sell more than you have.");
+        }
+        else{
+            quantity -= quantityToSell;
+            quantitySold += quantityToSell;
+
+            double net = quantityToSell * currentSellPrice;
+            TradingAccount account = TradingAccount.getAccount(accountID);
+
+            //take current realized pl and add net from transaction to it, remove it from unrealized
+            account.setRealizedProfitLoss(account.getRealizedProfitLoss() + net);
+            account.setUnrealizedProfitLoss(account.getUnrealizedProfitLoss() - net);
+
+            //add amount into balance
+            account.deposit(net);
+
+            //push account update
+            TradingAccount.update(account);
+
+            //recalculate local pl
+            calculateRealizedPl();
+            calculateUnrealizedPl();
+            //push position update
+            updatePosition(this);
+            Transaction.addTransaction(accountID, securityId, quantity, currentSellPrice, "sell");
+            if(quantity == 0){
+                deletePosition(this);
+            }
+        }
+    }
+
     //adds quantityToAdd shares at the current sellPrice/buyPrice
     //creates a transaction to cement this purchase
-    //TODO: update balance after a successful purchase
-    public void addToPosition(int quantityToAdd){
+    private void addToPosition(int quantityToAdd){
         //how much this purchase cost
         double newPurchaseCost = quantityToAdd*getCurrentSellPrice();
+
+        //check if this can be afforded
+        TradingAccount account = TradingAccount.getAccount(accountID);
+        if(account.getBalance() < newPurchaseCost){
+            return;
+        }
+
         quantity += quantityToAdd;
         avgBuyPrice = (avgBuyPrice + newPurchaseCost)/(quantity);
 
+
         calculateRealizedPl();
         calculateUnrealizedPl();
-
-
-        //TODO: make a transaction record
 
         updatePosition();
     }
 
     private void calculateUnrealizedPl(){
-        unrealizedProfitLoss = (quantity)*(currentSellPrice - avgBuyPrice);
+        //recalculate any changes in PL and push changes to account
+        double newUnrealizd = (quantity)*(currentSellPrice - avgBuyPrice);
+        double difference = newUnrealizd - unrealizedProfitLoss;
+        unrealizedProfitLoss = newUnrealizd;
+
+        TradingAccount account = TradingAccount.getAccount(accountID);
+        account.setUnrealizedProfitLoss(account.getUnrealizedProfitLoss() + difference);
+        TradingAccount.update(account);
     }
 
     private void calculateRealizedPl(){
-        realizedProfitLoss = (quantitySold) *(currentSellPrice - avgBuyPrice);
+        //recalculate any changes in PL and push changes to account
+        double newRealized = (quantitySold) * (currentSellPrice - avgBuyPrice);
+        double difference = newRealized - unrealizedProfitLoss;
+        realizedProfitLoss = newRealized;
+
+
+        TradingAccount account = TradingAccount.getAccount(accountID);
+        account.setRealizedProfitLoss(account.getRealizedProfitLoss() + difference);
+        TradingAccount.update(account);
     }
 
     public int getAccountID() {
@@ -116,28 +172,6 @@ public class Position {
         return quantitySold;
     }
 
-    //attempts to sell quantityToSell, updates PL and DB, and if quantity is 0, closes position in DB
-    //TODO: update balance of Account after a successful sell
-    public void sell(int quantityToSell){
-        if(quantityToSell <= 0){
-            System.out.println("Can't sell 0 or less shares.");
-        }
-        else if(quantityToSell > quantity){
-            System.out.println("Can't sell more than you have.");
-        }
-        else{
-            quantity -= quantityToSell;
-            quantitySold += quantityToSell;
-            calculateRealizedPl();
-            calculateUnrealizedPl();
-
-            //TODO: create a Transaction to mark sell
-            if(quantity == 0){
-                //TODO: delete from DB and do appropriate updating of account PL
-            }
-        }
-    }
-
     //beginning of wrapper methods
     public static List<Position> getAllPositions(int accountId){
         PositionDao pDao = PositionDao.getInstance();
@@ -154,13 +188,34 @@ public class Position {
         pDao.updatePosition(position);
     }
 
-    //TODO: logic of subtracting cost from account
-    public static void createPosition(int accountId, int stockId, int quantity){
+    public static void buy(int accountId, int stockId, int quantity){
         StockDao sDao = new StockDao();
         double price = sDao.getStock(stockId).getPrice();
-        Position p1 = new Position(accountId, stockId, quantity, 0, price, price,0, 0);
-        PositionDao pDao = PositionDao.getInstance();
-        pDao.createPosition(p1);
+
+        //check if this can be afforded
+        TradingAccount account = TradingAccount.getAccount(accountId);
+        if(account.getBalance() < price){
+            return;
+        }
+
+        //subtract cost
+
+        //attempt to fetch position, if it is new, create a new Position
+        //if it not a new position, add to position
+        Position p1 = getPosition(accountId, stockId);
+        if(p1 == null){
+            p1 = new Position(accountId, stockId, quantity, 0, price, price,0, 0);
+            PositionDao pdao = PositionDao.getInstance();
+            pdao.createPosition(p1);
+        }
+
+        //subtract cost of the purchase
+        account.withdraw(price);
+        TradingAccount.update(account);
+
+        //create transaction
+        Transaction.addTransaction(accountId, stockId, quantity, price, "buy");
+        updatePosition(p1);
     }
 
     public static Position getPosition(int accountID, int securityId){

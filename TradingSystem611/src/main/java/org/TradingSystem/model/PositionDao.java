@@ -39,17 +39,19 @@ public class PositionDao {
 
             ResultSet rs = pstmt.executeQuery();
 
-            LinkedList<Position> accounts = new LinkedList<Position>();
+            LinkedList<Position> positions = new LinkedList<Position>();
             StockDao sDao = StockDao.getInstance();
             while(rs.next()){
                 Position fetched = new Position(accountId, rs.getInt("securityId"),rs.getInt("quantity"),
                         rs.getInt("quantitySold"), sDao.getStock(rs.getInt("securityId")).getPrice(),
                         rs.getDouble("avgBuyPrice"), rs.getDouble("realizedPL"), rs.getDouble("unrealizedPL"));
-                accounts.add(fetched);
-                //push new price to the db
+                positions.add(fetched);
+
+                //push new price to the db, reflects price update in terms of PL in parent account as well
                 updatePosition(fetched);
+
             }
-            return accounts;
+            return positions;
         }catch (Exception e){
             System.out.println(e.toString());
         }
@@ -115,11 +117,13 @@ public class PositionDao {
 
             ResultSet rs = pstmt.executeQuery();
 
-            //TODO: when fetching a Position, consult StockDao to get current sell price
+            StockDao sDao = new StockDao();
             if(rs.next()){
-                return new Position(accountId, securityId ,rs.getInt("quantity"),
-                        rs.getInt("quantitySold"), rs.getDouble("currentSellPrice"),
+                Position fetched = new Position(accountId, securityId ,rs.getInt("quantity"),
+                        rs.getInt("quantitySold"), sDao.getStock(rs.getInt("securityId")).getPrice(),
                         rs.getDouble("avgBuyPrice"), rs.getDouble("realizedPL"), rs.getDouble("unrealizedPL"));
+                updatePosition(fetched);
+                return fetched;
             }
         }catch (Exception e){
             System.out.println(e.toString());

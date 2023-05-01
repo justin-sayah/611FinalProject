@@ -14,9 +14,37 @@ Purpose: Data Access Object to perform CRUD on TradingAccounts across DB
  */
 public class TradingAccountDao implements AccountDao<TradingAccount>{
     private Connection connection;
+    public static TradingAccountDao dao;
+
+    //TODO: Make private
     public TradingAccountDao(){
         connection = DatabaseConnection.getConnection();
     }
+
+    public static TradingAccountDao getInstance() {
+        if(dao == null){
+            dao = new TradingAccountDao();
+        }
+        return dao;
+    }
+
+    public TradingAccount getAccount(int accountId) {
+        try{
+            String sql = "SELECT * FROM activeAccounts WHERE accountNumber = ?";
+
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1,accountId);
+
+            ResultSet rs    = pstmt.executeQuery();
+            if(rs.next()){
+                return new TradingAccount(accountId, rs.getInt("customerId"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
+            }
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+        return null;
+    }
+
     @Override
     public TradingAccount getAccount(int accountId, int customerId) {
         try{
@@ -38,9 +66,6 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         }
         return null;
     }
-
-
-
 
     @Override
     public TradingAccount getPendingAccount(int accountId, int customerId) {

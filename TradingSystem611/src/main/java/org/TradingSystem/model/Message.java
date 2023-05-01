@@ -1,5 +1,7 @@
 package org.TradingSystem.model;
 
+import java.util.List;
+
 /*
 Date: 4/23/23
 Class: CS611 Final Project

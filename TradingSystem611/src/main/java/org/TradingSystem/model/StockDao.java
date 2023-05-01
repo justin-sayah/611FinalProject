@@ -58,9 +58,8 @@ public class StockDao {
         return null;
     }
 
-    public void addStock(String name, int price, String ticker){
-        String sql = "INSERT INTO stocks (name, " +
-                "price, ticker)" +
+    public void addStock(String name, double price, String ticker){
+        String sql = "INSERT INTO stocks (name, price, ticker)" +
                 "VALUES (?,?,?)";
 
         try{

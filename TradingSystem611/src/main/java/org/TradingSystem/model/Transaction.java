@@ -98,7 +98,22 @@ public class Transaction {
         TransactionDao.getInstance().addTransaction(accountId, stockId, quantity, price, action);
     }
 
-    //TODO: rest of wrapper methods
+    public static void addTransaction(Transaction transaction){
+        TransactionDao.getInstance().addTransaction(transaction);
+
+    }
+
+    public static void deleteTransaction(Transaction transaction){
+        TransactionDao.getInstance().deleteTransaction(transaction);
+    }
+
+    public static void deleteTransaction(int transactionId){
+        TransactionDao.getInstance().deleteTransaction(transactionId);
+    }
+
+    public static void updateTransaction(Transaction transaction){
+        TransactionDao.getInstance().updateTransaction(transaction);
+    }
 
     @Override
     public String toString() {
