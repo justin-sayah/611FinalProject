@@ -9,12 +9,17 @@ public class Manager extends Person {
         super(id, firstName, lastName, username, password, dob, ssn);
     }
 
-    public void createNewAccount(String accountType, int accountNumber){
-        if(!accountType.equals("tradingAccount")){
-            return;
-        }
-        TradingAccount account = new TradingAccount(accountNumber);
-        TradingAccountDao.getInstance().addTradingAccount(account);
+    public Market getMarket(){
+        return Market.getInstance();
+    }
+
+    public static boolean addNewPendingAccount(int customerId, String accountType){
+        TradingAccountDao.getInstance().addPendingAccount(customerId, accountType);
+        return true;
+    }
+
+    public TradingAccount getPendingAccount(int accountId, int customerId){
+        return TradingAccountDao.getInstance().getPendingAccount(accountId, customerId);
     }
 
     public boolean activateAccount(TradingAccount account){
@@ -23,22 +28,12 @@ public class Manager extends Person {
         return true;
     }
 
-    public boolean pendAccount(TradingAccount account){
-        TradingAccountDao.getInstance().delete(account);
-        TradingAccountDao.getInstance().addPendingAccount(account.getPersonId(), "tradingAccount");
-        return true;
-    }
-
     public boolean deleteAccount(TradingAccount account){
         TradingAccountDao.getInstance().delete(account);
         return true;
     }
 
-    public TradingAccount getPendingAccount(int accountId, int customerId){
-        return TradingAccountDao.getInstance().getPendingAccount(accountId, customerId);
-    }
-
-    public List<TradingAccount> getAllActive(int customerId){
+    public List<TradingAccount> getAllActiveAccounts(int customerId){
         return TradingAccountDao.getInstance().getAllActive(customerId);
     }
 
@@ -54,8 +49,8 @@ public class Manager extends Person {
         return PeopleDao.getInstance().getManager(personId);
     }
 
-    public void sendMessage(Customer customer, int messageID, String text){
-        customer.receiveMessage(new Message(messageID, this.getID(), customer.getID(), text));
+    public void sendMessage(Customer customer, String text){
+        MessageCenter.getInstance().sendMessage(getID(), customer.getID(), text);
     }
 
     public static boolean createCustomer(String firstName, String lastName, String username, String password, String dob, String ssn){
@@ -77,7 +72,6 @@ public class Manager extends Person {
     public static void changePassword(String ssn, String username, String password){
         PeopleDao.getInstance().changePassword(ssn, username, password);
     }
-
     public static void deleteManager(Manager manager){
         PeopleDao.getInstance().deleteManager(manager);
     }

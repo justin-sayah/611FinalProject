@@ -35,4 +35,8 @@ public class MessageCenter {
     public void deleteMessage(Message message){
         messageDao.deleteMessage(message);
     }
+
+    public void deleteMessage(int messageId){
+        messageDao.deleteMessage(messageId);
+    }
 }

@@ -2,8 +2,6 @@ package org.TradingSystem.model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -72,7 +70,7 @@ public class PositionDao {
             pstmt.setInt(1, position.getQuantity());
             pstmt.setInt(2, position.getQuantitySold());
             pstmt.setDouble(3, position.getAvgBuyPrice());
-            pstmt.setDouble(4, position.getCurrentSellPrice());
+            pstmt.setDouble(4, position.getCurrentPrice());
             pstmt.setDouble(5, position.getRealizedProfitLoss());
             pstmt.setDouble(6, position.getUnrealizedProfitLoss());
             pstmt.setInt(7, position.getAccountID());
@@ -94,7 +92,7 @@ public class PositionDao {
             pstmt.setInt(1, position.getQuantity());
             pstmt.setInt(2, position.getQuantitySold());
             pstmt.setDouble(3, position.getAvgBuyPrice());
-            pstmt.setDouble(4, position.getCurrentSellPrice());
+            pstmt.setDouble(4, position.getCurrentPrice());
             pstmt.setDouble(5, position.getRealizedProfitLoss());
             pstmt.setDouble(6, position.getUnrealizedProfitLoss());
             pstmt.setInt(7, position.getAccountID());

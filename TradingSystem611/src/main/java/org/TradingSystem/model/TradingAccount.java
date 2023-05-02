@@ -80,11 +80,6 @@ public class TradingAccount implements Account{
         return TradingAccountDao.getInstance().getAccount(accountId);
     }
 
-    //beginning of wrapper methods
-    public static TradingAccount getAccount(int accountId, int customerId){
-        return TradingAccountDao.getInstance().getAccount(accountId, customerId);
-    }
-
     public static TradingAccount getPendingAccount(int accountId, int customerId){
         return TradingAccountDao.getInstance().getPendingAccount(accountId, customerId);
     }
@@ -93,7 +88,7 @@ public class TradingAccount implements Account{
         return TradingAccountDao.getInstance().getAllActive(customerId);
     }
 
-    public static List<TradingAccount> getPendingActive(int customerId){
+    public static List<TradingAccount> getAllPending(int customerId){
         return TradingAccountDao.getInstance().getAllPending(customerId);
     }
 
@@ -115,6 +110,10 @@ public class TradingAccount implements Account{
 
     public static void addTradingAccount(TradingAccount tradingAccount){
         TradingAccountDao.getInstance().addTradingAccount(tradingAccount);
+    }
+
+    public List<Position> getAllPositions(){
+        return Position.getAllPositions(accountNumber);
     }
 
     //FOR TESTING PURPOSES
