@@ -4,17 +4,23 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class TransactionDao {
     private Connection connection;
+    public static TransactionDao transactionDao;
 
     public TransactionDao(){
         connection = DatabaseConnection.getConnection();
     }
 
+    public static TransactionDao getInstance() {
+        if(transactionDao == null){
+            transactionDao = new TransactionDao();
+        }
+        return transactionDao;
+    }
     public Transaction getTransaction(int transactionId){
         try{
             String sql = "SELECT * FROM transactions WHERE"

@@ -1,39 +1,149 @@
 package org.TradingSystem.model;
 
+import java.util.List;
+
 public class Position {
     protected int accountID;
     protected int quantity;
-    protected double currentSellPrice;
+    protected double currentPrice;
     protected double avgBuyPrice;
     protected double realizedProfitLoss;
     protected double unrealizedProfitLoss;
     protected int securityId;
     protected int quantitySold;
 
-    public Position(int accountID, int securityId, int quantity, int quantitySold, double currentSellPrice, double avgBuyPrice, double realizedProfitLoss, double unrealizedProfitLoss) {
+    public Position(int accountID, int securityId, int quantity, int quantitySold, double currentPrice, double avgBuyPrice, double realizedProfitLoss, double unrealizedProfitLoss) {
         this.accountID = accountID;
         this.quantity = quantity;
-        this.currentSellPrice = currentSellPrice;
+        this.currentPrice = currentPrice;
         this.avgBuyPrice = avgBuyPrice;
         this.realizedProfitLoss = realizedProfitLoss;
         this.unrealizedProfitLoss = unrealizedProfitLoss;
         this.securityId = securityId;
         this.quantitySold = quantitySold;
+
+        //make sure calculations on PL are up-to-date
+        calculateUnrealizedPl();
+        calculateRealizedPl();
+        updatePosition();
+    }
+
+    //attempts to sell quantityToSell, updates PL and DB, and if quantity is 0, closes position in DB
+    public void sell(int quantityToSell){
+        if(quantityToSell <= 0){
+            System.out.println("Can't sell 0 or less shares.");
+        }
+        else if(quantityToSell > quantity){
+            System.out.println("Can't sell more than you have.");
+        }
+        else{
+            quantity -= quantityToSell;
+            quantitySold += quantityToSell;
+
+            double net = quantityToSell * currentPrice;
+            TradingAccount account = TradingAccount.getAccount(accountID);
+
+            //take current realized pl and add net from transaction to it, remove it from unrealized
+            account.setRealizedProfitLoss(account.getRealizedProfitLoss() + net);
+            account.setUnrealizedProfitLoss(account.getUnrealizedProfitLoss() - net);
+
+            //add amount into balance
+            account.deposit(net);
+
+            //push account update
+            TradingAccount.update(account);
+
+            //recalculate local pl
+            calculateRealizedPl();
+            calculateUnrealizedPl();
+            //push position update
+            updatePosition(this);
+            Transaction.addTransaction(accountID, securityId, quantity, currentPrice, "sell");
+            if(quantity == 0){
+                deletePosition(this);
+            }
+        }
+    }
+
+    public void buy(int stockId, int quantity){
+        Position.buy(accountID, stockId, quantity);
+    }
+
+    public static void buy(int accountId, int stockId, int quantity){
+        StockDao sDao = new StockDao();
+        double price = sDao.getStock(stockId).getPrice();
+
+        //check if this can be afforded
+        TradingAccount account = TradingAccount.getAccount(accountId);
+        if(account.getBalance() < price){
+            return;
+        }
+
+        //subtract cost
+
+        //attempt to fetch position, if it is new, create a new Position
+        //if it not a new position, add to position
+        Position p1 = getPosition(accountId, stockId);
+        if(p1 == null){
+            p1 = new Position(accountId, stockId, quantity, 0, price, price,0, 0);
+            PositionDao pdao = PositionDao.getInstance();
+            pdao.createPosition(p1);
+        }
+
+        //subtract cost of the purchase
+        account.withdraw(price);
+        TradingAccount.update(account);
+
+        //create transaction
+        Transaction.addTransaction(accountId, stockId, quantity, price, "buy");
+        updatePosition(p1);
     }
 
     //adds quantityToAdd shares at the current sellPrice/buyPrice
     //creates a transaction to cement this purchase
-    //TODO: fix implementation
-    public void addToPosition(int quantityToAdd){
-        double totalCost = avgBuyPrice * quantity + getCurrentSellPrice() * quantityToAdd;
+    private void addToPosition(int quantityToAdd){
+        //how much this purchase cost
+        double newPurchaseCost = quantityToAdd* getCurrentPrice();
+
+        //check if this can be afforded
+        TradingAccount account = TradingAccount.getAccount(accountID);
+        if(account.getBalance() < newPurchaseCost){
+            return;
+        }
+
         quantity += quantityToAdd;
-        avgBuyPrice = totalCost/quantity;
+        avgBuyPrice = (avgBuyPrice + newPurchaseCost)/(quantity);
+
+
+        calculateRealizedPl();
+        calculateUnrealizedPl();
+
+        updatePosition();
     }
 
-    public void updatePosition(){
-        PositionDao pd = new PositionDao();
-        pd.updatePosition(this);
+    private void calculateUnrealizedPl(){
+        //recalculate any changes in PL and push changes to account
+        double newUnrealizd = (quantity)*(currentPrice - avgBuyPrice);
+        double difference = newUnrealizd - unrealizedProfitLoss;
+        unrealizedProfitLoss = newUnrealizd;
+
+        TradingAccount account = TradingAccount.getAccount(accountID);
+        account.setUnrealizedProfitLoss(account.getUnrealizedProfitLoss() + difference);
+        TradingAccount.update(account);
     }
+
+    private void calculateRealizedPl(){
+        //recalculate any changes in PL and push changes to account
+        double newRealized = (quantitySold) * (currentPrice - avgBuyPrice);
+        double difference = newRealized - unrealizedProfitLoss;
+        realizedProfitLoss = newRealized;
+
+
+        TradingAccount account = TradingAccount.getAccount(accountID);
+        account.setRealizedProfitLoss(account.getRealizedProfitLoss() + difference);
+        TradingAccount.update(account);
+    }
+
     public int getAccountID() {
         return accountID;
     }
@@ -50,12 +160,12 @@ public class Position {
         this.quantity = quantity;
     }
 
-    public double getCurrentSellPrice() {
-        return currentSellPrice;
+    public double getCurrentPrice() {
+        return currentPrice;
     }
 
-    public void setCurrentSellPrice(double currentSellPrice) {
-        this.currentSellPrice = currentSellPrice;
+    public void setCurrentPrice(double currentPrice) {
+        this.currentPrice = currentPrice;
     }
 
     public double getAvgBuyPrice() {
@@ -66,18 +176,16 @@ public class Position {
         this.avgBuyPrice = avgBuyPrice;
     }
 
-    //TODO: fix this to just be a return and not a calculation
     public double getRealizedProfitLoss() {
-        return quantitySold *(currentSellPrice - avgBuyPrice);
+        return realizedProfitLoss;
     }
 
     public void setRealizedProfitLoss(double realizedProfitLoss) {
         this.realizedProfitLoss = realizedProfitLoss;
     }
 
-    //TODO: fix this to just be a return and not a calculation
     public double getUnrealizedProfitLoss() {
-        return (quantity - quantitySold)*(currentSellPrice - avgBuyPrice);
+        return unrealizedProfitLoss;
     }
 
     public void setUnrealizedProfitLoss(double unrealizedProfitLoss) {
@@ -96,17 +204,41 @@ public class Position {
         return quantitySold;
     }
 
-    public void sell(){
-        if(quantitySold < quantity){
-            quantity -= quantitySold;
-        }else{
-            System.out.println("Quantity to sell is greater than the quantity that customer has");
-        }
+    //beginning of wrapper methods
+    public static List<Position> getAllPositions(int accountId){
+        PositionDao pDao = PositionDao.getInstance();
+        return pDao.getAllPositions(accountId);
     }
+
+    public void updatePosition(){
+        PositionDao pDao = PositionDao.getInstance();
+        pDao.updatePosition(this);
+    }
+
+    public static void updatePosition(Position position){
+        PositionDao pDao = PositionDao.getInstance();
+        pDao.updatePosition(position);
+    }
+
+    public static Position getPosition(int accountID, int securityId){
+        PositionDao pDao = PositionDao.getInstance();
+        return pDao.getPosition(accountID,securityId);
+    }
+
+    public static void deletePosition(int accountId, int securityId){
+        PositionDao pDao = PositionDao.getInstance();
+        pDao.deletePosition(accountId, securityId);
+    }
+
+    public static void deletePosition(Position position){
+        PositionDao pDao = PositionDao.getInstance();
+        pDao.deletePosition(position);
+    }
+
     @Override
     public String toString() {
         return "Account ID: "+ accountID + " Security ID: "+ securityId + " Quantity: " + quantity
-                + " current sell price: "+ currentSellPrice + " average buy price: "+
+                + " current sell price: "+ currentPrice + " average buy price: "+
                 avgBuyPrice + " realized profit or loss：" + realizedProfitLoss + " unrealized profit or loss: " +
                 unrealizedProfitLoss;
     }

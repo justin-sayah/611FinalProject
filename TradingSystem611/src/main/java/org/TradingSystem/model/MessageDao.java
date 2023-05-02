@@ -67,4 +67,17 @@ public class MessageDao {
             System.out.println(e.toString());
         }
     }
+
+    public void deleteMessage(int messageId){
+        String sql = "DELETE FROM messages WHERE messageId = ?";
+
+        try{
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1,messageId);
+
+            pstmt.executeUpdate();
+        } catch (Exception e){
+            System.out.println(e.toString());
+        }
+    }
 }

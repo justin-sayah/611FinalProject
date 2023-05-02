@@ -2,8 +2,6 @@ package org.TradingSystem.model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,9 +13,18 @@ Purpose: Data Access Object to perform CRUD on Position objects
  */
 public class PositionDao {
     private Connection connection;
+    public static PositionDao positionDao;
 
+    //TODO: make private
     public PositionDao(){
         connection = DatabaseConnection.getConnection();
+    }
+
+    public static PositionDao getInstance() {
+        if(positionDao == null){
+            positionDao = new PositionDao();
+        }
+        return positionDao;
     }
 
     public List<Position> getAllPositions(int accountId){
@@ -30,14 +37,19 @@ public class PositionDao {
 
             ResultSet rs = pstmt.executeQuery();
 
-            LinkedList<Position> accounts = new LinkedList<Position>();
-            //TODO: when fetching a Position, consult StockDao to get current sell prices
+            LinkedList<Position> positions = new LinkedList<Position>();
+            StockDao sDao = StockDao.getInstance();
             while(rs.next()){
-                accounts.add(new Position(accountId, rs.getInt("securityId"),rs.getInt("quantity"),
-                        rs.getInt("quantitySold"), rs.getDouble("currentSellPrice"),
-                        rs.getDouble("avgBuyPrice"), rs.getDouble("realizedPL"), rs.getDouble("unrealizedPL")));
+                Position fetched = new Position(accountId, rs.getInt("securityId"),rs.getInt("quantity"),
+                        rs.getInt("quantitySold"), sDao.getStock(rs.getInt("securityId")).getPrice(),
+                        rs.getDouble("avgBuyPrice"), rs.getDouble("realizedPL"), rs.getDouble("unrealizedPL"));
+                positions.add(fetched);
+
+                //push new price to the db, reflects price update in terms of PL in parent account as well
+                updatePosition(fetched);
+
             }
-            return accounts;
+            return positions;
         }catch (Exception e){
             System.out.println(e.toString());
         }
@@ -58,7 +70,7 @@ public class PositionDao {
             pstmt.setInt(1, position.getQuantity());
             pstmt.setInt(2, position.getQuantitySold());
             pstmt.setDouble(3, position.getAvgBuyPrice());
-            pstmt.setDouble(4, position.getCurrentSellPrice());
+            pstmt.setDouble(4, position.getCurrentPrice());
             pstmt.setDouble(5, position.getRealizedProfitLoss());
             pstmt.setDouble(6, position.getUnrealizedProfitLoss());
             pstmt.setInt(7, position.getAccountID());
@@ -80,7 +92,7 @@ public class PositionDao {
             pstmt.setInt(1, position.getQuantity());
             pstmt.setInt(2, position.getQuantitySold());
             pstmt.setDouble(3, position.getAvgBuyPrice());
-            pstmt.setDouble(4, position.getCurrentSellPrice());
+            pstmt.setDouble(4, position.getCurrentPrice());
             pstmt.setDouble(5, position.getRealizedProfitLoss());
             pstmt.setDouble(6, position.getUnrealizedProfitLoss());
             pstmt.setInt(7, position.getAccountID());
@@ -103,11 +115,13 @@ public class PositionDao {
 
             ResultSet rs = pstmt.executeQuery();
 
-            //TODO: when fetching a Position, consult StockDao to get current sell price
+            StockDao sDao = new StockDao();
             if(rs.next()){
-                return new Position(accountId, securityId ,rs.getInt("quantity"),
-                        rs.getInt("quantitySold"), rs.getDouble("currentSellPrice"),
+                Position fetched = new Position(accountId, securityId ,rs.getInt("quantity"),
+                        rs.getInt("quantitySold"), sDao.getStock(rs.getInt("securityId")).getPrice(),
                         rs.getDouble("avgBuyPrice"), rs.getDouble("realizedPL"), rs.getDouble("unrealizedPL"));
+                updatePosition(fetched);
+                return fetched;
             }
         }catch (Exception e){
             System.out.println(e.toString());
