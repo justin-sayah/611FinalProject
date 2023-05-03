@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 public class ViewBlockedAccounts extends JFrame implements ActionListener {
 
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
