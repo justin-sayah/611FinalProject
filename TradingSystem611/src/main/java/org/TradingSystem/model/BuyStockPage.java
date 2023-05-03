@@ -196,23 +196,22 @@ public class BuyStockPage extends JFrame implements ActionListener {
             int selectedRow = stockTable.getSelectedRow();
             if (selectedRow != -1) {
                 // Retrieve the selected row data
+                Object stockId = stockTable.getValueAt(selectedRow,1);
                 Object stockPrice = stockTable.getValueAt(selectedRow, 3);
                 if(buyQuantity==null){
                     JOptionPane.showMessageDialog(this,"You have not entered any quantity");
                 }else{
                     try {
                         int quantity = Integer.parseInt(buyQuantity.getText());
+                        int stockId_num =(int)(stockId);
                         double initBalance = tradingAccountDao.getAccount(tradingAccount.getAccountNumber(),tradingAccount.getPersonId()).getBalance();
                         if((quantity*(double)stockPrice)<initBalance){
                             if ( buyPopup == null) {
-                                buyPopup = new BuyConfirmPopup(this,(quantity*(double)stockPrice),initBalance,tradingAccount); // Create the deposit popup window if it's not already created
+                                buyPopup = new BuyConfirmPopup(this,(quantity*(double)stockPrice),initBalance,tradingAccount, (int)(stockId),quantity,(double)stockPrice); // Create the deposit popup window if it's not already created
                             }
                             buyPopup.setVisible(true); // Show the deposit popup window
 
-//                            JOptionPane.showMessageDialog(this,"You have successfully bought the stock");
-//                            double balanceLeft = initBalance-quantity*(double)stockPrice;
-//                            tradingAccount.setBalance(balanceLeft);
-//                            tradingAccountDao.update(tradingAccount);
+//
                         }else{
                             JOptionPane.showMessageDialog(this,"You do not have enough balance");
                         }

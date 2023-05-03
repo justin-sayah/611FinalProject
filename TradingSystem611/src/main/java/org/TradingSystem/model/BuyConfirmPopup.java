@@ -7,12 +7,11 @@ import java.awt.event.ActionListener;
 
 public class BuyConfirmPopup extends JDialog {
     private TradingAccountDao tradingAccountDao;
-    private TransactionDao transactionDao;
 
-    public BuyConfirmPopup(BuyStockPage buyStockPage, double amountCost, double initBalance,TradingAccount tradingAccount){
+
+    public BuyConfirmPopup(BuyStockPage buyStockPage, double amountCost, double initBalance,TradingAccount tradingAccount, int stockId, int quantity,double price){
 
         tradingAccountDao = new TradingAccountDao();
-        transactionDao = new TransactionDao();
 
         JLabel instructionLabel = new JLabel("Your total cost is $"+ amountCost);
         JButton confirmButton = new JButton("CONFIRM");
@@ -41,9 +40,9 @@ public class BuyConfirmPopup extends JDialog {
                 JOptionPane.showMessageDialog(BuyConfirmPopup.this,"You have successfully bought the stock");
                 double balanceLeft = initBalance-amountCost;
                 tradingAccount.setBalance(balanceLeft);
-                tradingAccountDao.update(tradingAccount);
+                Transaction.addTransaction(tradingAccount.getAccountNumber(),stockId,quantity,price,"Buy");
 
-                transactionDao.addTransaction(tradingAccount.getAccountNumber(),buyStockPage.buyQuantity);
+                //transactionDao.addTransaction(tradingAccount.getAccountNumber(),buyStockPage.buyQuantity);
 
                 // Add your code to process the deposit amount here
                 dispose();
