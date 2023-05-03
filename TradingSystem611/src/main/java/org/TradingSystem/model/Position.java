@@ -213,6 +213,8 @@ public class Position {
     }
 
     public void updatePosition(){
+        calculateUnrealizedPl();
+        calculateRealizedPl();
         PositionDao pDao = PositionDao.getInstance();
         pDao.updatePosition(this);
     }

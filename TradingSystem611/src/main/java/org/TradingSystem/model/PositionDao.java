@@ -47,7 +47,6 @@ public class PositionDao {
 
                 //push new price to the db, reflects price update in terms of PL in parent account as well
                 updatePosition(fetched);
-
             }
             return positions;
         }catch (Exception e){
@@ -57,6 +56,10 @@ public class PositionDao {
     }
 
     public void updatePosition(Position position){
+        //NEED TO DO A RECALCULATION OF PROFIT AND LOSS TO MAKE SURE ITS UP TO DATE
+        //BEFORE PUSHING TO DB
+        position.updatePosition();
+
         String sql = "UPDATE positions SET quantity = ? , "
                 + "quantitySold = ?,"
                 + "avgBuyPrice = ?,"
