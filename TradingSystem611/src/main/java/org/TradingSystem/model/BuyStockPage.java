@@ -1,6 +1,8 @@
 package org.TradingSystem.model;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -19,10 +21,16 @@ public class BuyStockPage extends JFrame implements ActionListener {
     private final JButton backButton;
     private final JButton buyButton;
     private final JLabel buyQuantityLabel;
-    private final JTextField buyQuantity;
+    protected final JTextField buyQuantity;
     private final JTable stockTable;
+    private final JLabel balanceLabel;
+    private final JLabel balance;
+    private BuyConfirmPopup buyPopup;
+
+    private JTextField costLabel;
     private StockDao stockDao;
     private DefaultTableModel stockTableModel;
+    private DocumentListener quantityChangeListener;
     private int accountNum;
     private String name;
     private int customerId;
@@ -48,7 +56,11 @@ public class BuyStockPage extends JFrame implements ActionListener {
         accountIDLabel = new JLabel("Account Number: ");
         customerName = new JLabel(name);
         customerLabel = new JLabel("Customer Name: ");
+        balanceLabel = new JLabel("Balance: ");
+        balance = new JLabel(String.valueOf(tradingAccount.getBalance()));
         buyQuantityLabel = new JLabel("Enter the Quantity: ");
+        costLabel = new JTextField("");
+        costLabel.setPreferredSize(new Dimension(200,20));
         buyQuantity = new JTextField();
 
         buyQuantity.setColumns(10);
@@ -86,6 +98,8 @@ public class BuyStockPage extends JFrame implements ActionListener {
         leftPanel.add(accountID);
         leftPanel.add(customerLabel);
         leftPanel.add(customerName);
+        leftPanel.add(balanceLabel);
+        leftPanel.add(balance);
 
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         rightPanel.add(backButton);
@@ -96,6 +110,7 @@ public class BuyStockPage extends JFrame implements ActionListener {
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         bottomPanel.add(buyQuantityLabel);
         bottomPanel.add(buyQuantity);
+        bottomPanel.add(costLabel);
         bottomPanel.add(buyButton);
         JPanel bottomPanelWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
         bottomPanelWrapper.add(bottomPanel);
@@ -108,9 +123,47 @@ public class BuyStockPage extends JFrame implements ActionListener {
         add(container);
         pack();
 
+
+
+
         setLocationAndSize();
         actionEvent();
 
+        // Initialize the quantity change listener
+        quantityChangeListener = new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateCostLabel();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateCostLabel();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateCostLabel();
+            }
+        };
+
+        // Add the quantity change listener to the buyQuantity field
+        buyQuantity.getDocument().addDocumentListener(quantityChangeListener);
+
+    }
+
+    private void updateCostLabel() {
+        try {
+            int quantity = Integer.parseInt(buyQuantity.getText());
+            int selectedRow = stockTable.getSelectedRow();
+            if (selectedRow != -1) {
+                Object stockPrice = stockTable.getValueAt(selectedRow, 3);
+                double cost = quantity * (double) stockPrice;
+                costLabel.setText("Your total cost is: $" + cost);
+            }
+        } catch (NumberFormatException ignored) {
+        }
     }
 
     public void setLocationAndSize(){
@@ -119,6 +172,7 @@ public class BuyStockPage extends JFrame implements ActionListener {
         customerName.setBounds(270,0,100,40);
         customerLabel.setBounds(150, 0, 110, 40);
         stockTable.setBounds(250,150,500,500);
+        costLabel.setBounds(500,700,200,40);
         buyQuantityLabel.setBounds(200,700,100,40);
         buyQuantity.setBounds(350,700,100,40);
         backButton.setBounds(878,0,100,40);
@@ -150,10 +204,15 @@ public class BuyStockPage extends JFrame implements ActionListener {
                         int quantity = Integer.parseInt(buyQuantity.getText());
                         double initBalance = tradingAccountDao.getAccount(tradingAccount.getAccountNumber(),tradingAccount.getPersonId()).getBalance();
                         if((quantity*(double)stockPrice)<initBalance){
-                            JOptionPane.showMessageDialog(this,"You have successfully bought the stock");
-                            double balanceLeft = initBalance-quantity*(double)stockPrice;
-                            tradingAccount.setBalance(balanceLeft);
-                            tradingAccountDao.update(tradingAccount);
+                            if ( buyPopup == null) {
+                                buyPopup = new BuyConfirmPopup(this,(quantity*(double)stockPrice),initBalance,tradingAccount); // Create the deposit popup window if it's not already created
+                            }
+                            buyPopup.setVisible(true); // Show the deposit popup window
+
+//                            JOptionPane.showMessageDialog(this,"You have successfully bought the stock");
+//                            double balanceLeft = initBalance-quantity*(double)stockPrice;
+//                            tradingAccount.setBalance(balanceLeft);
+//                            tradingAccountDao.update(tradingAccount);
                         }else{
                             JOptionPane.showMessageDialog(this,"You do not have enough balance");
                         }

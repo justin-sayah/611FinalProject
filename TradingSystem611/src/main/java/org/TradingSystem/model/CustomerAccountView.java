@@ -17,6 +17,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
     private final JButton buyButton;
 
     private final JButton transacButton;
+    private final JButton blockedButton;
     private final JButton withdrawButton;
     private final JButton depositButton;
     private final JButton refreshButton;
@@ -36,6 +37,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
     private DepositPopup depositPopup;
 
     private WithdrawPopup withdrawPopup;
+
     private int accountNumberInt;
     private int customerId;
 
@@ -71,7 +73,10 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         transacButton = new JButton("TRANSACTIONS");
         withdrawButton = new JButton("WITHDRAW");
         depositButton = new JButton("DEPOSIT");
+
+        //TODO to implement the automatic refresh function later
         refreshButton = new JButton("Refresh");
+        blockedButton = new JButton("BLOCKED ACCOUNTS");
         balanceLabel = new JLabel("Balance");
         balance = new JLabel(String.valueOf(tradingAccount.getBalance()));
         realizedPLLabel = new JLabel("Realized Profit/Loss");
@@ -100,11 +105,12 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         unrealizedPL.setBounds(350, 400, 100, 40);
         manageButton.setBounds(600, 250, 150, 40);
         backButton.setBounds(878,0,100,40);
-        buyButton.setBounds(600, 400, 100, 40);
+        buyButton.setBounds(600, 350, 100, 40);
         refreshButton.setBounds(700,0,100,40);
         depositButton.setBounds(200, 550, 100, 40);
         withdrawButton.setBounds(400, 550, 100, 40);
         transacButton.setBounds(600, 550, 150, 40);
+        blockedButton.setBounds(600,450,150,40);
     }
 
     public void setLayoutManager() {
@@ -124,6 +130,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         container.add(manageButton);
         container.add(buyButton);
         container.add(backButton);
+        container.add(blockedButton);
         container.add(depositButton);
         container.add(withdrawButton);
         container.add(transacButton);
@@ -139,6 +146,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         transacButton.addActionListener(this);
         withdrawButton.addActionListener(this);
         refreshButton.addActionListener(this);
+        blockedButton.addActionListener(this);
     }
 
     @Override
@@ -165,6 +173,9 @@ public class CustomerAccountView extends JFrame implements ActionListener {
             this.setVisible(false);
         }else if(e.getSource() == refreshButton){ //refresh the page and update he balance, realized profit/loss and unrealized profit/loss
             updateAccountInformation(accountNumberInt,customerId);
+        }else if(e.getSource() == blockedButton){
+            new ViewBlockedAccounts();
+            this.setVisible(false);
         }
     }
 

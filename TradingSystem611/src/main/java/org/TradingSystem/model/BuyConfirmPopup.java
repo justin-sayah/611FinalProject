@@ -5,40 +5,45 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DepositPopup extends JDialog {
-
-    private JTextField depositAmountField;
+public class BuyConfirmPopup extends JDialog {
     private TradingAccountDao tradingAccountDao;
+    private TransactionDao transactionDao;
 
-    public DepositPopup(CustomerAccountView customerAccountView, TradingAccount tradingAccount) {
+    public BuyConfirmPopup(BuyStockPage buyStockPage, double amountCost, double initBalance,TradingAccount tradingAccount){
 
         tradingAccountDao = new TradingAccountDao();
+        transactionDao = new TransactionDao();
 
-        // Create and configure the components
-        JLabel instructionLabel = new JLabel("Enter deposit amount:");
-        depositAmountField = new JTextField(10);
+        JLabel instructionLabel = new JLabel("Your total cost is $"+ amountCost);
         JButton confirmButton = new JButton("CONFIRM");
         JButton cancelButton = new JButton("CANCEL");
 
         // Configure the layout of the pop-up window
-        setLayout(new FlowLayout());
-        add(instructionLabel);
-        add(depositAmountField);
-        add(confirmButton);
-        add(cancelButton);
+        setLayout(new BorderLayout());
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        panel.add(instructionLabel);
 
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttonPanel.add(confirmButton);
+        buttonPanel.add(cancelButton);
+
+        panel.add(buttonPanel);
+        add(panel, BorderLayout.CENTER);
         // Set the size and position of the pop-up window
         setSize(300, 150);
-        setLocationRelativeTo(customerAccountView);
+        setLocationRelativeTo(buyStockPage);
 
         // Add action listeners to the buttons
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Perform the deposit action
-                String depositAmount = depositAmountField.getText();
-                tradingAccount.setBalance(Integer.parseInt(depositAmount)+tradingAccount.getBalance());
+                JOptionPane.showMessageDialog(BuyConfirmPopup.this,"You have successfully bought the stock");
+                double balanceLeft = initBalance-amountCost;
+                tradingAccount.setBalance(balanceLeft);
                 tradingAccountDao.update(tradingAccount);
+
+                transactionDao.addTransaction(tradingAccount.getAccountNumber(),buyStockPage.buyQuantity);
 
                 // Add your code to process the deposit amount here
                 dispose();
@@ -53,5 +58,5 @@ public class DepositPopup extends JDialog {
         });
     }
 
+    }
 
-}
