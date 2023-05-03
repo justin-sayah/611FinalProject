@@ -19,6 +19,34 @@ public class Market {
         return StockDao.getInstance().getAllStocks();
     }
 
+    public List<Stock> getAllUnblockedStocks(){
+        return StockDao.getInstance().getAllUnblockedStocks();
+    }
+
+    public List<Stock> getAllBlockedStocks(){
+        return StockDao.getInstance().getAllBlockedStocks();
+    }
+
+    public void blockStock(int stockId){
+        StockDao.getInstance().blockStock(stockId);
+    }
+
+    public void blockStock(Stock stock){
+        StockDao.getInstance().blockStock(stock);
+    }
+
+    public void unblockStock(int stockId){
+        StockDao.getInstance().unblockStock(stockId);
+    }
+
+    public void unblockStock(Stock stock){
+        StockDao.getInstance().unblockStock(stock);
+    }
+
+    public boolean isBlocked(int stockId){
+        return StockDao.getInstance().isBlocked(stockId);
+    }
+
     public Stock getStock(int stockId){
         return StockDao.getInstance().getStock(stockId);
     }
@@ -32,6 +60,8 @@ public class Market {
         stock.changePrice(price);
         updateStock(stock);
     }
+
+    //make sure that update is pushed to stock in either table
     public void updateStock(Stock stock){
         StockDao.getInstance().updateStock(stock);
     }

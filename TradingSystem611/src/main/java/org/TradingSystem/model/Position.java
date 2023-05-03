@@ -79,8 +79,6 @@ public class Position {
             return;
         }
 
-        //subtract cost
-
         //attempt to fetch position, if it is new, create a new Position
         //if it not a new position, add to position
         Position p1 = getPosition(accountId, stockId);
@@ -202,6 +200,10 @@ public class Position {
 
     public int getQuantitySold() {
         return quantitySold;
+    }
+
+    public boolean isBlockedPosition(){
+        return Market.getInstance().isBlocked(securityId);
     }
 
     //beginning of wrapper methods
