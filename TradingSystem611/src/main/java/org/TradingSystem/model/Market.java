@@ -60,6 +60,8 @@ public class Market {
         stock.changePrice(price);
         updateStock(stock);
     }
+
+    //make sure that update is pushed to stock in either table
     public void updateStock(Stock stock){
         StockDao.getInstance().updateStock(stock);
     }

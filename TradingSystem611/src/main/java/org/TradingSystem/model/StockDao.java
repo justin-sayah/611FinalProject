@@ -259,8 +259,34 @@ public class StockDao {
         }
         return null;
     }
+
+    //updates stock regardless of if it is in blocked or unblocked state
     public void updateStock(Stock stock){
+        updateBlockedStock(stock);
+        updateUnblockedStock(stock);
+    }
+
+    private void updateUnblockedStock(Stock stock){
         String sql = "UPDATE stocks SET ticker = ? , "
+                + "price = ?, name = ?"
+                + "WHERE stockId = ?";
+
+        try{
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, stock.getTicker());
+            pstmt.setDouble(2, stock.getPrice());
+            pstmt.setString(3, stock.getName());
+            pstmt.setInt(4, stock.getSecurityId());
+
+
+            pstmt.executeUpdate();
+        } catch (Exception e){
+            System.out.println(e.toString());
+        }
+    }
+
+    private void updateBlockedStock(Stock stock){
+        String sql = "UPDATE blockedStocks SET ticker = ? , "
                 + "price = ?, name = ?"
                 + "WHERE stockId = ?";
 
