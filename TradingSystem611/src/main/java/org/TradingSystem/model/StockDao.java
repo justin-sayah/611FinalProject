@@ -8,9 +8,18 @@ import java.util.List;
 
 public class StockDao {
     private Connection connection;
+    public static StockDao stockDao;
 
+    //TODO: make private
     public StockDao(){
         connection = DatabaseConnection.getConnection();
+    }
+
+    public static StockDao getInstance() {
+        if(stockDao == null){
+            stockDao = new StockDao();
+        }
+        return stockDao;
     }
 
     public Stock getStock(int stockId){
@@ -49,9 +58,8 @@ public class StockDao {
         return null;
     }
 
-    public void addStock(String name, int price, String ticker){
-        String sql = "INSERT INTO stocks (name, " +
-                "price, ticker)" +
+    public void addStock(String name, double price, String ticker){
+        String sql = "INSERT INTO stocks (name, price, ticker)" +
                 "VALUES (?,?,?)";
 
         try{

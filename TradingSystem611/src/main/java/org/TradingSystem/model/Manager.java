@@ -5,132 +5,78 @@ import java.util.List;
 
 public class Manager extends Person {
 
-    private ArrayList<TradingAccount> accounts;
-    private ArrayList<Customer> customers;
-    private TradingAccountDao dao;
     public Manager(int id, String firstName, String lastName, String username, String password, String dob, String ssn){
         super(id, firstName, lastName, username, password, dob, ssn);
-        this.accounts = new ArrayList<>();
-        this.customers = new ArrayList<>();
-        this.dao = new TradingAccountDao();
     }
 
-    public void createNewAccount(String accountType, int accountNumber){
-        if(!accountType.equals("TradingAccount")){
-            return;
-        }
-        TradingAccount account = new TradingAccount(accountNumber);
-        dao.addTradingAccount(account);
+    public Market getMarket(){
+        return Market.getInstance();
     }
 
-    public boolean activateAccount(TradingAccount account){
-        dao.deleteFromPending(account);
-        dao.addTradingAccount(account);
-        return true;
-    }
-
-    public boolean pendAccount(TradingAccount account){
-        dao.delete(account);
-        dao.addPendingAccount(account.getPersonId(), "TradingAccount");
-        return true;
-    }
-
-    public boolean deleteAccount(TradingAccount account){
-        dao.delete(account);
+    public static boolean addNewPendingAccount(int customerId, String accountType){
+        TradingAccountDao.getInstance().addPendingAccount(customerId, accountType);
         return true;
     }
 
     public TradingAccount getPendingAccount(int accountId, int customerId){
-        return dao.getPendingAccount(accountId, customerId);
+        return TradingAccountDao.getInstance().getPendingAccount(accountId, customerId);
     }
 
-    public  List<TradingAccount> getAllActive(int customerId){
-        return dao.getAllActive(customerId);
+    public boolean activateAccount(TradingAccount account){
+        TradingAccountDao.getInstance().deleteFromPending(account);
+        TradingAccountDao.getInstance().addTradingAccount(account);
+        return true;
     }
 
-    public Customer getCustomer(int customerId){
-        return new PeopleDao().getCustomer(customerId);
+    public boolean deleteAccount(TradingAccount account){
+        TradingAccountDao.getInstance().delete(account);
+        return true;
+    }
+
+    public List<TradingAccount> getAllActiveAccounts(int customerId){
+        return TradingAccountDao.getInstance().getAllActive(customerId);
     }
 
     public List<Customer> getAllCustomers(){
-        return new PeopleDao().getAllCustomers();
+        return PeopleDao.getInstance().getAllCustomers();
     }
 
 
-//    public void createNewAccount(String accountType, int accountNumber){
-//        if(!accountType.equals("TradingAccount")){
-//            return;
-//        }
-//        TradingAccount account = new TradingAccount(accountNumber);
-//        accounts.add(account);
-//    }
-
-//    public boolean activateAccount(TradingAccount account){
-//        if(account.getActive() == false){
-//            account.setActive(true);
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//    public boolean deactivateAccount(TradingAccount account){
-//        if(account.getActive() == true){
-//            account.setActive(false);
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//    public boolean deleteAccount(TradingAccount account){
-//        if(accounts.contains(account)){
-//            accounts.remove(account);
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//    public ArrayList<TradingAccount> getPendingAccounts(){
-//        ArrayList<TradingAccount> list = new ArrayList<TradingAccount>();
-//        for(int i = 0; i < accounts.size(); i++){
-//            if(accounts.get(i).getActive() == false){
-//                list.add(accounts.get(i));
-//            }
-//        }
-//        return list;
-//    }
-//
-//    public ArrayList<TradingAccount> getActiveAccounts(){
-//        ArrayList<TradingAccount> list = new ArrayList<TradingAccount>();
-//        for(int i = 0; i < accounts.size(); i++){
-//            if(accounts.get(i).getActive() == true){
-//                list.add(accounts.get(i));
-//            }
-//        }
-//        return list;
-//    }
-
-    /*public Customer getCustomer(int id){
-        for(int i = 0; i < customers.size(); i++){
-            if(customers.get(i).getID() == id){
-                return customers.get(i);
-            }
-        }
-        return null;
-    }*/
-
-    public ArrayList<Customer> getCustomers(){
-        return customers;
+    public static Customer getCustomer(int customerId){
+        return PeopleDao.getInstance().getCustomer(customerId);
+    }
+    public static Manager getManager(int personId){
+        return PeopleDao.getInstance().getManager(personId);
     }
 
-    public void sendMessage(Customer customer, int messageID, String text){
-        customer.receiveMessage(new Message(messageID, this.getID(), customer.getID(), text));
+    public void sendMessage(Customer customer, String text){
+        MessageCenter.getInstance().sendMessage(getID(), customer.getID(), text);
     }
 
-    public Manager getManager(int id){
-        return new PeopleDao().getManager(id);
+    public static boolean createCustomer(String firstName, String lastName, String username, String password, String dob, String ssn){
+        return PeopleDao.getInstance().createCustomer(firstName, lastName, username, password, dob, ssn);
     }
 
-    @Override
+    public static Manager managerLogin(String username, String password){
+        return PeopleDao.getInstance().managerLogin(username, password);
+    }
+
+    public static void updateCustomer(Customer customer){
+        PeopleDao.getInstance().updateCustomer(customer);
+    }
+
+    public static void updateManager(Manager manager){
+        PeopleDao.getInstance().updateManager(manager);
+    }
+
+    public static void changePassword(String ssn, String username, String password){
+        PeopleDao.getInstance().changePassword(ssn, username, password);
+    }
+    public static void deleteManager(Manager manager){
+        PeopleDao.getInstance().deleteManager(manager);
+    }
+
+        @Override
     public String toString() {
         return "Manager! PersonId: " + getID() + "     Name: " + getFirstName() + " " + getLastName();
     }

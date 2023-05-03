@@ -16,34 +16,35 @@ public class Market {
     }
 
     public List<Stock> getAllStocks(){
-        return null;
+        return StockDao.getInstance().getAllStocks();
     }
 
     public Stock getStock(int stockId){
-        return null;
+        return StockDao.getInstance().getStock(stockId);
     }
 
     public List<Stock> getStocksByTickerSearch(String searchString){
-        return null;
+        return StockDao.getInstance().getStocks(searchString);
     }
 
-    public void updatePrice(int stockId, int price){
-        //stuff
+    public void updatePrice(int stockId, double price){
+        Stock stock = getStock(stockId);
+        stock.changePrice(price);
+        updateStock(stock);
     }
     public void updateStock(Stock stock){
-        //stuff
+        StockDao.getInstance().updateStock(stock);
     }
     public void deleteStock(int stockId){
-        //stuff
+        StockDao.getInstance().deleteStock(stockId);
     }
     public void deleteStock(Stock stock){
-        //stuff
+        StockDao.getInstance().deleteStock(stock);
     }
-    public void addStock(String name, int price, String ticker){
-        //stuff
+    public void addStock(String name, double price, String ticker){
+        StockDao.getInstance().addStock(name, price, ticker);
     }
-
     public void addStock(Stock stock){
-        //stuff
+        StockDao.getInstance().addStock(stock);
     }
 }
