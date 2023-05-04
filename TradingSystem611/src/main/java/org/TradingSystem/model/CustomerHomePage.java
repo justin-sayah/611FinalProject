@@ -124,7 +124,7 @@ public class CustomerHomePage extends JFrame implements ActionListener {
                 System.out.println("Selected Account Number: " + accountNumber);
                 System.out.println("Selected Balance: " + balance);
                 dispose();
-                new CustomerAccountView(accountNumber,customer.getLastName()+customer.getFirstName(),customer.getID());
+                new CustomerAccountView(TradingAccount.getAccount((Integer) accountNumber));
                 this.setVisible(false);
             }else{
                 JOptionPane.showMessageDialog(this,"You have not selected any account.");

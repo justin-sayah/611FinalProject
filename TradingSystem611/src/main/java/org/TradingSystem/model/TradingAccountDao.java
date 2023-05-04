@@ -33,13 +33,44 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         Position.getAllPositions(tradingAccount.getPersonId());
 
         //pull data out of the DB for this tradingAccount and push the variables into this object
-        TradingAccount refreshed = TradingAccount.getAccount(tradingAccount.getAccountNumber());
+        TradingAccount refreshed = getAccountNoRefresh(tradingAccount.getAccountNumber());
         tradingAccount.setBalance(refreshed.getBalance());
         tradingAccount.setRealizedProfitLoss(refreshed.getRealizedProfitLoss());
         tradingAccount.setUnrealizedProfitLoss(tradingAccount.getUnrealizedProfitLoss());
 
         //push update back to the DB for this account
         TradingAccountDao.getInstance().update(tradingAccount);
+    }
+
+    public TradingAccount getAccountNoRefresh(int accountId) {
+        try {
+            String sql = "SELECT * FROM activeAccounts WHERE accountNumber = ?";
+
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, accountId);
+
+            ResultSet rs = pstmt.executeQuery();
+            TradingAccount tradingAccount = null;
+            if (rs.next()) {
+                tradingAccount = new TradingAccount(accountId, rs.getInt("customerId"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
+            } else {
+                String sql2 = "SELECT * FROM blockedAccounts WHERE accountNumber = ?";
+
+                PreparedStatement pstmt2 = connection.prepareStatement(sql2);
+                pstmt2.setInt(1, accountId);
+
+                ResultSet rs2 = pstmt2.executeQuery();
+                if (rs2.next()) {
+                    tradingAccount = new TradingAccount(accountId, rs2.getInt("customerId"), rs2.getDouble("balance"), rs2.getDouble("unrealizedPL"), rs2.getDouble("realizedPL"));
+                }
+            }
+            if (tradingAccount != null) {
+                return tradingAccount;
+            }
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return null;
     }
 
     //gets account from either blocked or unblocked table

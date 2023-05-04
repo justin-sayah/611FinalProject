@@ -190,7 +190,7 @@ public class BuyStockPage extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == backButton){
-            new CustomerAccountView(tradingAccount.getAccountNumber(),name,tradingAccount.getPersonId());
+            new CustomerAccountView(tradingAccount);
             this.setVisible(false);
         }else if(e.getSource() == buyButton){
             int selectedRow = stockTable.getSelectedRow();

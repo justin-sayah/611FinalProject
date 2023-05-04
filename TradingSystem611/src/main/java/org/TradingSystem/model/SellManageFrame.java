@@ -154,7 +154,7 @@ public class SellManageFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
-            new CustomerAccountView(tradingAccount.getAccountNumber(), name, tradingAccount.getPersonId());
+            new CustomerAccountView(tradingAccount);
             this.setVisible(false);
         } else if (e.getSource() == sellButton) {
             int selectedRow = stockTable.getSelectedRow();
@@ -194,7 +194,7 @@ public class SellManageFrame extends JFrame implements ActionListener {
 
                 // Sell the shares and update the position and trading account
                 position.sell(sellQuantity);
-                Position.updatePosition(position);
+                Position.refresh(position);
                 tradingAccountDao.update(tradingAccount);
 
 //                // Add the sale transaction to the transaction history
