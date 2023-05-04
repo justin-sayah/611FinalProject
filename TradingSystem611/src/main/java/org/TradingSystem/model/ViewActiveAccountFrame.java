@@ -14,7 +14,11 @@ public class ViewActiveAccountFrame extends JFrame {
     private final String[] columns = {"Account Number", "Customer Name"};
     private final DefaultTableModel model;
 
+    private final Manager manager;
+
     public ViewActiveAccountFrame(Manager manager) {
+        this.manager = manager;
+
         setTitle("View Active Accounts");
         setSize(800, 600);
         setLocationRelativeTo(null);
@@ -58,10 +62,16 @@ public class ViewActiveAccountFrame extends JFrame {
         }
 
         add(container);
-
+        addActionListeners();
         setVisible(true);
     }
 
+    private void addActionListeners() {
+        backButton.addActionListener(e -> {
+            dispose();
+            ManageAccountFrame manageAccountFrame = new ManageAccountFrame(manager);
+        });
+    }
 
     public static void main(String[] args) {
         // Create a new Manager

@@ -146,6 +146,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         }else if(e.getSource() == transacButton){
             new TransactionHistoryFrame(tradingAccount);
             //TODO need to implement the transaction page
+            this.setVisible(true);
         }else if(e.getSource() == depositButton){ //call the deposit popup window
             if (depositPopup == null) {
                 depositPopup = new DepositPopup(this,tradingAccount); // Create the deposit popup window if it's not already created
