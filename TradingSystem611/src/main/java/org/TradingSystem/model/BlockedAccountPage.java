@@ -1,29 +1,26 @@
 package org.TradingSystem.model;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 
-public class CustomerAccountView extends JFrame implements ActionListener {
-    //labels declarations
+public class BlockedAccountPage extends JFrame implements ActionListener {
     private final JPanel container;
     private final JLabel customerNameLabel;
     private final JLabel accountIDLabel;
 
     private final JButton backButton;
     private final JButton manageButton;
-    private final JButton buyButton;
 
     private final JButton transacButton;
 
     private final JButton withdrawButton;
-    private final JButton depositButton;
-    private final JButton refreshButton;
+
 
     private final JLabel balanceLabel;
-    private final JLabel balance;
+    protected final JLabel balance;
     private final JLabel realizedPLLabel;
     private final JLabel realizedPL;
     private final JLabel unrealizedPLLabel;
@@ -33,16 +30,12 @@ public class CustomerAccountView extends JFrame implements ActionListener {
     private TradingAccountDao tradingAccountDao;
     private Customer customer;
     private TradingAccount tradingAccount;
-
-    private DepositPopup depositPopup;
-
-    private WithdrawPopup withdrawPopup;
-
-    private int accountNumberInt;
-    private int customerId;
+    private TradingAccount updatedAccount;
 
 
-    public CustomerAccountView(TradingAccount tradingAccount) {
+    private BlockedAccountsWithdrawPopup withdrawPopup;
+
+    public BlockedAccountPage(TradingAccount tradingAccount) {
         this.tradingAccount = tradingAccount;
         customer = Customer.getCustomer(tradingAccount.getPersonId());
         setVisible(true);
@@ -57,14 +50,9 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         accountID = new JLabel("Account Number: ");
         nameLabel = new JLabel("Customer Name: ");
         backButton = new JButton("BACK");
-        manageButton = new JButton("MANAGE/SELL");
-        buyButton = new JButton("BUY");
+        manageButton = new JButton("SELL");
         transacButton = new JButton("TRANSACTIONS");
         withdrawButton = new JButton("WITHDRAW");
-        depositButton = new JButton("DEPOSIT");
-
-        //TODO to implement the automatic refresh function later
-        refreshButton = new JButton("Refresh");
 
         balanceLabel = new JLabel("Balance");
         balance = new JLabel(String.valueOf(tradingAccount.getBalance()));
@@ -72,19 +60,19 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         realizedPL = new JLabel(String.valueOf(tradingAccount.getRealizedProfitLoss()));
         unrealizedPLLabel = new JLabel("Unrealized Profit/Loss");
         unrealizedPL = new JLabel(String.valueOf(tradingAccount.getUnrealizedProfitLoss()));
+
         setLocationAndSize();
         setLayoutManager();
         addComponentsToContainer();
         addActionEvent();
         tradingAccount.refresh();
-
     }
-//set locations for each label and button: x represents the column, y represents the row
+
     public void setLocationAndSize() {
 
-        accountID.setBounds(0,0,110,40);
+        accountID.setBounds(0, 0, 110, 40);
         accountIDLabel.setBounds(120, 0, 20, 40);
-        nameLabel.setBounds(150,0,110,40);
+        nameLabel.setBounds(150, 0, 110, 40);
         customerNameLabel.setBounds(260, 0, 200, 40);
         balanceLabel.setBounds(150, 200, 100, 40);
         balance.setBounds(350, 200, 100, 40);
@@ -93,10 +81,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         unrealizedPLLabel.setBounds(150, 400, 200, 40);
         unrealizedPL.setBounds(350, 400, 100, 40);
         manageButton.setBounds(600, 250, 150, 40);
-        backButton.setBounds(878,0,100,40);
-        buyButton.setBounds(600, 350, 100, 40);
-        refreshButton.setBounds(700,0,100,40);
-        depositButton.setBounds(200, 550, 100, 40);
+        backButton.setBounds(878, 0, 100, 40);
         withdrawButton.setBounds(400, 550, 100, 40);
         transacButton.setBounds(600, 550, 150, 40);
 
@@ -106,7 +91,8 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         container.setLayout(null);
     }
 
-    public void addComponentsToContainer(){
+
+    public void addComponentsToContainer() {
         container.add(accountID);
         container.add(accountIDLabel);
         container.add(customerNameLabel);
@@ -117,65 +103,45 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         container.add(unrealizedPLLabel);
         container.add(unrealizedPL);
         container.add(manageButton);
-        container.add(buyButton);
         container.add(backButton);
-
-        container.add(depositButton);
         container.add(withdrawButton);
         container.add(transacButton);
-        container.add(refreshButton);
         container.add(nameLabel);
         add(container);
     }
+
+
     private void addActionEvent() {
         backButton.addActionListener(this);
         manageButton.addActionListener(this);
-        buyButton.addActionListener(this);
-        depositButton.addActionListener(this);
         transacButton.addActionListener(this);
         withdrawButton.addActionListener(this);
-        refreshButton.addActionListener(this);
-
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == backButton){
+        if (e.getSource() == backButton) {
             new CustomerHomePage(customer);
             this.setVisible(false);
-        }else if(e.getSource() == transacButton){
+        } else if (e.getSource() == transacButton) {
             new TransactionHistoryFrame(tradingAccount);
             //TODO need to implement the transaction page
-        }else if(e.getSource() == depositButton){ //call the deposit popup window
-            if (depositPopup == null) {
-                depositPopup = new DepositPopup(this,tradingAccount); // Create the deposit popup window if it's not already created
-            }
-            depositPopup.setVisible(true); // Show the deposit popup window
-        }else if(e.getSource() == withdrawButton){ //call the withdraw popup window
+        } else if (e.getSource() == withdrawButton) { //call the withdraw popup window
             if (withdrawPopup == null) {
-                withdrawPopup = new WithdrawPopup(this,tradingAccount); // Create the deposit popup window if it's not already created
+                withdrawPopup = new BlockedAccountsWithdrawPopup(this, tradingAccount);
+
             }
-            withdrawPopup.setVisible(true); // Show the deposit popup window
-        }else if(e.getSource() == manageButton){
-            //TODO need to implement the manage page
-            SellManageFrame sellManageFrame = new SellManageFrame(customer.getLastName()+customer.getFirstName(), tradingAccount);
-            sellManageFrame.setVisible(true);
-            this.setVisible(false);
-        }else if(e.getSource() == buyButton){
-            new BuyStockPage(customer.getLastName()+customer.getFirstName(),tradingAccount);
-            this.setVisible(false);
-        }else if(e.getSource() == refreshButton){ //refresh the page and update he balance, realized profit/loss and unrealized profit/loss
-            tradingAccount.refresh();
+                withdrawPopup.setVisible(true); // Show the withdraw popup window
+
+//
+
+            } else if (e.getSource() == manageButton) {
+                //TODO need to implement the manage page
+                SellManageFrame sellManageFrame = new SellManageFrame(customer.getLastName() + customer.getFirstName(), tradingAccount);
+                sellManageFrame.setVisible(true);
+                this.setVisible(false);
+            }
         }
-    }
-
-
-
-    public static void main(String[] args){
-        TradingAccount tradingAccount = TradingAccount.getAccount(1);
-        CustomerAccountView ca = new CustomerAccountView(tradingAccount);
-        ca.setVisible(true);
-    }
 
 
 
