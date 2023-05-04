@@ -58,7 +58,7 @@ public class PositionDao {
     public void updatePosition(Position position){
         //NEED TO DO A RECALCULATION OF PROFIT AND LOSS TO MAKE SURE ITS UP TO DATE
         //BEFORE PUSHING TO DB
-        position.updatePosition();
+        position.refresh();
 
         String sql = "UPDATE positions SET quantity = ? , "
                 + "quantitySold = ?,"

@@ -25,7 +25,7 @@ public class Position {
         //make sure calculations on PL are up-to-date
         calculateUnrealizedPl();
         calculateRealizedPl();
-        updatePosition();
+        refresh();
     }
 
     //attempts to sell quantityToSell, updates PL and DB, and if quantity is 0, closes position in DB
@@ -57,7 +57,7 @@ public class Position {
             calculateRealizedPl();
             calculateUnrealizedPl();
             //push position update
-            updatePosition(this);
+            refresh(this);
             Transaction.addTransaction(accountID, securityId, quantity, currentPrice, "sell");
             if(quantity == 0){
                 deletePosition(this);
@@ -94,7 +94,7 @@ public class Position {
 
         //create transaction
         Transaction.addTransaction(accountId, stockId, quantity, price, "buy");
-        updatePosition(p1);
+        refresh(p1);
     }
 
     //adds quantityToAdd shares at the current sellPrice/buyPrice
@@ -116,7 +116,7 @@ public class Position {
         calculateRealizedPl();
         calculateUnrealizedPl();
 
-        updatePosition();
+        refresh();
     }
 
     private void calculateUnrealizedPl(){
@@ -212,14 +212,16 @@ public class Position {
         return pDao.getAllPositions(accountId);
     }
 
-    public void updatePosition(){
+    public void refresh(){
+        //get the latest stock price
+        setCurrentPrice(StockDao.getInstance().getStock(securityId).getPrice());
         calculateUnrealizedPl();
         calculateRealizedPl();
         PositionDao pDao = PositionDao.getInstance();
         pDao.updatePosition(this);
     }
 
-    public static void updatePosition(Position position){
+    public static void refresh(Position position){
         PositionDao pDao = PositionDao.getInstance();
         pDao.updatePosition(position);
     }

@@ -22,6 +22,11 @@ public class StockDao {
         return stockDao;
     }
 
+    public void refreshStock(Stock stock){
+        Stock fresh = getStock(stock.getSecurityId());
+        stock.changePrice(fresh.getPrice());
+    }
+
     //gets the stock, whether it is blocked or unblocked
     public Stock getStock(int stockId){
         try{

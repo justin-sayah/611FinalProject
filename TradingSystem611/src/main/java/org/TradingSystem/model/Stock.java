@@ -27,6 +27,10 @@ public class Stock extends Security{
         super.changePrice(price);
     }
 
+    public void refresh(){
+        StockDao.getInstance().refreshStock(this);
+    }
+
     @Override
     public String toString() {
         return getName() + " Ticker: " + getTicker() + "  Current Price: " + getPrice();

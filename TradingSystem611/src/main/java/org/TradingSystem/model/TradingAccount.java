@@ -76,6 +76,10 @@ public class TradingAccount implements Account{
         this.balance = balance;
     }
 
+    public void refresh(){
+        TradingAccountDao.getInstance().refreshTradingAccount(this);
+    }
+
     public static TradingAccount getAccount(int accountId){
         return TradingAccountDao.getInstance().getAccount(accountId);
     }
@@ -92,6 +96,7 @@ public class TradingAccount implements Account{
         return TradingAccountDao.getInstance().getAllPending(customerId);
     }
 
+    //TODO: rename this to push data
     public static void update(TradingAccount tradingAccount){
         TradingAccountDao.getInstance().update(tradingAccount);
     }

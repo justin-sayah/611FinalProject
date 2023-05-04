@@ -28,9 +28,21 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         return dao;
     }
 
+    public void refreshTradingAccount(TradingAccount tradingAccount){
+        //fetch all positions out of the DB and force them to update/push back to the DB
+        Position.getAllPositions(tradingAccount.getPersonId());
+
+        //pull data out of the DB for this tradingAccount and push the variables into this object
+        TradingAccount refreshed = TradingAccount.getAccount(tradingAccount.getAccountNumber());
+        tradingAccount.setBalance(refreshed.getBalance());
+        tradingAccount.setRealizedProfitLoss(refreshed.getRealizedProfitLoss());
+        tradingAccount.setUnrealizedProfitLoss(tradingAccount.getUnrealizedProfitLoss());
+
+        //push update back to the DB for this account
+        TradingAccountDao.getInstance().update(tradingAccount);
+    }
+
     //gets account from either blocked or unblocked table
-    //TODO: have all accounts refreshed as they are pulled out to see if PL changed because of price changes
-    //TODO: IDEA: call getAllPositions and have them pulled out of DB, updated prices and recalculated, then pushed back
     public TradingAccount getAccount(int accountId) {
         try{
             String sql = "SELECT * FROM activeAccounts WHERE accountNumber = ?";
@@ -39,8 +51,9 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
             pstmt.setInt(1,accountId);
 
             ResultSet rs    = pstmt.executeQuery();
+            TradingAccount tradingAccount = null;
             if(rs.next()){
-                return new TradingAccount(accountId, rs.getInt("customerId"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
+                tradingAccount = new TradingAccount(accountId, rs.getInt("customerId"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
             } else{
                 String sql2 = "SELECT * FROM blockedAccounts WHERE accountNumber = ?";
 
@@ -49,8 +62,12 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
 
                 ResultSet rs2    = pstmt2.executeQuery();
                 if(rs2.next()){
-                    return new TradingAccount(accountId, rs2.getInt("customerId"), rs2.getDouble("balance"), rs2.getDouble("unrealizedPL"), rs2.getDouble("realizedPL"));
+                    tradingAccount = new TradingAccount(accountId, rs2.getInt("customerId"), rs2.getDouble("balance"), rs2.getDouble("unrealizedPL"), rs2.getDouble("realizedPL"));
                 }
+            }
+            if (tradingAccount != null) {
+                refreshTradingAccount(tradingAccount);
+                return tradingAccount;
             }
         }catch (Exception e){
             System.out.println(e.toString());
@@ -58,7 +75,6 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         return null;
     }
 
-    //TODO: have all accounts refreshed as they are pulled out to see if PL changed because of price changes
     //gets account from either blocked or unblocked account table
     @Override
     public TradingAccount getAccount(int accountId, int customerId) {
@@ -73,8 +89,9 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
             pstmt.setString(3, "tradingAccount");
 
             ResultSet rs    = pstmt.executeQuery();
+            TradingAccount tradingAccount = null;
             if(rs.next()){
-                return new TradingAccount(accountId, customerId, rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
+                tradingAccount = new TradingAccount(accountId, customerId, rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
             } else {
                 String sql2 = "SELECT * FROM blockedAccounts WHERE accountNumber = ? "
                         + " AND customerId = ?"
@@ -87,7 +104,12 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
 
                 ResultSet rs2 = pstmt2.executeQuery();
                 if (rs2.next()) {
-                    return new TradingAccount(accountId, customerId, rs2.getDouble("balance"), rs2.getDouble("unrealizedPL"), rs2.getDouble("realizedPL"));
+                    tradingAccount =  new TradingAccount(accountId, customerId, rs2.getDouble("balance"), rs2.getDouble("unrealizedPL"), rs2.getDouble("realizedPL"));
+                }
+
+                if (tradingAccount != null) {
+                    refreshTradingAccount(tradingAccount);
+                    return tradingAccount;
                 }
             }
         }catch (Exception e){
@@ -118,7 +140,6 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         return null;
     }
 
-    //TODO: have all accounts refreshed as they are pulled out to see if PL changed because of price changes
     @Override
     public List<TradingAccount> getAllActive(int customerId) {
         try{
@@ -133,8 +154,11 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
             ResultSet rs    = pstmt.executeQuery();
 
             ArrayList<TradingAccount> accounts = new ArrayList<TradingAccount>();
+
             while(rs.next()){
-                accounts.add(new TradingAccount(rs.getInt("accountNumber"), rs.getInt("customerId"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL")));
+                TradingAccount tradingAccount = new TradingAccount(rs.getInt("accountNumber"), rs.getInt("customerId"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
+                refreshTradingAccount(tradingAccount);
+                accounts.add(tradingAccount);
             }
             return accounts;
         }catch (Exception e){
@@ -143,7 +167,6 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         return null;
     }
 
-    //TODO: have all accounts refreshed as they are pulled out to see if PL changed because of price changes
     public List<TradingAccount> getAllBlocked() {
         try{
             String sql = "SELECT * FROM blockedAccounts";
@@ -154,7 +177,9 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
 
             ArrayList<TradingAccount> accounts = new ArrayList<TradingAccount>();
             while(rs.next()){
-                accounts.add(new TradingAccount(rs.getInt("accountNumber"), rs.getInt("customerId"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL")));
+                TradingAccount tradingAccount = new TradingAccount(rs.getInt("accountNumber"), rs.getInt("customerId"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
+                refreshTradingAccount(tradingAccount);
+                accounts.add(tradingAccount);
             }
             return accounts;
         }catch (Exception e){
@@ -163,7 +188,6 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         return null;
     }
 
-    //TODO: have all accounts refreshed as they are pulled out to see if PL changed because of price changes
     public List<TradingAccount> getAllBlocked(int customerId) {
         try{
             String sql = "SELECT * FROM blockedAccounts WHERE"
@@ -178,7 +202,9 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
 
             ArrayList<TradingAccount> accounts = new ArrayList<TradingAccount>();
             while(rs.next()){
-                accounts.add(new TradingAccount(rs.getInt("accountNumber"), rs.getInt("customerId"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL")));
+                TradingAccount tradingAccount = new TradingAccount(rs.getInt("accountNumber"), rs.getInt("customerId"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
+                refreshTradingAccount(tradingAccount);
+                accounts.add(tradingAccount);
             }
             return accounts;
         }catch (Exception e){
