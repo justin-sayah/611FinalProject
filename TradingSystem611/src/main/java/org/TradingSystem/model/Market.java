@@ -71,6 +71,15 @@ public class Market {
         }
     }
 
+    public static void updatePriceRealLife(int stockId){
+        Stock stock = StockDao.getInstance().getStock(stockId);
+        Double realPrice = PriceFetcher.fetchPrice(stock.getTicker());
+        if(realPrice != null){
+            stock.changePrice(realPrice);
+        }
+
+    }
+
     //make sure that update is pushed to stock in either table
     public void updateStock(Stock stock){
         StockDao.getInstance().updateStock(stock);

@@ -137,9 +137,10 @@ public class DBTesting {
 //        System.out.println(stockDao.getStocks("a"));
 
 //        TradingAccount tradingAccount = new TradingAccount(3,1,10000,400,500);
-        TradingAccount tradingAccount = TradingAccount.getAccount(1);
+//        TradingAccount tradingAccount = TradingAccount.getAccount(1);
 //        TradingAccountDao.getInstance().blockAccount(tradingAccount);
-        System.out.println(tradingAccount);
+//        System.out.println(tradingAccount);
+        Market.updateAllPricesRealLife();
     }
 
 }
