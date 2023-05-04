@@ -42,20 +42,10 @@ public class CustomerAccountView extends JFrame implements ActionListener {
     private int customerId;
 
 
-    public CustomerAccountView(Object accountNumber, String name, int customerID) {
-        customerId = customerID;
-        PeopleDao peopleDao = new PeopleDao();
-        customer = peopleDao.getCustomer(customerID);
-        tradingAccountDao = new TradingAccountDao();
+    public CustomerAccountView(TradingAccount tradingAccount) {
 
-        try {
-            accountNumberInt = Integer.parseInt(String.valueOf(accountNumber));
-            tradingAccount =  tradingAccountDao.getAccount(accountNumberInt,customerID);
-        } catch (NumberFormatException e) {
-            // Handle the case where the accountNumber is not a valid integer
-            // Display an error message or take appropriate action
-            e.printStackTrace(); // You can print the stack trace for debugging purposes
-        }
+        customer = Customer.getCustomer(tradingAccount.getPersonId());
+
         setVisible(true);
         setTitle("Customer Account Page");
         setSize(1000, 800);
@@ -63,8 +53,8 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         setResizable(false);
 
         container = new JPanel();
-        customerNameLabel = new JLabel(name);
-        accountIDLabel = new JLabel(accountNumber.toString());
+        customerNameLabel = new JLabel();
+        accountIDLabel = new JLabel(String.valueOf(tradingAccount.getAccountNumber()));
         accountID = new JLabel("Account Number: ");
         nameLabel = new JLabel("Customer Name: ");
         backButton = new JButton("BACK");
@@ -87,7 +77,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         setLayoutManager();
         addComponentsToContainer();
         addActionEvent();
-        updateAccountInformation(accountNumberInt,customerID);
+        tradingAccount.refresh();
 
     }
 //set locations for each label and button: x represents the column, y represents the row
@@ -176,21 +166,13 @@ public class CustomerAccountView extends JFrame implements ActionListener {
             new BuyStockPage(customer.getLastName()+customer.getFirstName(),tradingAccount);
             this.setVisible(false);
         }else if(e.getSource() == refreshButton){ //refresh the page and update he balance, realized profit/loss and unrealized profit/loss
-            updateAccountInformation(accountNumberInt,customerId);
+            tradingAccount.refresh();
         }
     }
 
-    private void updateAccountInformation(int accountNumber, int customerID) {
-        // Fetch the updated trading account data from your data source
-        tradingAccount = TradingAccount.getAccount(accountNumber);
-
-        // Update the labels with the new data
-        balance.setText(String.valueOf(tradingAccount.getBalance()));
-        realizedPL.setText(String.valueOf(tradingAccount.getRealizedProfitLoss()));
-        unrealizedPL.setText(String.valueOf(tradingAccount.getUnrealizedProfitLoss()));
-    }
     public static void main(String[] args){
-        CustomerAccountView ca = new CustomerAccountView(1,"Shangzhou" + "Yin",1);
+        TradingAccount tradingAccount = TradingAccount.getAccount(1);
+        CustomerAccountView ca = new CustomerAccountView(tradingAccount);
         ca.setVisible(true);
     }
 

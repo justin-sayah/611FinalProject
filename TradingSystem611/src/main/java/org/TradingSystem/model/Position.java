@@ -125,7 +125,7 @@ public class    Position {
         double difference = newUnrealizd - unrealizedProfitLoss;
         unrealizedProfitLoss = newUnrealizd;
 
-        TradingAccount account = TradingAccount.getAccount(accountID);
+        TradingAccount account = TradingAccount.getAccountNoRefresh(accountID);
         account.setUnrealizedProfitLoss(account.getUnrealizedProfitLoss() + difference);
         TradingAccount.update(account);
     }
@@ -137,7 +137,7 @@ public class    Position {
         realizedProfitLoss = newRealized;
 
 
-        TradingAccount account = TradingAccount.getAccount(accountID);
+        TradingAccount account = TradingAccount.getAccountNoRefresh(accountID);
         account.setRealizedProfitLoss(account.getRealizedProfitLoss() + difference);
         TradingAccount.update(account);
     }
@@ -218,7 +218,7 @@ public class    Position {
         calculateUnrealizedPl();
         calculateRealizedPl();
         PositionDao pDao = PositionDao.getInstance();
-        pDao.updatePosition(this);
+        pDao.pushToDB(this);
     }
 
     public static void refresh(Position position){
