@@ -3,7 +3,6 @@ package org.TradingSystem.model;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class ViewActiveAccountFrame extends JFrame {
 
@@ -12,10 +11,10 @@ public class ViewActiveAccountFrame extends JFrame {
     private final JLabel personNameLabel;
     private final JTable accountsTable;
     private final JButton backButton;
-    private final String[] columns = {"Account Number"};
+    private final String[] columns = {"Account Number", "Customer Name"};
     private final DefaultTableModel model;
 
-    public ViewActiveAccountFrame(String personId, String personName, ArrayList<String> accounts) {
+    public ViewActiveAccountFrame(Manager manager) {
         setTitle("View Active Accounts");
         setSize(800, 600);
         setLocationRelativeTo(null);
@@ -28,12 +27,11 @@ public class ViewActiveAccountFrame extends JFrame {
         // Person information panel
         JPanel personInfoPanel = new JPanel();
         personInfoPanel.setLayout(new GridLayout(2, 1));
-        personIdLabel = new JLabel("Person ID: " + personId);
-        personNameLabel = new JLabel("Person Name: " + personName);
+        personIdLabel = new JLabel("Person ID: " + manager.getID());
+        personNameLabel = new JLabel("Person Name: " + manager.getFirstName() + " " + manager.getLastName());
         personInfoPanel.add(personIdLabel);
         personInfoPanel.add(personNameLabel);
         container.add(personInfoPanel, BorderLayout.WEST);
-
 
         // Accounts table panel
         JPanel accountsPanel = new JPanel();
@@ -50,9 +48,11 @@ public class ViewActiveAccountFrame extends JFrame {
         backButtonPanel.add(backButton);
         container.add(backButtonPanel, BorderLayout.NORTH);
 
-        for (String account : accounts) {
+        for (TradingAccount account : manager.getAllActiveAccounts(manager.getID())) {
             Object[] row = {
-                    account
+                    account.getAccountNumber(),
+                    Manager.getCustomer(account.getPersonId()).getLastName() + " " + Manager.getCustomer(account.getPersonId()).getFirstName(),
+//                    account.getAccountType()
             };
             model.addRow(row);
         }
@@ -64,11 +64,10 @@ public class ViewActiveAccountFrame extends JFrame {
 
 
     public static void main(String[] args) {
-        ArrayList<String> accounts = new ArrayList<>();
-        accounts.add("123456");
-        accounts.add("789012");
-        accounts.add("345678");
-        new ViewActiveAccountFrame("123456", "John Doe", accounts);
+        // Create a new Manager
+        Manager manager = new Manager(1, "John", "Doe", "username", "password", "1990-01-01", "123-45-6789");
+        new ViewActiveAccountFrame(manager);
     }
 
 }
+

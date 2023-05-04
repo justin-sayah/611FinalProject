@@ -155,6 +155,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
             new CustomerHomePage(customer.getUsername(),customer.getPassword());
             this.setVisible(false);
         }else if(e.getSource() == transacButton){
+            new TransactionHistoryFrame(tradingAccount);
             //TODO need to implement the transaction page
         }else if(e.getSource() == depositButton){ //call the deposit popup window
             if (depositPopup == null) {
@@ -168,6 +169,9 @@ public class CustomerAccountView extends JFrame implements ActionListener {
             withdrawPopup.setVisible(true); // Show the deposit popup window
         }else if(e.getSource() == manageButton){
             //TODO need to implement the manage page
+            SellManageFrame sellManageFrame = new SellManageFrame(customer.getLastName()+customer.getFirstName(), tradingAccount);
+            sellManageFrame.setVisible(true);
+            this.setVisible(false);
         }else if(e.getSource() == buyButton){
             new BuyStockPage(customer.getLastName()+customer.getFirstName(),tradingAccount);
             this.setVisible(false);

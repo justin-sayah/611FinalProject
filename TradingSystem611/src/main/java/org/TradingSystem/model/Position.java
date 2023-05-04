@@ -2,7 +2,7 @@ package org.TradingSystem.model;
 
 import java.util.List;
 
-public class Position {
+public class    Position {
     protected int accountID;
     protected int quantity;
     protected double currentPrice;
