@@ -14,6 +14,7 @@ public class CustomerHomePage extends JFrame implements ActionListener {
     private final JPanel container;
     private final JLabel customerNameLabel;
     private final JTextArea messageTextArea;
+    private final JButton blockedButton;
 
     private final JButton logoutButton;
 
@@ -48,10 +49,12 @@ public class CustomerHomePage extends JFrame implements ActionListener {
         messageTextArea.setRows(5);
         messageTextArea.setColumns(50);
         //messageTextArea.setPreferredSize(new Dimension(200,50));
-        logoutButton = new JButton("Logout");
-        applyButton = new JButton("Apply");
+        logoutButton = new JButton("LOGOUT");
+        applyButton = new JButton("APPLY");
+        blockedButton = new JButton("BLOCKED");
 //        applyButton.setBounds(750,700,40,20);
         applyButton.setPreferredSize(new Dimension(100,30));
+        blockedButton.setPreferredSize(new Dimension(100,30));
 
         //set up account table
         accountList = new JTable();
@@ -72,14 +75,16 @@ public class CustomerHomePage extends JFrame implements ActionListener {
             accountTableModel.addRow(rowData);
         }
 
-        //set up the UI layout
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.add(customerNameLabel, BorderLayout.WEST);
-        messageTextArea.setEditable(false);
-        topPanel.add(new JScrollPane(messageTextArea), BorderLayout.SOUTH);
-        topPanel.add(logoutButton, BorderLayout.EAST);
 
-        //add top panel to the container
+        topPanel.add(customerNameLabel, BorderLayout.WEST);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(blockedButton);
+        buttonPanel.add(logoutButton);
+
+        topPanel.add(buttonPanel, BorderLayout.EAST);
+
         container.add(topPanel, BorderLayout.NORTH);
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.add(applyButton,BorderLayout.EAST);
@@ -101,6 +106,7 @@ public class CustomerHomePage extends JFrame implements ActionListener {
     private void addActionEvent() {
         logoutButton.addActionListener(this);
         applyButton.addActionListener(this);
+        blockedButton.addActionListener(this);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -123,6 +129,9 @@ public class CustomerHomePage extends JFrame implements ActionListener {
             }else{
                 JOptionPane.showMessageDialog(this,"You have not selected any account.");
             }
+        }else if(e.getSource() == blockedButton){
+            new ViewBlockedAccounts(customer.getID());
+            this.setVisible(false);
         }
     }
 
