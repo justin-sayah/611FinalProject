@@ -146,29 +146,6 @@ public class TransactionHistoryFrame extends JFrame {
         setVisible(true);
     }
 
-//    public static void main(String[] args) {
-//        // create a new account
-//        TradingAccount account = new TradingAccount(1234);
-//
-//        // add a new transaction
-//        Transaction.addTransaction(account.getAccountNumber(), 1, 10, 50.0, "buy");
-//
-//        // update the transaction
-//        Transaction transaction = Transaction.getAllTransactionsByAccount(account.getAccountNumber()).get(0);
-//        transaction.setPrice(55.0);
-//        transaction.updateTransaction();
-//
-//        // delete the transaction
-//        Transaction.deleteTransaction(transaction);
-//
-//        // print all transactions for the account
-//        List<Transaction> transactions = Transaction.getAllTransactionsByAccount(account.getAccountNumber());
-//        for (Transaction t : transactions) {
-//            System.out.println(t);
-//        }
-//    }
-
-
 }
 
 

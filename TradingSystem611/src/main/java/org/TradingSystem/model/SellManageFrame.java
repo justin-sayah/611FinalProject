@@ -194,7 +194,7 @@ public class SellManageFrame extends JFrame implements ActionListener {
 
                 // Sell the shares and update the position and trading account
                 position.sell(sellQuantity);
-                Position.updatePosition(position);
+//                Position.updatePosition(position);
                 tradingAccountDao.update(tradingAccount);
 
 //                // Add the sale transaction to the transaction history
