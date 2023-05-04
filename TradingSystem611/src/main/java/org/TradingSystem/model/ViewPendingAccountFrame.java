@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ViewPendingAccountFrame extends JFrame {
 
@@ -16,7 +17,7 @@ public class ViewPendingAccountFrame extends JFrame {
     private final DefaultTableModel model;
     private final ArrayList<JCheckBox> checkBoxes;
 
-    public ViewPendingAccountFrame(String personId, String personName, ArrayList<String> accounts) {
+    public ViewPendingAccountFrame(String personId, String personName, List<TradingAccount> accounts) {
         setTitle("View Pending Accounts");
         setSize(800, 600);
         setLocationRelativeTo(null);
@@ -52,12 +53,12 @@ public class ViewPendingAccountFrame extends JFrame {
 
         // Create checkboxes for each account
         checkBoxes = new ArrayList<>();
-        for (String account : accounts) {
+        for (TradingAccount account : accounts) {
             JCheckBox checkBox = new JCheckBox();
             checkBoxes.add(checkBox);
 
             Object[] row = {
-                    account
+                    account.getAccountNumber()
             };
             model.addRow(row);
         }
@@ -68,11 +69,10 @@ public class ViewPendingAccountFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        ArrayList<String> accounts = new ArrayList<>();
-        accounts.add("123456");
-        accounts.add("789012");
-        accounts.add("345678");
+        List<TradingAccount> accounts = TradingAccountDao.getInstance().getAllPending(123456);
         new ViewPendingAccountFrame("123456", "John Doe", accounts);
     }
 
 }
+
+
