@@ -24,8 +24,7 @@ public class SellManageFrame extends JFrame implements ActionListener {
     private final TradingAccountDao tradingAccountDao;
     private final StockDao stockDao;
     private int customerId;
-
-
+    private JButton refreshButton;
     private String name;
     private JScrollPane scrollPane;
 
@@ -52,6 +51,8 @@ public class SellManageFrame extends JFrame implements ActionListener {
 
         backButton = new JButton("BACK");
         sellButton = new JButton("SELL");
+        refreshButton = new JButton("REFRESH");
+
 
         stockTableModel = new DefaultTableModel();
         stockTableModel.addColumn("Ticker");
@@ -107,6 +108,7 @@ public class SellManageFrame extends JFrame implements ActionListener {
     }
 
 
+
     public void setLayoutManager() {
         container.setLayout(new BorderLayout());
     }
@@ -120,6 +122,7 @@ public class SellManageFrame extends JFrame implements ActionListener {
         leftPanel.add(customerName);
 
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        rightPanel.add(refreshButton);
         rightPanel.add(backButton);
         topPanel.add(leftPanel, BorderLayout.WEST);
         topPanel.add(rightPanel, BorderLayout.EAST);
@@ -146,9 +149,12 @@ public class SellManageFrame extends JFrame implements ActionListener {
     }
 
 
+
+
     private void addActionEvent() {
         backButton.addActionListener(this);
         sellButton.addActionListener(this);
+        refreshButton.addActionListener(this);
     }
 
     @Override
@@ -197,10 +203,6 @@ public class SellManageFrame extends JFrame implements ActionListener {
                 Position.refresh(position);
                 tradingAccountDao.update(tradingAccount);
 
-//                // Add the sale transaction to the transaction history
-//                Transaction sellTransaction = new Transaction(Transaction.Type.SELL, selectedStock.getSecurityId(), selectedStock.getName(), selectedStock.getTicker(), sellQuantity, selectedStock.getPrice(), selectedStock.getPrice() * sellQuantity);
-//                tradingAccount.getTransactionHistory().add(sellTransaction);
-
                 // Show confirmation message
                 JOptionPane.showMessageDialog(this, String.format("Successfully sold %d shares of %s for $%.2f", sellQuantity, selectedStock.getName(), selectedStock.getPrice() * sellQuantity));
 
@@ -224,8 +226,25 @@ public class SellManageFrame extends JFrame implements ActionListener {
             }
 
 
+        } else if (e.getSource() == refreshButton) {
+            // Refresh the stock table
+            stockTableModel.setRowCount(0);
+            List<Stock> allStocks = stockDao.getAllStocks();
+            for (Stock stock : allStocks) {
+                Position p = Position.getPosition(tradingAccount.getAccountNumber(), stock.getSecurityId());
+                int shareCount = p != null ? p.getQuantity() : 0;
+                Object[] rowData = new Object[]{
+                        stock.getTicker(),
+                        stock.getSecurityId(),
+                        stock.getName(),
+                        stock.getPrice(),
+                        shareCount
+                };
+                stockTableModel.addRow(rowData);
+            }
         }
     }
+
 
     public static void main(String[] args) {
         String name = "John Doe"; // replace with customer name

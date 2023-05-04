@@ -17,7 +17,11 @@ public class ViewPendingAccountFrame extends JFrame {
     private final DefaultTableModel model;
     private final ArrayList<JCheckBox> checkBoxes;
 
-    public ViewPendingAccountFrame(String personId, String personName, List<TradingAccount> accounts) {
+    private final Manager manager;
+
+    public ViewPendingAccountFrame(Manager manager) {
+        this.manager = manager;
+
         setTitle("View Pending Accounts");
         setSize(800, 600);
         setLocationRelativeTo(null);
@@ -30,8 +34,8 @@ public class ViewPendingAccountFrame extends JFrame {
         // Person information panel
         JPanel personInfoPanel = new JPanel();
         personInfoPanel.setLayout(new GridLayout(2, 1));
-        personIdLabel = new JLabel("Person ID: " + personId);
-        personNameLabel = new JLabel("Person Name: " + personName);
+        personIdLabel = new JLabel("Person ID: " + manager.getID());
+        personNameLabel = new JLabel("Person Name: " + manager.getFirstName() + " " + manager.getLastName());
         personInfoPanel.add(personIdLabel);
         personInfoPanel.add(personNameLabel);
         container.add(personInfoPanel, BorderLayout.WEST);
@@ -53,6 +57,7 @@ public class ViewPendingAccountFrame extends JFrame {
 
         // Create checkboxes for each account
         checkBoxes = new ArrayList<>();
+        List<TradingAccount> accounts = TradingAccountDao.getInstance().getAllPending(manager.getID());
         for (TradingAccount account : accounts) {
             JCheckBox checkBox = new JCheckBox();
             checkBoxes.add(checkBox);
@@ -64,15 +69,24 @@ public class ViewPendingAccountFrame extends JFrame {
         }
 
         add(container);
-
+        addActionListeners();
         setVisible(true);
     }
 
+    private void addActionListeners() {
+        backButton.addActionListener(e -> {
+            dispose();
+            ManageAccountFrame manageAccountFrame = new ManageAccountFrame(manager);
+        });
+    }
+
+
     public static void main(String[] args) {
-        List<TradingAccount> accounts = TradingAccountDao.getInstance().getAllPending(123456);
-        new ViewPendingAccountFrame("123456", "John Doe", accounts);
+        Manager manager = new Manager(1, "John", "Doe", "username", "password", "1990-01-01", "123-45-6789");
+        new ViewPendingAccountFrame(manager);
     }
 
 }
+
 
 
