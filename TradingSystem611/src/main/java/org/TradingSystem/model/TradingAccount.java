@@ -117,6 +117,7 @@ public class TradingAccount implements Account{
         TradingAccountDao.getInstance().addTradingAccount(tradingAccount);
     }
 
+    //gets all blocked accounts
     public static List<TradingAccount> getAllBlocked(){
         return TradingAccountDao.getInstance().getAllBlocked();
     }
