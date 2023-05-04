@@ -29,6 +29,8 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
     }
 
     //gets account from either blocked or unblocked table
+    //TODO: have all accounts refreshed as they are pulled out to see if PL changed because of price changes
+    //TODO: IDEA: call getAllPositions and have them pulled out of DB, updated prices and recalculated, then pushed back
     public TradingAccount getAccount(int accountId) {
         try{
             String sql = "SELECT * FROM activeAccounts WHERE accountNumber = ?";
@@ -56,6 +58,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         return null;
     }
 
+    //TODO: have all accounts refreshed as they are pulled out to see if PL changed because of price changes
     //gets account from either blocked or unblocked account table
     @Override
     public TradingAccount getAccount(int accountId, int customerId) {
@@ -115,6 +118,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         return null;
     }
 
+    //TODO: have all accounts refreshed as they are pulled out to see if PL changed because of price changes
     @Override
     public List<TradingAccount> getAllActive(int customerId) {
         try{
@@ -139,6 +143,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         return null;
     }
 
+    //TODO: have all accounts refreshed as they are pulled out to see if PL changed because of price changes
     public List<TradingAccount> getAllBlocked() {
         try{
             String sql = "SELECT * FROM blockedAccounts";
@@ -158,6 +163,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         return null;
     }
 
+    //TODO: have all accounts refreshed as they are pulled out to see if PL changed because of price changes
     public List<TradingAccount> getAllBlocked(int customerId) {
         try{
             String sql = "SELECT * FROM blockedAccounts WHERE"
