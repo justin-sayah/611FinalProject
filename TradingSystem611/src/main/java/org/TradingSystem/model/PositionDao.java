@@ -85,6 +85,32 @@ public class PositionDao {
         }
     }
 
+    public void pushToDB(Position position){
+        String sql = "UPDATE positions SET quantity = ? , "
+                + "quantitySold = ?,"
+                + "avgBuyPrice = ?,"
+                + "currentSellPrice = ?," +
+                "realizedPL = ?," +
+                "unrealizedPL = ?"
+                + "WHERE accountId = ? AND securityId = ?";
+
+        try{
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, position.getQuantity());
+            pstmt.setInt(2, position.getQuantitySold());
+            pstmt.setDouble(3, position.getAvgBuyPrice());
+            pstmt.setDouble(4, position.getCurrentPrice());
+            pstmt.setDouble(5, position.getRealizedProfitLoss());
+            pstmt.setDouble(6, position.getUnrealizedProfitLoss());
+            pstmt.setInt(7, position.getAccountID());
+            pstmt.setInt(8, position.getSecurityId());
+
+            pstmt.executeUpdate();
+        } catch (Exception e){
+            System.out.println(e.toString());
+        }
+    }
+
     public void createPosition(Position position){
         String sql = "INSERT INTO positions (quantity, quantitySold, " +
                 "avgBuyPrice, currentSellPrice, realizedPL, unrealizedPL, accountID, securityId)" +

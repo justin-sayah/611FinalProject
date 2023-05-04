@@ -84,6 +84,10 @@ public class TradingAccount implements Account{
         return TradingAccountDao.getInstance().getAccount(accountId);
     }
 
+    public static TradingAccount getAccountNoRefresh(int accountId){
+        return TradingAccountDao.getInstance().getAccountNoRefresh(accountId);
+    }
+
     public static TradingAccount getPendingAccount(int accountId, int customerId){
         return TradingAccountDao.getInstance().getPendingAccount(accountId, customerId);
     }
@@ -117,6 +121,7 @@ public class TradingAccount implements Account{
         TradingAccountDao.getInstance().addTradingAccount(tradingAccount);
     }
 
+    //gets all blocked accounts
     public static List<TradingAccount> getAllBlocked(){
         return TradingAccountDao.getInstance().getAllBlocked();
     }

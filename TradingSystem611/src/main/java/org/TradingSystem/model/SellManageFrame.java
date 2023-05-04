@@ -5,113 +5,240 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.List;
 
 public class SellManageFrame extends JFrame implements ActionListener {
 
     private final JPanel container;
-    private final JLabel accountNumberLabel;
-    private final JLabel accountNameLabel;
-    private final JTable stocksTable;
+    private final JLabel accountID;
+    private final JLabel accountIDLabel;
+    private final JLabel customerName;
+    private final JLabel customerLabel;
     private final JButton backButton;
     private final JButton sellButton;
-    private final String[] columns = {"Stock Name", "Sell Price", "Stock ID", "Quantity"};
-    private final DefaultTableModel model;
-    private final ArrayList<JCheckBox> checkBoxes;
-    private final ArrayList<JTextField> quantityFields;
-    private final ArrayList<String[]> stocks;
+    private final JLabel sellQuantityLabel;
+    private final JTextField sellQuantity;
+    private final JTable stockTable;
+    private final DefaultTableModel stockTableModel;
+    private final TradingAccount tradingAccount;
+    private final TradingAccountDao tradingAccountDao;
+    private final StockDao stockDao;
+    private int customerId;
 
-    SellManageFrame(String accountNumber, String accountName, ArrayList<String[]> stocks) {
+
+    private String name;
+    private JScrollPane scrollPane;
+
+    public SellManageFrame(String name, TradingAccount tradingAccount) {
+        this.tradingAccount = tradingAccount;
+        this.tradingAccountDao = new TradingAccountDao();
+        this.stockDao = new StockDao();
+
         setTitle("Sell/Manage Stocks");
-        setSize(800, 600);
+        setSize(1000, 800);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
 
         container = new JPanel();
-        container.setLayout(new BorderLayout());
+        accountID = new JLabel(String.valueOf(tradingAccount.getAccountNumber()));
+        accountIDLabel = new JLabel("Account Number: ");
+        customerName = new JLabel(name);
+        customerLabel = new JLabel("Customer Name: ");
+        sellQuantityLabel = new JLabel("Enter the Quantity: ");
+        sellQuantity = new JTextField();
 
-        // Account information panel
-        JPanel accountInfoPanel = new JPanel();
-        accountInfoPanel.setLayout(new GridLayout(2, 1));
-        accountNumberLabel = new JLabel("Account Number: " + accountNumber);
-        accountNameLabel = new JLabel("Account Name: " + accountName);
-        accountInfoPanel.add(accountNumberLabel);
-        accountInfoPanel.add(accountNameLabel);
-        container.add(accountInfoPanel, BorderLayout.NORTH);
+        sellQuantity.setColumns(10);
 
-        // Stocks table panel
-        JPanel stocksPanel = new JPanel();
-        stocksPanel.setLayout(new BorderLayout());
-        model = new DefaultTableModel(columns, 0);
-        stocksTable = new JTable(model);
-        JScrollPane scrollPane = new JScrollPane(stocksTable);
-        stocksPanel.add(scrollPane, BorderLayout.CENTER);
-        container.add(stocksPanel, BorderLayout.CENTER);
+        backButton = new JButton("BACK");
+        sellButton = new JButton("SELL");
 
-        // Sell button panel
-        JPanel buttonPanel = new JPanel();
-        sellButton = new JButton("Sell");
-        sellButton.setEnabled(false);
-        buttonPanel.add(sellButton);
-        container.add(buttonPanel, BorderLayout.SOUTH);
+        stockTableModel = new DefaultTableModel();
+        stockTableModel.addColumn("Ticker");
+        stockTableModel.addColumn("ID");
+        stockTableModel.addColumn("Name");
+        stockTableModel.addColumn("Price");
+        stockTableModel.addColumn("Quantity");
+        stockTable = new JTable(stockTableModel);
+        stockTable.setPreferredScrollableViewportSize(new Dimension(500, 300));
 
-        // Back button panel
-        JPanel backButtonPanel = new JPanel();
-        backButton = new JButton("Back");
-        backButtonPanel.add(backButton);
-        container.add(backButtonPanel, BorderLayout.NORTH);
+        scrollPane = new JScrollPane(stockTable);
 
-        // Create checkboxes and quantity fields for each stock
-        checkBoxes = new ArrayList<>();
-        quantityFields = new ArrayList<>();
-        this.stocks = stocks;
-        for (String[] stock : stocks) {
-            JCheckBox checkBox = new JCheckBox();
-            checkBox.addActionListener(this);
-            checkBoxes.add(checkBox);
-
-            JTextField quantityField = new JTextField();
-            quantityField.setColumns(5);
-            quantityField.setEnabled(false);
-            quantityFields.add(quantityField);
-
-
+        List<Stock> allStocks = stockDao.getAllStocks();
+        for (Stock stock : allStocks) {
+            Object[] rowData = new Object[]{
+                    stock.getTicker(),
+                    stock.getSecurityId(),
+                    stock.getName(),
+                    stock.getPrice(),
+            };
+            stockTableModel.addRow(rowData);
         }
 
-        add(container);
+        setLocationAndSize();
+        setLayoutManager();
+        addComponentsToContainer();
+        addActionEvent();
 
         setVisible(true);
     }
 
+    public void setLocationAndSize() {
+        accountIDLabel.setBounds(0, 0, 110, 40);
+        accountID.setBounds(120, 0, 100, 40);
+        customerName.setBounds(270, 0, 100, 40);
+        customerLabel.setBounds(150, 0, 110, 40);
+        stockTable.setBounds(250, 150, 500, 300);
+        backButton.setBounds(878, 0, 100, 40);
+        sellButton.setBounds(600, 600, 100, 40);
+
+        // Add label and textfield for input quantity to sell
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        sellQuantityLabel.setBounds(0, 0, 150, 40);
+        sellQuantity.setBounds(150, 0, 100, 40);
+        bottomPanel.add(sellQuantityLabel);
+        bottomPanel.add(sellQuantity);
+        bottomPanel.add(sellButton);
+        container.add(bottomPanel, BorderLayout.SOUTH);
+
+        container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.WEST);
+        container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.EAST);
+        add(container);
+    }
+
+
+    public void setLayoutManager() {
+        container.setLayout(new BorderLayout());
+    }
+
+    public void addComponentsToContainer() {
+        JPanel topPanel = new JPanel(new BorderLayout());
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        leftPanel.add(accountIDLabel);
+        leftPanel.add(accountID);
+        leftPanel.add(customerLabel);
+        leftPanel.add(customerName);
+
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        rightPanel.add(backButton);
+        topPanel.add(leftPanel, BorderLayout.WEST);
+        topPanel.add(rightPanel, BorderLayout.EAST);
+
+        container.add(topPanel, BorderLayout.NORTH);
+        container.add(scrollPane, BorderLayout.CENTER);
+
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        JPanel sellPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        sellPanel.add(sellButton);
+
+        JPanel quantityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        quantityPanel.add(sellQuantityLabel);
+        quantityPanel.add(sellQuantity);
+
+        bottomPanel.add(sellPanel, BorderLayout.SOUTH);
+        bottomPanel.add(quantityPanel, BorderLayout.CENTER);
+
+        container.add(bottomPanel, BorderLayout.SOUTH);
+
+        container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.WEST);
+        container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.EAST);
+        add(container);
+    }
+
+
+    private void addActionEvent() {
+        backButton.addActionListener(this);
+        sellButton.addActionListener(this);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Check if any checkboxes are selected
-        boolean hasSelection = false;
-        for (JCheckBox checkBox : checkBoxes) {
-            if (checkBox.isSelected()) {
-                hasSelection = true;
-                break;
+        if (e.getSource() == backButton) {
+            new CustomerAccountView(tradingAccount);
+            this.setVisible(false);
+        } else if (e.getSource() == sellButton) {
+            int selectedRow = stockTable.getSelectedRow();
+            if (selectedRow != -1) {
+                // Retrieve the selected stock
+                int stockId = (int) stockTable.getValueAt(selectedRow, 1);
+                Stock selectedStock = stockDao.getStock(stockId);
+                if (selectedStock == null) {
+                    JOptionPane.showMessageDialog(this, "Failed to retrieve selected stock.");
+                    return;
+                }
+
+                // Get the sell quantity from the user
+                String sellQuantityStr = sellQuantity.getText();
+                if (sellQuantityStr == null || sellQuantityStr.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Please enter a quantity to sell.");
+                    return;
+                }
+                int sellQuantity;
+                try {
+                    sellQuantity = Integer.parseInt(sellQuantityStr);
+                    if (sellQuantity <= 0) {
+                        JOptionPane.showMessageDialog(this, "Sell quantity must be a positive integer.");
+                        return;
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Sell quantity must be a positive integer.");
+                    return;
+                }
+
+                // Retrieve the position for the selected stock
+                Position position = Position.getPosition(tradingAccount.getAccountNumber(), stockId);
+                if (position == null) {
+                    JOptionPane.showMessageDialog(this, "Failed to retrieve position for selected stock.");
+                    return;
+                }
+
+                // Sell the shares and update the position and trading account
+                position.sell(sellQuantity);
+                Position.refresh(position);
+                tradingAccountDao.update(tradingAccount);
+
+//                // Add the sale transaction to the transaction history
+//                Transaction sellTransaction = new Transaction(Transaction.Type.SELL, selectedStock.getSecurityId(), selectedStock.getName(), selectedStock.getTicker(), sellQuantity, selectedStock.getPrice(), selectedStock.getPrice() * sellQuantity);
+//                tradingAccount.getTransactionHistory().add(sellTransaction);
+
+                // Show confirmation message
+                JOptionPane.showMessageDialog(this, String.format("Successfully sold %d shares of %s for $%.2f", sellQuantity, selectedStock.getName(), selectedStock.getPrice() * sellQuantity));
+
+                // Refresh the stock table
+                stockTableModel.setRowCount(0);
+                List<Stock> allStocks = stockDao.getAllStocks();
+                for (Stock stock : allStocks) {
+                    Position p = Position.getPosition(tradingAccount.getAccountNumber(), stock.getSecurityId());
+                    int shareCount = p != null ? p.getQuantity() : 0;
+                    Object[] rowData = new Object[]{
+                            stock.getTicker(),
+                            stock.getSecurityId(),
+                            stock.getName(),
+                            stock.getPrice(),
+                            shareCount
+                    };
+                    stockTableModel.addRow(rowData);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select a stock to sell.");
             }
-        }
 
-        // Enable sell button if there are checkboxes selected
-        sellButton.setEnabled(hasSelection);
 
-        // Enable quantity field for selected checkboxes
-        for (int i = 0; i < checkBoxes.size(); i++) {
-            JCheckBox checkBox = checkBoxes.get(i);
-            JTextField quantityField = quantityFields.get(i);
-            quantityField.setEnabled(checkBox.isSelected());
         }
     }
 
     public static void main(String[] args) {
-        ArrayList<String[]> stocks = new ArrayList<>();
-        stocks.add(new String[] {"AAPL", "150.0", "100", "110.0"});
-        stocks.add(new String[] {"MSFT", "250.0", "50", "200.0"});
-        stocks.add(new String[] {"TSLA", "800.0", "25", "700.0"});
-        new SellManageFrame("123456", "John Doe", stocks);
+        String name = "John Doe"; // replace with customer name
+        TradingAccount tradingAccount = new TradingAccount(1234, 5678, 10000.0, 0.0, 0.0);
+        SellManageFrame frame = new SellManageFrame(name, tradingAccount);
     }
 
+
 }
+
+
+
+
+
+
+
