@@ -120,7 +120,23 @@ public class StockDao {
             System.out.println(e.toString());
         }
     }
-    //adds a stock to unlbocked list
+
+    public void updateStockPrice(Stock stock, double price){
+        String sql = "UPDATE stocks SET price = ? "
+                + "WHERE stockId = ?";
+
+        try{
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, price+"");
+            pstmt.setDouble(2, stock.getSecurityId());
+
+
+            pstmt.executeUpdate();
+        } catch (Exception e){
+            System.out.println(e.toString());
+        }
+    }
+    //adds a stock to unblocked list
     public void addStock(Stock stock){
         String sql = "INSERT INTO stocks (stockId, name, " +
                 "price, ticker)" +
