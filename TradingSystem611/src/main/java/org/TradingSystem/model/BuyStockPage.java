@@ -40,7 +40,6 @@ public class BuyStockPage extends JFrame implements ActionListener {
 
     public BuyStockPage( String name,TradingAccount tradingAccount) {
 
-
         this.name = name;
         this.tradingAccount = tradingAccount;
         tradingAccountDao = new TradingAccountDao();
@@ -79,7 +78,7 @@ public class BuyStockPage extends JFrame implements ActionListener {
 
 
 
-        List<Stock> allStocks = stockDao.getAllStocks();
+        List<Stock> allStocks = stockDao.getAllUnblockedStocks();
         for(Stock stock:allStocks){
             Object[] rowData = new Object[]{
                     stock.getTicker(),
@@ -204,10 +203,10 @@ public class BuyStockPage extends JFrame implements ActionListener {
                     try {
                         int quantity = Integer.parseInt(buyQuantity.getText());
                         int stockId_num =(int)(stockId);
-                        double initBalance = tradingAccountDao.getAccount(tradingAccount.getAccountNumber(),tradingAccount.getPersonId()).getBalance();
-                        if((quantity*(double)stockPrice)<initBalance){
+                        //double initBalance = tradingAccountDao.getAccount(tradingAccount.getAccountNumber(),tradingAccount.getPersonId()).getBalance();
+                        if(tradingAccount.getBalance() >= Market.getInstance().getStock(stockId_num).getPrice() * quantity){
                             if ( buyPopup == null) {
-                                buyPopup = new BuyConfirmPopup(this,(quantity*(double)stockPrice),initBalance,tradingAccount, (int)(stockId),quantity,(double)stockPrice); // Create the deposit popup window if it's not already created
+                                buyPopup = new BuyConfirmPopup(this,(quantity*(double)stockPrice),tradingAccount.getBalance() ,tradingAccount, (int)(stockId),quantity,(double)stockPrice); // Create the deposit popup window if it's not already created
                             }
                             buyPopup.setVisible(true); // Show the deposit popup window
 

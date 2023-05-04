@@ -105,7 +105,8 @@ public class LoginFrame extends JFrame implements ActionListener {
                     // replace this with your own code to open the main menu or dashboard
                 } else if(peopleDao.login(userText,pwdText)!= null){
                     JOptionPane.showMessageDialog(this, "Login Successful");
-                    new CustomerHomePage(userText,pwdText);
+                    Customer customer = Customer.customerLogin(userText,pwdText);
+                    new CustomerHomePage(customer);
                     dispose();
                 }
                 else {

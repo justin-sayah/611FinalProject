@@ -5,16 +5,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class WithdrawPopup extends JDialog{
-
+public class BlockedAccountsWithdrawPopup extends JDialog {
     private JTextField withdrawAmountField;
-    private TradingAccountDao tradingAccountDao;
+    protected TradingAccount updatedTradingAccount;
 
-    private CustomerAccountView customerAccountView;
+    public BlockedAccountsWithdrawPopup(BlockedAccountPage blockedAccountPage, TradingAccount tradingAccount) {
 
-    public WithdrawPopup(CustomerAccountView customerAccountView, TradingAccount tradingAccount) {
-        this.customerAccountView = customerAccountView;
-        tradingAccountDao = new TradingAccountDao();
 
         // Create and configure the components
         JLabel instructionLabel = new JLabel("Enter withdraw amount:");
@@ -31,7 +27,7 @@ public class WithdrawPopup extends JDialog{
 
         // Set the size and position of the pop-up window
         setSize(300, 150);
-        setLocationRelativeTo(customerAccountView);
+        setLocationRelativeTo(blockedAccountPage);
 
         // Add action listeners to the buttons
         confirmButton.addActionListener(new ActionListener() {
@@ -41,13 +37,19 @@ public class WithdrawPopup extends JDialog{
                 String withdrawAmount = withdrawAmountField.getText();
                 int amount = Integer.parseInt(withdrawAmount);
                 if (amount < 0) {
-                    JOptionPane.showMessageDialog(WithdrawPopup.this, "Invalid withdraw amount. Please enter a positive value.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(BlockedAccountsWithdrawPopup.this, "Invalid withdraw amount. Please enter a positive value.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                tradingAccount.setBalance(tradingAccount.getBalance()-Integer.parseInt(withdrawAmount));
-                tradingAccountDao.update(tradingAccount);
+                //tradingAccount.setBalance(tradingAccount.getBalance()-Integer.parseInt(withdrawAmount));
+                System.out.println("balance before withdraw: " + tradingAccount.getBalance());
+                tradingAccount.withdraw(amount);
+                System.out.println("balance after withdraw: "+tradingAccount.getBalance());
+                TradingAccount.update(tradingAccount);
+                tradingAccount.refresh();
+                blockedAccountPage.balance.setText(String.valueOf(tradingAccount.getBalance()));
 
-                // Add your code to process the deposit amount here
+//                updatedTradingAccount = TradingAccount.getAccount(tradingAccount.getAccountNumber());
+//                System.out.println(updatedTradingAccount);
                 dispose();
             }
         });
@@ -59,5 +61,8 @@ public class WithdrawPopup extends JDialog{
             }
         });
     }
+
+
+
 
 }

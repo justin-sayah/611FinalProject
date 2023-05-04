@@ -24,14 +24,15 @@ public class CustomerHomePage extends JFrame implements ActionListener {
     private PeopleDao peopleDao;
     private TradingAccountDao tradingAccountDao;
     //figure out how to get customerID
-    Customer customer;
+    private Customer customer;
     private int customerId;
 
-    public CustomerHomePage(String username, String password){
+    public CustomerHomePage(Customer customer){
+        this.customer = customer;
         //initialize the tradingAccountDao instance
         tradingAccountDao = new TradingAccountDao();
         peopleDao = new PeopleDao();
-        customer = peopleDao.login(username,password);
+
         //set up the JFrame
         setTitle("Customer Main Page");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -130,7 +131,7 @@ public class CustomerHomePage extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this,"You have not selected any account.");
             }
         }else if(e.getSource() == blockedButton){
-            new ViewBlockedAccounts(customer.getID());
+            new ViewBlockedAccounts(customer);
             this.setVisible(false);
         }
     }

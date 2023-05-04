@@ -29,9 +29,9 @@ public class ViewBlockedAccounts extends JFrame implements ActionListener {
     private TradingAccount tradingAccount;
     private Customer customer;
 
-    public ViewBlockedAccounts(int customerId){
-        this.customerId = customerId;
-        customer = Customer.getCustomer(customerId);
+    public ViewBlockedAccounts(Customer customer){
+        this.customer = customer;
+        System.out.println(customer);
         tradingAccountDao = new TradingAccountDao();
         setVisible(true);
         setTitle("Blocked Accounts View Page");
@@ -40,7 +40,7 @@ public class ViewBlockedAccounts extends JFrame implements ActionListener {
         setSize(1000,800);
         setResizable(false);
         container = new JPanel();
-        customerName = new JLabel(name);
+        customerName = new JLabel(customer.getLastName()+","+customer.getLastName());
         customerLabel = new JLabel("Customer Name: ");
 
         backButton = new JButton("BACK");
@@ -93,7 +93,6 @@ public class ViewBlockedAccounts extends JFrame implements ActionListener {
         add(container);
         pack();
 
-
         setVisible(true);
         actionEvent();
 
@@ -109,7 +108,7 @@ public class ViewBlockedAccounts extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if(e.getSource() == backButton){
-            new CustomerHomePage(customer.getUsername(),customer.getPassword());
+            new CustomerHomePage(customer);
             this.setVisible(false);
         }else if(e.getSource() == applyButton){
             int selectedRow = blockedAccountsTable.getSelectedRow();
@@ -117,7 +116,7 @@ public class ViewBlockedAccounts extends JFrame implements ActionListener {
                 // Retrieve the selected row data
                 Object accountNumber = blockedAccountsTable.getValueAt(selectedRow,0);
                 Object balance = blockedAccountsTable.getValueAt(selectedRow, 1);
-
+                new BlockedAccountPage(TradingAccount.getAccount((Integer) accountNumber));
                 this.setVisible(false);
             }else {
                 JOptionPane.showMessageDialog(this, "You have not selected any account.");
