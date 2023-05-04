@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.json.*;
 
 public class PriceFetcher {
