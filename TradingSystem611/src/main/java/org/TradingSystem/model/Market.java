@@ -58,7 +58,17 @@ public class Market {
     public void updatePrice(int stockId, double price){
         Stock stock = getStock(stockId);
         stock.changePrice(price);
-        updateStock(stock);
+    }
+
+    //uses API to update all prices by IRL prices if possible
+    public static void updateAllPricesRealLife(){
+        List<Stock> stocks = getInstance().getAllStocks();
+        for(Stock stock: stocks){
+            Double realPrice = PriceFetcher.fetchPrice(stock.getTicker());
+            if(realPrice != null){
+                stock.changePrice(realPrice);
+            }
+        }
     }
 
     //make sure that update is pushed to stock in either table

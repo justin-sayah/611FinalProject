@@ -25,8 +25,11 @@ public class Stock extends Security{
     @Override
     public void changePrice(double price) {
         super.changePrice(price);
+        //push change to DB
+        StockDao.getInstance().updateStock(this);
     }
 
+    //gets price from database, whatever it may be
     public void refresh(){
         StockDao.getInstance().refreshStock(this);
     }
