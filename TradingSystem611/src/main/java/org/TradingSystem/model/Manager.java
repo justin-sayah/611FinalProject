@@ -76,6 +76,22 @@ public class Manager extends Person {
         PeopleDao.getInstance().deleteManager(manager);
     }
 
+    public static void blockAccount(TradingAccount tradingAccount){
+        TradingAccountDao.getInstance().blockAccount(tradingAccount);
+    }
+
+    public static void blockAccount(int accountId){
+        TradingAccountDao.getInstance().blockAccount(accountId);
+    }
+
+    public static void unblockAccount(TradingAccount tradingAccount){
+        TradingAccountDao.getInstance().unblockAccount(tradingAccount);
+    }
+
+    public static void unblockAccount(int accountId){
+        TradingAccountDao.getInstance().unblockAccount(accountId);
+    }
+
         @Override
     public String toString() {
         return "Manager! PersonId: " + getID() + "     Name: " + getFirstName() + " " + getLastName();

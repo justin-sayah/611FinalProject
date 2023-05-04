@@ -36,12 +36,12 @@ public class StockDao {
             } else{
                 String sql2 = "SELECT * FROM stocks WHERE stockId = ? ";
 
-                PreparedStatement pstmt2 = connection.prepareStatement(sql);
+                PreparedStatement pstmt2 = connection.prepareStatement(sql2);
                 pstmt.setInt(1, stockId);
 
-                ResultSet rs2 = pstmt.executeQuery();
+                ResultSet rs2 = pstmt2.executeQuery();
                 if(rs.next()){
-                    return new Stock(stockId, rs.getDouble("price"), rs.getString("name"), rs.getString("ticker") );
+                    return new Stock(stockId, rs2.getDouble("price"), rs2.getString("name"), rs2.getString("ticker") );
                 }
             }
         }catch (Exception e){
@@ -138,7 +138,7 @@ public class StockDao {
     public void blockStock(Stock stock){
 
         //first remove from stocks table
-        removeFromUnblocked(stock.getSecurityId());
+        deleteFromUnblocked(stock.getSecurityId());
 
         //then add to blockedStock table
         String sql = "INSERT INTO blockedStocks (stockId, name, " +
@@ -167,7 +167,7 @@ public class StockDao {
     public void unblockStock(Stock stock){
         //add to unblocked stocks
         addStock(stock);
-        removeFromBlocked(stock.getSecurityId());
+        deleteFromBlocked(stock.getSecurityId());
     }
 
     public void unblockStock(int stockId){
@@ -177,14 +177,14 @@ public class StockDao {
         //add to unblocked stocks
         addStock(toUnblock);
         //remove from blocked
-        removeFromBlocked(toUnblock.getSecurityId());
+        deleteFromBlocked(toUnblock.getSecurityId());
     }
 
     //removes a stock from both blocked and unblocked list
     public void deleteStock(int stockId){
         //TODO: Sell positions for all people that own this stock
-        removeFromUnblocked(stockId);
-        removeFromBlocked(stockId);
+        deleteFromUnblocked(stockId);
+        deleteFromBlocked(stockId);
     }
 
     //removes stock from unblocked and blocked list
@@ -193,7 +193,7 @@ public class StockDao {
     }
 
     //deletes a stock from unblocked list
-    public void removeFromUnblocked(int stockId){
+    private void deleteFromUnblocked(int stockId){
         String sql = "DELETE FROM stocks WHERE stockId = ?";
 
         try{
@@ -226,7 +226,7 @@ public class StockDao {
     }
 
     //deletes a stock from blocked list
-    public void removeFromBlocked(int stockId){
+    private void deleteFromBlocked(int stockId){
         String sql = "DELETE FROM blockedStocks WHERE stockId = ?";
 
         try{
