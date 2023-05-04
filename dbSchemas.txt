@@ -1,5 +1,7 @@
 activeAccounts - accountNumber (integer PRIMARY KEY), cusomterID (integer NOT NULL), type (text NOT NULL), balance (real), unrealizedPL (real), realizedPL(real)
 
+blockedAccounts- accountNumber (integer PRIMARY KEY), cusomterID (integer NOT NULL), type (text NOT NULL), balance (real), unrealizedPL (real), realizedPL(real)
+
 pendingAccounts - accountNumber(integer PRIMARY KEY AUTOINCREMENT), customerID (integer NOT NULL), type (text NOT NULL)
 
 messages - messageId (integer PRIMARY KEY AUTOINCREMENT), customerId (integer), message (text)
@@ -9,5 +11,7 @@ people - personId(integer PRIMARY KEY AUTOINRCEMENT), firstName text, lastName (
 positions - accountId integer PRIMARY KEY NOT NULL, securityId integer, quantity integer, quantitySold (integer), currentSellPrice (real), avgBuyPrice (real), realizedPL (real), urealizedPL (real)
 
 stocks - stockId (integer PRIMARY KEY AUTOINCREMENT), name text, price real, ticker text UNIQUE
+
+blockedStocks- stockId (integer PRIMARY KEY AUTOINCREMENT), name text, price real, ticker text UNIQUE
 
 transactions - CREATE TABLE transactions (transactionId integer PRIMARY KEY AUTOINCREMENT, accountId integer, timestamp text, stockId integer, action text, quantity text, price real);

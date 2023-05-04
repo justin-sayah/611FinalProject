@@ -112,6 +112,23 @@ public class TradingAccount implements Account{
         TradingAccountDao.getInstance().addTradingAccount(tradingAccount);
     }
 
+    public static List<TradingAccount> getAllBlocked(){
+        return TradingAccountDao.getInstance().getAllBlocked();
+    }
+
+    public static List<TradingAccount> getAllBlocked(int customerId){
+        return TradingAccountDao.getInstance().getAllBlocked(customerId);
+    }
+
+    public static boolean isBlocked(int accountId){
+        return TradingAccountDao.getInstance().isBlocked(accountId);
+    }
+
+    public static boolean isBlocked(TradingAccount tradingAccount){
+        return TradingAccountDao.getInstance().isBlocked(tradingAccount);
+    }
+
+
     public List<Position> getAllPositions(){
         return Position.getAllPositions(accountNumber);
     }
