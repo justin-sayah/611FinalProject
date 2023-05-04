@@ -1,8 +1,9 @@
 package org.TradingSystem.model;
 
 import java.util.List;
+import java.util.Observer;
 
-public class TradingAccount implements Account{
+public class TradingAccount  implements Account{
     protected int accountNumber;
     protected int personId;
     protected double balance;
