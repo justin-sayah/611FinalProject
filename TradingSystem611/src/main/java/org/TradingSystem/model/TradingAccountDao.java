@@ -40,14 +40,14 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
             if(rs.next()){
                 return new TradingAccount(accountId, rs.getInt("customerId"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
             } else{
-                String sql2 = "SELECT * FROM blockedAcounts WHERE accountNumber = ?";
+                String sql2 = "SELECT * FROM blockedAccounts WHERE accountNumber = ?";
 
                 PreparedStatement pstmt2 = connection.prepareStatement(sql2);
                 pstmt2.setInt(1,accountId);
 
                 ResultSet rs2    = pstmt2.executeQuery();
-                if(rs.next()){
-                    return new TradingAccount(accountId, rs.getInt("customerId"), rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
+                if(rs2.next()){
+                    return new TradingAccount(accountId, rs2.getInt("customerId"), rs2.getDouble("balance"), rs2.getDouble("unrealizedPL"), rs2.getDouble("realizedPL"));
                 }
             }
         }catch (Exception e){
@@ -83,8 +83,8 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
                 pstmt2.setString(3, "tradingAccount");
 
                 ResultSet rs2 = pstmt2.executeQuery();
-                if (rs.next()) {
-                    return new TradingAccount(accountId, customerId, rs.getDouble("balance"), rs.getDouble("unrealizedPL"), rs.getDouble("realizedPL"));
+                if (rs2.next()) {
+                    return new TradingAccount(accountId, customerId, rs2.getDouble("balance"), rs2.getDouble("unrealizedPL"), rs2.getDouble("realizedPL"));
                 }
             }
         }catch (Exception e){

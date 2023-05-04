@@ -126,14 +126,18 @@ public class DBTesting {
 
 
         //testing stocks
-        Stock s1 = new Stock(1,100,"Apple Inc", "AAPL");
-        Stock s2 = new Stock(2, 15, "AMC Entertainment", "AMC");
-        StockDao stockDao = new StockDao();
-        stockDao.addStock(s1);
-        stockDao.addStock(s2);
+//        Stock s1 = new Stock(1,100,"Apple Inc", "AAPL");
+//        Stock s2 = new Stock(2, 15, "AMC Entertainment", "AMC");
+//        StockDao stockDao = new StockDao();
+//        stockDao.addStock(s1);
+//        stockDao.addStock(s2);
+//
+//        System.out.println(stockDao.getStock(1));
+//        System.out.println();
+//        System.out.println(stockDao.getStocks("a"));
 
-        System.out.println(stockDao.getStock(1));
-        System.out.println();
-        System.out.println(stockDao.getStocks("a"));
+//        TradingAccount tradingAccount = new TradingAccount(3,1,10000,400,500);
+        TradingAccount tradingAccount = TradingAccountDao.getInstance().getAccount(3);
+        TradingAccountDao.getInstance().blockAccount(tradingAccount);
     }
 }
