@@ -97,11 +97,14 @@ public class TradingAccount  implements Account{
         return TradingAccountDao.getInstance().getAllActive(customerId);
     }
 
+    public static List<TradingAccount> getAllPending(){
+        return TradingAccountDao.getInstance().getAllPending();
+    }
+
     public static List<TradingAccount> getAllPending(int customerId){
         return TradingAccountDao.getInstance().getAllPending(customerId);
     }
-
-    //TODO: rename this to push data
+    
     public static void update(TradingAccount tradingAccount){
         TradingAccountDao.getInstance().update(tradingAccount);
     }
