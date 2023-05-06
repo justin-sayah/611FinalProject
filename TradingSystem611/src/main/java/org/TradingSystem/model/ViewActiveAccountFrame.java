@@ -11,14 +11,15 @@ public class ViewActiveAccountFrame extends JFrame {
     private final JLabel personNameLabel;
     private final JTable accountsTable;
     private final JButton backButton;
-    private final String[] columns = {"Account Number", "Customer Name"};
+    private final String[] columns = {"Account Number","Customer ID","Account Last Name", "Account First Name", "Account Type"};
     private final DefaultTableModel model;
 
     private final Manager manager;
+    private  PeopleDao peopleDao;
 
     public ViewActiveAccountFrame(Manager manager) {
         this.manager = manager;
-
+        peopleDao = new PeopleDao();
         setTitle("View Active Accounts");
         setSize(800, 600);
         setLocationRelativeTo(null);
@@ -52,11 +53,14 @@ public class ViewActiveAccountFrame extends JFrame {
         backButtonPanel.add(backButton);
         container.add(backButtonPanel, BorderLayout.NORTH);
 
-        for (TradingAccount account : manager.getAllActiveAccounts(manager.getID())) {
+        for (TradingAccount account : TradingAccount.getAllActive()) {
+            Customer customer = peopleDao.getCustomer(account.getPersonId());
             Object[] row = {
                     account.getAccountNumber(),
-                    Manager.getCustomer(account.getPersonId()).getLastName() + " " + Manager.getCustomer(account.getPersonId()).getFirstName(),
-//                    account.getAccountType()
+                    customer.getID(),
+                    customer.getLastName(),
+                    customer.getFirstName(),
+                    "Trading Account",
             };
             model.addRow(row);
         }

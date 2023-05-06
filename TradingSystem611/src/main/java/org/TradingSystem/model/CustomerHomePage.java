@@ -24,7 +24,6 @@ public class CustomerHomePage extends JFrame implements ActionListener {
     private final JButton requestButton;
     //figure out how to get customerID
     private Customer customer;
-    private int customerId;
 
     public CustomerHomePage(Customer customer) {
         this.customer = customer;
@@ -138,8 +137,7 @@ public class CustomerHomePage extends JFrame implements ActionListener {
             new ViewBlockedAccounts(customer);
             this.setVisible(false);
         } else if (e.getSource() == requestButton) {
-            System.out.println(customerId);
-            TradingAccount.addPendingAccount(customerId, "tradingAccount");
+            TradingAccount.addPendingAccount(customer.getID(), "tradingAccount");
         }
     }
 }

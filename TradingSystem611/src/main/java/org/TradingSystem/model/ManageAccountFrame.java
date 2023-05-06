@@ -76,6 +76,7 @@ public class ManageAccountFrame extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
+            new ManagerFrame(manager);
             dispose();
         } else if (e.getSource() == approveButton) {
             System.out.println("Approve Account button clicked!");

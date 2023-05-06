@@ -1,7 +1,6 @@
 package org.TradingSystem.model;
 
 import java.util.List;
-import java.util.Observer;
 
 public class TradingAccount  implements Account{
     protected int accountNumber;
@@ -95,6 +94,10 @@ public class TradingAccount  implements Account{
 
     public static List<TradingAccount> getAllActive(int customerId){
         return TradingAccountDao.getInstance().getAllActive(customerId);
+    }
+
+    public static List<TradingAccount> getAllActive(){
+        return TradingAccountDao.getInstance().getAllActive();
     }
 
     public static List<TradingAccount> getAllPending(){
