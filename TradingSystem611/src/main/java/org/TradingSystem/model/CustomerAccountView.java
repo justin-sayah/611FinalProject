@@ -51,7 +51,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         customerNameLabel = new JLabel(customer.getLastName()+", "+customer.getFirstName());
         accountIDLabel = new JLabel(String.valueOf(tradingAccount.getAccountNumber()));
         accountID = new JLabel("Account Number: ");
-        nameLabel = new JLabel("Customer Name");
+        nameLabel = new JLabel("Customer Name: ");
         backButton = new JButton("BACK");
         manageButton = new JButton("MANAGE/SELL");
         buyButton = new JButton("BUY");

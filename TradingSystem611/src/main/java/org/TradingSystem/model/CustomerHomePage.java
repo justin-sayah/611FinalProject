@@ -62,6 +62,8 @@ public class CustomerHomePage extends JFrame implements ActionListener {
         accountTableModel = new DefaultTableModel();
         accountTableModel.addColumn("Account Number");
         accountTableModel.addColumn("Balance");
+        accountTableModel.addColumn("UnrealizedPL");
+        accountTableModel.addColumn("RealizedPL");
         accountList.setModel(accountTableModel);
         accountList.setPreferredScrollableViewportSize(new Dimension(300, 300));
 
@@ -72,6 +74,8 @@ public class CustomerHomePage extends JFrame implements ActionListener {
             Object[] rowData = new Object[]{
                     account.getAccountNumber(),
                     account.getBalance(),
+                    account.getUnrealizedProfitLoss(),
+                    account.getRealizedProfitLoss(),
             };
             accountTableModel.addRow(rowData);
         }
