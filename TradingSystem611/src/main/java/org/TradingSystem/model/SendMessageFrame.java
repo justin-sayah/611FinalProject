@@ -1,6 +1,7 @@
 package org.TradingSystem.model;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -54,7 +55,7 @@ public class SendMessageFrame extends JFrame implements ActionListener {
         customerIDLabel.setBounds(150, 150, 100, 40);
         textLabel.setBounds(150,200,50,40);
         personIDTextField.setBounds(260,150,200,40);
-        textTextField.setBounds(150,250,500,200);
+        textTextField.setBounds(210,200,600,40);
         back.setBounds(800,50,100,40);
         send.setBounds(800,500,100,40);
     }
