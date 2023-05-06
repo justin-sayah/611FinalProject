@@ -39,13 +39,13 @@ public class StockDao {
             if(rs.next()){
                 return new Stock(stockId, rs.getDouble("price"), rs.getString("name"), rs.getString("ticker") );
             } else{
-                String sql2 = "SELECT * FROM stocks WHERE stockId = ? ";
+                String sql2 = "SELECT * FROM blockedStocks WHERE stockId = ? ";
 
                 PreparedStatement pstmt2 = connection.prepareStatement(sql2);
-                pstmt.setInt(1, stockId);
+                pstmt2.setInt(1, stockId);
 
                 ResultSet rs2 = pstmt2.executeQuery();
-                if(rs.next()){
+                if(rs2.next()){
                     return new Stock(stockId, rs2.getDouble("price"), rs2.getString("name"), rs2.getString("ticker") );
                 }
             }
@@ -186,19 +186,22 @@ public class StockDao {
 
     //removes a stock from blocked list and moves it back to unblocked list
     public void unblockStock(Stock stock){
+
+        System.out.println(stock);
+
+        //delete from blocked table
+        deleteFromBlocked(stock.getSecurityId());
+
         //add to unblocked stocks
         addStock(stock);
-        deleteFromBlocked(stock.getSecurityId());
+
     }
 
     public void unblockStock(int stockId){
         //get the stock
         Stock toUnblock = getStock(stockId);
 
-        //add to unblocked stocks
-        addStock(toUnblock);
-        //remove from blocked
-        deleteFromBlocked(toUnblock.getSecurityId());
+        unblockStock(toUnblock);
     }
 
     //removes a stock from both blocked and unblocked list

@@ -90,7 +90,7 @@ public class ManagerFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == manageAccount) {
-            new ManageAccountFrame(manager.getID()+"",manager.getFirstName()+""+manager.getLastName());
+            new ManageAccountFrame(manager);
             dispose();
         }else if(e.getSource() == viewCustomerInformation){
             new CustomerInformationFrame(manager);
