@@ -68,9 +68,11 @@ public class ManageMarketFrame extends JFrame implements ActionListener {
             data[i][3] = list.get(i).getTicker();
         }
         stockTable = new JTable(data,columnNames);
-        stockTable.setRowHeight(40);
+        stockTable.setRowHeight(30);
         stockTable.setPreferredScrollableViewportSize(new Dimension(300,200));
+        //stockTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         scrollPane = new JScrollPane(stockTable);
+        scrollPane.setSize(new Dimension(600,200));
         container.setLayout(new BorderLayout());
         setLocationAndSize();
         addComponentsToContainer();
