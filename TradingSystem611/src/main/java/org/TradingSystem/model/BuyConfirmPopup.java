@@ -9,7 +9,7 @@ public class BuyConfirmPopup extends JDialog {
     private TradingAccountDao tradingAccountDao;
 
 
-    public BuyConfirmPopup(BuyStockPage buyStockPage, double amountCost, double initBalance,TradingAccount tradingAccount, int stockId, int quantity,double price){
+    public BuyConfirmPopup(CustomerAccountView customerAccountView,BuyStockPage buyStockPage, double amountCost, double initBalance,TradingAccount tradingAccount, int stockId, int quantity,double price){
 
         tradingAccountDao = new TradingAccountDao();
 
@@ -39,7 +39,10 @@ public class BuyConfirmPopup extends JDialog {
                 // Perform the deposit action
                 JOptionPane.showMessageDialog(BuyConfirmPopup.this,"You have successfully bought the stock");
                 Position.buy(tradingAccount.getAccountNumber(),stockId,quantity);
-                buyStockPage.balance.setText(String.valueOf(tradingAccount.getBalance()));
+
+                buyStockPage.balance.setText(String.valueOf(TradingAccount.getAccount(tradingAccount.getAccountNumber()).getBalance()));
+                customerAccountView.balance.setText(String.valueOf(TradingAccount.getAccount(tradingAccount.getAccountNumber()).getBalance()));
+
                 //transactionDao.addTransaction(tradingAccount.getAccountNumber(),buyStockPage.buyQuantity);
 
                 // Add your code to process the deposit amount here

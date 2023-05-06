@@ -58,7 +58,7 @@ public class    Position {
             calculateUnrealizedPl();
             //push position update
             refresh(this);
-            Transaction.addTransaction(accountID, securityId, quantity, currentPrice, "sell");
+            Transaction.addTransaction(accountID, securityId, quantityToSell, currentPrice, "sell");
             if(quantity == 0){
                 deletePosition(this);
             }
@@ -71,7 +71,7 @@ public class    Position {
 
     public static void buy(int accountId, int stockId, int quantity){
         StockDao sDao = new StockDao();
-        double price = sDao.getStock(stockId).getPrice();
+        double price = sDao.getStock(stockId).getPrice() * quantity;
 
         //check if this can be afforded
         TradingAccount account = TradingAccount.getAccount(accountId);

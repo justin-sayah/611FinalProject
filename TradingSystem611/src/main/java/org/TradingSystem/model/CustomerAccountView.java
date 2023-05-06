@@ -18,11 +18,11 @@ public class CustomerAccountView extends JFrame implements ActionListener {
 
     private final JButton withdrawButton;
     private final JButton depositButton;
-    private final JButton refreshButton;
+
 
 
     private final JLabel balanceLabel;
-    private final JLabel balance;
+    protected final JLabel balance;
     private final JLabel realizedPLLabel;
     private final JLabel realizedPL;
     private final JLabel unrealizedPLLabel;
@@ -45,6 +45,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
     public CustomerAccountView(TradingAccount tradingAccount) {
 
         this.tradingAccount = tradingAccount;
+        tradingAccount.refresh();
         customer = Customer.getCustomer(tradingAccount.getPersonId());
         setVisible(true);
         setTitle("Customer Account Page");
@@ -67,7 +68,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
 
 
         //TODO to implement the automatic refresh function later
-        refreshButton = new JButton("Refresh");
+
 
         balanceLabel = new JLabel("Balance");
         balance = new JLabel(String.valueOf(tradingAccount.getBalance()));
@@ -79,7 +80,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         setLayoutManager();
         addComponentsToContainer();
         addActionEvent();
-        tradingAccount.refresh();
+
 
     }
 //set locations for each label and button: x represents the column, y represents the row
@@ -98,7 +99,6 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         manageButton.setBounds(600, 250, 150, 40);
         backButton.setBounds(878,0,100,40);
         buyButton.setBounds(600, 350, 100, 40);
-        refreshButton.setBounds(700,0,100,40);
         depositButton.setBounds(200, 550, 100, 40);
         withdrawButton.setBounds(400, 550, 100, 40);
         transacButton.setBounds(600, 550, 150, 40);
@@ -127,7 +127,6 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         container.add(depositButton);
         container.add(withdrawButton);
         container.add(transacButton);
-        container.add(refreshButton);
         container.add(nameLabel);
         add(container);
     }
@@ -138,7 +137,6 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         depositButton.addActionListener(this);
         transacButton.addActionListener(this);
         withdrawButton.addActionListener(this);
-        refreshButton.addActionListener(this);
 
 
     }
@@ -168,10 +166,8 @@ public class CustomerAccountView extends JFrame implements ActionListener {
             sellManageFrame.setVisible(true);
             this.setVisible(false);
         }else if(e.getSource() == buyButton){
-            new BuyStockPage(customer.getLastName()+customer.getFirstName(),tradingAccount);
+            new BuyStockPage(this,customer.getLastName()+customer.getFirstName(),tradingAccount);
             this.setVisible(false);
-        }else if(e.getSource() == refreshButton){ //refresh the page and update he balance, realized profit/loss and unrealized profit/loss
-            tradingAccount.refresh();
         }
     }
 
