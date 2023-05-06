@@ -147,6 +147,12 @@ public class TradingAccount  implements Account{
         return Position.getAllPositions(accountNumber);
     }
 
+    public String getType(){
+        return "TradingAccount";
+    }
+
+
+
     //FOR TESTING PURPOSES
     @Override
     public String toString() {

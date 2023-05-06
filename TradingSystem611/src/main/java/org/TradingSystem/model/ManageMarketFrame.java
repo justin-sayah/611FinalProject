@@ -158,6 +158,9 @@ public class ManageMarketFrame extends JFrame implements ActionListener {
                     double price = Double.parseDouble(priceText);
                     int stockID = Integer.parseInt(stockIDText);
                     Stock stock = stockDao.getStock(stockID);
+                    if(stock == null){
+                        JOptionPane.showMessageDialog(this, "Cannot find the stock!");
+                    }
                     stockDao.updateStockPrice(stock, price);
                     JOptionPane.showMessageDialog(this, "Price Successfully Updated!");
                 }

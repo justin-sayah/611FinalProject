@@ -68,6 +68,7 @@ public class ManagerFrame extends JFrame implements ActionListener {
         container.add(viewCustomerInformation);
         container.add(manageMarket);
         container.add(sendMessage);
+        container.add(logout);
         add(container);
     }
 
@@ -100,6 +101,9 @@ public class ManagerFrame extends JFrame implements ActionListener {
             dispose();
         }else if(e.getSource() == sendMessage){
             new SendMessageFrame(manager);
+            dispose();
+        }else if(e.getSource() == logout){
+            new LoginFrame();
             dispose();
         }
     }
