@@ -61,16 +61,14 @@ public class CustomerInformationFrame extends JFrame implements ActionListener {
     }
 
     private void setLocationAndSize(){
-        customerIDLabel.setBounds(100,500,100,40);
-        customerIDTextField.setBounds(220,500,300,40);
-        viewAllActiveAccounts.setBounds(600,450,200,40);
-        viewAccountsOver10KProfit.setBounds(600,510,200,40);
-        back.setBounds(800,400,100,40);
+        customerIDLabel.setBounds(100,500,50,40);
+        customerIDTextField.setBounds(170,500,100,40);
+        viewAllActiveAccounts.setBounds(300,450,300,40);
+        viewAccountsOver10KProfit.setBounds(300,500,300,40);
+        back.setBounds(800,500,100,40);
     }
 
     private void addComponentsToContainer(){
-        container.add(customerIDLabel);
-        container.add(customerIDTextField);
         container.add(viewAllActiveAccounts);
         container.add(viewAccountsOver10KProfit);
         container.add(back);
@@ -89,40 +87,33 @@ public class CustomerInformationFrame extends JFrame implements ActionListener {
         if(e.getSource() == back){
             dispose();
         }else if(e.getSource() == viewAllActiveAccounts){
-
-            String customerIDText = customerIDTextField.getText();
-            if(customerIDText.isEmpty()){
-                JOptionPane.showMessageDialog(this, "Please Enter a CustomerID");
-            }else{
-                try{
-                    int customerID = Integer.parseInt(customerIDText);
-                    Customer customer = peopleDao.getCustomer(customerID);
-                    List<TradingAccount> list = tDao.getAllActive(customerID);
-                    new ViewAccountsFrame(customer,list);
-                }catch(Exception ex){
-                    ex.printStackTrace();
-                }
+            // Select a row and view all active accounts of the customer
+            int row = customerTable.getSelectedRow();
+            List<Customer> list = peopleDao.getAllCustomers();
+            if(row < 0){
+                JOptionPane.showMessageDialog(this, "Please choose a row!");
+            }else {
+                Customer customer = list.get(row);
+                List<TradingAccount> list1 = tDao.getAllActive(customer.getID());
+                new ViewAccountsFrame(customer, list1);
             }
         }else if(e.getSource() == viewAccountsOver10KProfit){
-
-            String customerIDText = customerIDTextField.getText();
-            if(customerIDText.isEmpty()){
-                JOptionPane.showMessageDialog(this, "Please Enter a CustomerID");
-            }else{
-                try{
-                    int customerID = Integer.parseInt(customerIDText);
-                    Customer customer = peopleDao.getCustomer(customerID);
-                    List<TradingAccount> list1 = tDao.getAllActive(customerID);
-                    List<TradingAccount> list = new ArrayList<>();
-                    for(TradingAccount account: list1){
-                        if(account.getRealizedProfitLoss() >= 10000){
-                            list.add(account);
-                        }
+            // Select a row and view the accounts over 10K profit of the customer
+            int row = customerTable.getSelectedRow();
+            List<Customer> list = peopleDao.getAllCustomers();
+            if(row < 0){
+                JOptionPane.showMessageDialog(this, "Please choose a row!");
+            }else {
+                Customer customer = list.get(row);
+                List<TradingAccount> list1 = tDao.getAllActive(customer.getID());
+                // Add accounts of over 10K profit
+                List<TradingAccount> list2 = new ArrayList<>();
+                for(TradingAccount account: list1){
+                    if(account.getRealizedProfitLoss() >= 10000){
+                        list2.add(account);
                     }
-                    new ViewAccountsFrame(customer,list);
-                }catch(Exception ex){
-                    ex.printStackTrace();
                 }
+                new ViewAccountsFrame(customer, list2);
             }
         }
     }
