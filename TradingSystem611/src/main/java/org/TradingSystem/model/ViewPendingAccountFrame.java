@@ -13,15 +13,17 @@ public class ViewPendingAccountFrame extends JFrame {
     private final JLabel personNameLabel;
     private final JTable accountsTable;
     private final JButton backButton;
-    private final String[] columns = {"Account Number"};
+    private final String[] columns = {"Account Number","Account Last Name", "Account First Name", "Account Type"};
     private final DefaultTableModel model;
     private final ArrayList<JCheckBox> checkBoxes;
 
     private final Manager manager;
+    private final PeopleDao peopleDao;
+
 
     public ViewPendingAccountFrame(Manager manager) {
         this.manager = manager;
-
+        peopleDao = new PeopleDao();
         setTitle("View Pending Accounts");
         setSize(800, 600);
         setLocationRelativeTo(null);
@@ -57,13 +59,21 @@ public class ViewPendingAccountFrame extends JFrame {
 
         // Create checkboxes for each account
         checkBoxes = new ArrayList<>();
-        List<TradingAccount> accounts = TradingAccountDao.getInstance().getAllPending(manager.getID());
+
+        //list of all pending accounts
+        List<TradingAccount> accounts = TradingAccountDao.getInstance().getAllPending();
+        System.out.println(accounts);
         for (TradingAccount account : accounts) {
             JCheckBox checkBox = new JCheckBox();
             checkBoxes.add(checkBox);
-
+            System.out.println(account.getPersonId());
+            Customer customer = peopleDao.getCustomer(account.getPersonId());
+            System.out.println(customer);
             Object[] row = {
-                    account.getAccountNumber()
+                    account.getAccountNumber(),
+                    customer.getLastName(),
+                    customer.getFirstName(),
+                    "Trading Account",
             };
             model.addRow(row);
         }
@@ -80,11 +90,11 @@ public class ViewPendingAccountFrame extends JFrame {
         });
     }
 
-
-    public static void main(String[] args) {
-        Manager manager = new Manager(1, "John", "Doe", "username", "password", "1990-01-01", "123-45-6789");
-        new ViewPendingAccountFrame(manager);
-    }
+//
+//    public static void main(String[] args) {
+//        Manager manager = new Manager(1, "John", "Doe", "username", "password", "1990-01-01", "123-45-6789");
+//        new ViewPendingAccountFrame(manager);
+//    }
 
 }
 

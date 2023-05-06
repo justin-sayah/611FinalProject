@@ -269,8 +269,7 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
 
     public List<TradingAccount> getAllPending() {
         try{
-            String sql = "SELECT * FROM pendingAccounts WHERE"
-                    + "type = ?";
+            String sql = "SELECT * FROM pendingAccounts WHERE type = ?";
 
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, "tradingAccount");
