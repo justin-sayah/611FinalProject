@@ -37,14 +37,20 @@ public class DepositPopup extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 // Perform the deposit action
                 String depositAmount = depositAmountField.getText();
-                int amount = Integer.parseInt(depositAmount);
-                if (amount < 0) {
-                    JOptionPane.showMessageDialog(DepositPopup.this, "Invalid deposit amount. Please enter a positive value.", "Error", JOptionPane.ERROR_MESSAGE);
+                try {
+                    int amount = Integer.parseInt(depositAmount);
+                    if (amount < 0) {
+                        JOptionPane.showMessageDialog(DepositPopup.this, "Invalid deposit amount. Please enter a positive value.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    tradingAccount.deposit(amount);
+                    TradingAccount.update(tradingAccount);
+                    tradingAccount.refresh();
+                    customerAccountView.balance.setText(String.valueOf(tradingAccount.getBalance()));
+                }catch(NumberFormatException ex){
+                    JOptionPane.showMessageDialog(DepositPopup.this, "Deposit amount must be a positive integer.");
                     return;
                 }
-                tradingAccount.setBalance(Integer.parseInt(depositAmount)+tradingAccount.getBalance());
-                tradingAccountDao.update(tradingAccount);
-
                 // Add your code to process the deposit amount here
                 dispose();
             }

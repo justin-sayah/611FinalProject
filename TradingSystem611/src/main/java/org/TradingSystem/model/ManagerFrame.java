@@ -77,6 +77,7 @@ public class ManagerFrame extends JFrame implements ActionListener {
         viewCustomerInformation.addActionListener(this);
         manageMarket.addActionListener(this);
         sendMessage.addActionListener(this);
+        logout.addActionListener(this);
     }
 
     public static void main(String[] args) {
@@ -95,7 +96,7 @@ public class ManagerFrame extends JFrame implements ActionListener {
             dispose();
         }else if(e.getSource() == viewCustomerInformation){
             new CustomerInformationFrame(manager);
-
+            dispose();
         }else if(e.getSource() == manageMarket){
             new ManageMarketFrame(manager);
             dispose();
@@ -104,7 +105,7 @@ public class ManagerFrame extends JFrame implements ActionListener {
             dispose();
         }else if(e.getSource() == logout){
             new LoginFrame();
-            dispose();
+            this.setVisible(false);
         }
     }
 }

@@ -39,14 +39,20 @@ public class WithdrawPopup extends JDialog{
             public void actionPerformed(ActionEvent e) {
                 // Perform the deposit action
                 String withdrawAmount = withdrawAmountField.getText();
-                int amount = Integer.parseInt(withdrawAmount);
-                if (amount < 0) {
-                    JOptionPane.showMessageDialog(WithdrawPopup.this, "Invalid withdraw amount. Please enter a positive value.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                tradingAccount.setBalance(tradingAccount.getBalance()-Integer.parseInt(withdrawAmount));
-                tradingAccountDao.update(tradingAccount);
+                try {
+                    int amount = Integer.parseInt(withdrawAmount);
+                    if (amount < 0) {
+                        JOptionPane.showMessageDialog(WithdrawPopup.this, "Invalid withdraw amount. Please enter a positive value.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
 
+                    tradingAccount.withdraw(amount);
+                    TradingAccount.update(tradingAccount);
+                    tradingAccount.refresh();
+                    customerAccountView.balance.setText(String.valueOf(tradingAccount.getBalance()));
+                }catch (NumberFormatException ex){
+                    JOptionPane.showMessageDialog(WithdrawPopup.this,"Withdraw amount must be a positive integer.");
+                }
                 // Add your code to process the deposit amount here
                 dispose();
             }
