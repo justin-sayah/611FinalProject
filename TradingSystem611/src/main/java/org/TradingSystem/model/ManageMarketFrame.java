@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class ManageMarketFrame extends JFrame implements ActionListener {
 
@@ -142,8 +143,8 @@ public class ManageMarketFrame extends JFrame implements ActionListener {
 
         }else if(e.getSource() == update){
             try{
-                if(priceText.isEmpty()){
-                    JOptionPane.showMessageDialog(this, "Please enter a price!");
+                if(priceText.isEmpty() || !isDouble(priceText)){
+                    JOptionPane.showMessageDialog(this, "Please enter a valid price!");
                 }else {
                     double price = Double.parseDouble(priceText);
                     int row = stockTable.getSelectedRow();
@@ -191,8 +192,8 @@ public class ManageMarketFrame extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Please choose a row!");
             }else {
                 Stock stock = list.get(row);
-//                Market.updatePriceRealLife(stock.getSecurityId());
-                Market.updateAllPricesRealLife();
+                Market.updatePriceRealLife(stock.getSecurityId());
+                //Market.updateAllPricesRealLife();
                 JOptionPane.showMessageDialog(this, "Price Successfully Updated to Real Life!");
                 refresh();
             }
@@ -205,5 +206,10 @@ public class ManageMarketFrame extends JFrame implements ActionListener {
     private void refresh(){
         new ManageMarketFrame(manager);
         dispose();
+    }
+
+    private boolean isDouble(String s) {
+        Pattern pattern = Pattern.compile("[+]?\\d+(.\\d+)?");
+        return pattern.matcher(s).matches();
     }
 }
