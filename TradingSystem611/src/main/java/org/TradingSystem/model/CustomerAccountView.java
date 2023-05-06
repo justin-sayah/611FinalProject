@@ -54,10 +54,10 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         setResizable(false);
 
         container = new JPanel();
-        customerNameLabel = new JLabel();
+        customerNameLabel = new JLabel("Customer Name: ");
         accountIDLabel = new JLabel(String.valueOf(tradingAccount.getAccountNumber()));
         accountID = new JLabel("Account Number: ");
-        nameLabel = new JLabel("Customer Name: ");
+        nameLabel = new JLabel(customer.getLastName()+", "+customer.getFirstName());
         backButton = new JButton("BACK");
         manageButton = new JButton("MANAGE/SELL");
         buyButton = new JButton("BUY");

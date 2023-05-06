@@ -44,7 +44,7 @@ public class CustomerInformationFrame extends JFrame implements ActionListener {
             data[i][5] = list.get(i).getSSN();
         }
         customerTable = new JTable(data,columnNames);
-        customerTable.setRowHeight(40);
+        customerTable.setRowHeight(30);
         customerTable.setPreferredScrollableViewportSize(new Dimension(300,300));
         scrollPane = new JScrollPane(customerTable);
         container.setLayout(new BorderLayout());
