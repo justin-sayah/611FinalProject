@@ -140,7 +140,14 @@ public class DBTesting {
 //        TradingAccount tradingAccount = TradingAccount.getAccount(1);
 //        TradingAccountDao.getInstance().blockAccount(tradingAccount);
 //        System.out.println(tradingAccount);
-        Market.updateAllPricesRealLife();
+
+        TradingAccount tradingAccount = new TradingAccount(11,1,120,0,0);
+        TradingAccount.addTradingAccount(tradingAccount);
+        Position.buy(11, 1, 1);
+        tradingAccount.refresh();
+        Market.getInstance().getStock(1).changePrice(130);
+        tradingAccount.refresh();
+        System.out.println(tradingAccount.getUnrealizedProfitLoss());
     }
 
 }

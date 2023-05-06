@@ -59,30 +59,6 @@ public class PositionDao {
         //NEED TO DO A RECALCULATION OF PROFIT AND LOSS TO MAKE SURE ITS UP TO DATE
         //BEFORE PUSHING TO DB
         position.refresh();
-
-        String sql = "UPDATE positions SET quantity = ? , "
-                + "quantitySold = ?,"
-                + "avgBuyPrice = ?,"
-                + "currentSellPrice = ?," +
-                "realizedPL = ?," +
-                "unrealizedPL = ?"
-                + "WHERE accountId = ? AND securityId = ?";
-
-        try{
-            PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setInt(1, position.getQuantity());
-            pstmt.setInt(2, position.getQuantitySold());
-            pstmt.setDouble(3, position.getAvgBuyPrice());
-            pstmt.setDouble(4, position.getCurrentPrice());
-            pstmt.setDouble(5, position.getRealizedProfitLoss());
-            pstmt.setDouble(6, position.getUnrealizedProfitLoss());
-            pstmt.setInt(7, position.getAccountID());
-            pstmt.setInt(8, position.getSecurityId());
-
-            pstmt.executeUpdate();
-        } catch (Exception e){
-            System.out.println(e.toString());
-        }
     }
 
     public void pushToDB(Position position){

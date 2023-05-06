@@ -44,8 +44,8 @@ public class    Position {
             TradingAccount account = TradingAccount.getAccount(accountID);
 
             //take current realized pl and add net from transaction to it, remove it from unrealized
-            account.setRealizedProfitLoss(account.getRealizedProfitLoss() + net);
-            account.setUnrealizedProfitLoss(account.getUnrealizedProfitLoss() - net);
+//            account.setRealizedProfitLoss(account.getRealizedProfitLoss() + net);
+//            account.setUnrealizedProfitLoss(account.getUnrealizedProfitLoss() - net);
 
             //add amount into balance
             account.deposit(net);
@@ -56,6 +56,7 @@ public class    Position {
             //recalculate local pl
             calculateRealizedPl();
             calculateUnrealizedPl();
+
             //push position update
             refresh(this);
             Transaction.addTransaction(accountID, securityId, quantityToSell, currentPrice, "sell");
@@ -113,7 +114,6 @@ public class    Position {
         avgBuyPrice = (avgBuyPrice + newPurchaseCost)/(quantity);
 
 
-        calculateRealizedPl();
         calculateUnrealizedPl();
 
         refresh();
@@ -121,19 +121,31 @@ public class    Position {
 
     private void calculateUnrealizedPl(){
         //recalculate any changes in PL and push changes to account
+
+        System.out.println("\nnew calculation");
+        System.out.println(avgBuyPrice);
+        System.out.println(currentPrice);
+        System.out.println(quantity);
+        //first calculate the current unrealizedPL with the currentPrice and avgBuyPrice
         double newUnrealizd = (quantity)*(currentPrice - avgBuyPrice);
+        System.out.println("new unrealized calculated: " + newUnrealizd + "\n");
         double difference = newUnrealizd - unrealizedProfitLoss;
         unrealizedProfitLoss = newUnrealizd;
+        System.out.println("difference in unrealized calculated vs existing: " + difference);
 
         TradingAccount account = TradingAccount.getAccountNoRefresh(accountID);
+        System.out.println("fetched account profit and loss:" + account.getUnrealizedProfitLoss());
         account.setUnrealizedProfitLoss(account.getUnrealizedProfitLoss() + difference);
+        System.out.println("fetched account newly set proft and loss:" + account.getUnrealizedProfitLoss());
         TradingAccount.update(account);
+
+        //push position change to the DB also
     }
 
     private void calculateRealizedPl(){
         //recalculate any changes in PL and push changes to account
         double newRealized = (quantitySold) * (currentPrice - avgBuyPrice);
-        double difference = newRealized - unrealizedProfitLoss;
+        double difference = newRealized - realizedProfitLoss;
         realizedProfitLoss = newRealized;
 
 
@@ -216,7 +228,6 @@ public class    Position {
         //get the latest stock price
         setCurrentPrice(StockDao.getInstance().getStock(securityId).getPrice());
         calculateUnrealizedPl();
-        calculateRealizedPl();
         PositionDao pDao = PositionDao.getInstance();
         pDao.pushToDB(this);
     }

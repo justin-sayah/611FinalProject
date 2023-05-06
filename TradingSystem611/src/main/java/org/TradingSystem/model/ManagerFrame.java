@@ -77,6 +77,7 @@ public class ManagerFrame extends JFrame implements ActionListener {
         viewCustomerInformation.addActionListener(this);
         manageMarket.addActionListener(this);
         sendMessage.addActionListener(this);
+        logout.addActionListener(this);
     }
 
     public static void main(String[] args) {

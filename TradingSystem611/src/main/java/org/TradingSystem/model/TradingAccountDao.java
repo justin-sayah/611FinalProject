@@ -33,10 +33,12 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         Position.getAllPositions(tradingAccount.getPersonId());
 
         //pull data out of the DB for this tradingAccount and push the variables into this object
+        //THIS OBJECT SHOULD HAVE THE RECALCULATED PROFITS AND LOSSES AFTER POSITIONS UPDATES THEM
         TradingAccount refreshed = getAccountNoRefresh(tradingAccount.getAccountNumber());
+
         tradingAccount.setBalance(refreshed.getBalance());
         tradingAccount.setRealizedProfitLoss(refreshed.getRealizedProfitLoss());
-        tradingAccount.setUnrealizedProfitLoss(tradingAccount.getUnrealizedProfitLoss());
+        tradingAccount.setUnrealizedProfitLoss(refreshed.getUnrealizedProfitLoss());
 
         //push update back to the DB for this account
         TradingAccountDao.getInstance().update(tradingAccount);
