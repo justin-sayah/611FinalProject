@@ -4,8 +4,6 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,7 +22,7 @@ public class BuyStockPage extends JFrame implements ActionListener {
     protected final JTextField buyQuantity;
     private final JTable stockTable;
     private final JLabel balanceLabel;
-    private final JLabel balance;
+    protected final JLabel balance;
     private BuyConfirmPopup buyPopup;
 
     private JTextField costLabel;
@@ -36,10 +34,11 @@ public class BuyStockPage extends JFrame implements ActionListener {
     private int customerId;
     private TradingAccountDao tradingAccountDao;
     private TradingAccount tradingAccount;
+    private CustomerAccountView customerAccountView;
 
 
-    public BuyStockPage( String name,TradingAccount tradingAccount) {
-
+    public BuyStockPage( CustomerAccountView customerAccountView,String name,TradingAccount tradingAccount) {
+        this.customerAccountView = customerAccountView;
         this.name = name;
         this.tradingAccount = tradingAccount;
         tradingAccountDao = new TradingAccountDao();
@@ -206,7 +205,7 @@ public class BuyStockPage extends JFrame implements ActionListener {
                         //double initBalance = tradingAccountDao.getAccount(tradingAccount.getAccountNumber(),tradingAccount.getPersonId()).getBalance();
                         if(tradingAccount.getBalance() >= Market.getInstance().getStock(stockId_num).getPrice() * quantity){
                             if ( buyPopup == null) {
-                                buyPopup = new BuyConfirmPopup(this,(quantity*(double)stockPrice),tradingAccount.getBalance() ,tradingAccount, (int)(stockId),quantity,(double)stockPrice); // Create the deposit popup window if it's not already created
+                                buyPopup = new BuyConfirmPopup(customerAccountView,this,(quantity*(double)stockPrice),tradingAccount.getBalance() ,tradingAccount, (int)(stockId),quantity,(double)stockPrice); // Create the deposit popup window if it's not already created
                             }
                             buyPopup.setVisible(true); // Show the deposit popup window
 
@@ -225,8 +224,4 @@ public class BuyStockPage extends JFrame implements ActionListener {
 
         }
     }
-//    public static void main(String[] args){
-//        BuyStockPage buyStockPage = new BuyStockPage();
-//        buyStockPage.setVisible(true);
-//    }
 }

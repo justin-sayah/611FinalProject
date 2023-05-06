@@ -126,7 +126,7 @@ public class TransactionDao {
     }
 //    getAllTransactions(Timestamp1, Timestamp2) ????
     public void addTransaction(int accountId, int stockId, int quantity, double price, String action){
-        String sql = "INSERT INTO people (accountId, stockId, quantity, price, timestamp, action) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO transactions (accountId, stockId, quantity, price, timestamp, action) VALUES (?,?,?,?,?,?)";
 
         try{
             PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -144,7 +144,7 @@ public class TransactionDao {
         }
     }
     public void addTransaction(Transaction transaction){
-        String sql = "INSERT INTO people (accountId, stockId, quantity, price, timestamp, action, transactionId) VALUES (?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO transactions (accountId, stockId, quantity, price, timestamp, action, transactionId) VALUES (?,?,?,?,?,?,?)";
 
         try{
             PreparedStatement pstmt = connection.prepareStatement(sql);
