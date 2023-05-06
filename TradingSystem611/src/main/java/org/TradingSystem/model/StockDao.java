@@ -286,15 +286,14 @@ public class StockDao {
 
     //updates stock regardless of if it is in blocked or unblocked state
     public void updateStock(Stock stock){
-        updateBlockedStock(stock);
         updateUnblockedStock(stock);
+        updateBlockedStock(stock);
     }
 
     private void updateUnblockedStock(Stock stock){
         String sql = "UPDATE stocks SET ticker = ? , "
                 + "price = ?, name = ?"
                 + "WHERE stockId = ?";
-
         try{
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, stock.getTicker());

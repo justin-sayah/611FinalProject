@@ -98,7 +98,7 @@ public class AddStockFrame extends JFrame implements ActionListener {
                 try{
                     double price = Double.parseDouble(priceText);
                     int stockID = Integer.parseInt(stockIDText);
-                    stockDao.addStock(new Stock(stockID,price,stockNameText,tickerText));
+                    Market.getInstance().addStock(stockNameText, price, tickerText);
                     JOptionPane.showMessageDialog(this, "Stock Added Successfully!");
                 }catch(Exception ex){
                     ex.printStackTrace();

@@ -59,7 +59,8 @@ public class ManageMarketFrame extends JFrame implements ActionListener {
         peopleDao = new PeopleDao();
         stockDao = new StockDao();
         Object[] columnNames = {"ID", "Name", "Price", "Ticker"};
-        List<Stock> list = stockDao.getAllUnblockedStocks();
+        List<Stock> list = Market.getInstance().getAllUnblockedStocks();
+
         Object[][] data = new Object[list.size()][4];
         for(int i = 0; i < list.size(); i++){
             data[i][0] = list.get(i).getSecurityId();
@@ -132,6 +133,7 @@ public class ManageMarketFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String priceText = priceTextField.getText();
         List<Stock> list = stockDao.getAllUnblockedStocks();
+        System.out.println("LIST AFTER CLICKING BACK:" + list);
         if (e.getSource() == back) {
             new ManagerFrame(manager);
             dispose();
@@ -189,7 +191,8 @@ public class ManageMarketFrame extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Please choose a row!");
             }else {
                 Stock stock = list.get(row);
-                Market.updatePriceRealLife(stock.getSecurityId());
+//                Market.updatePriceRealLife(stock.getSecurityId());
+                Market.updateAllPricesRealLife();
                 JOptionPane.showMessageDialog(this, "Price Successfully Updated to Real Life!");
                 refresh();
             }

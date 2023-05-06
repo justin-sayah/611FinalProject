@@ -8,7 +8,7 @@ public abstract class  Security implements Tradeable{
     public Security(int securityId, String name, double price){
         setSecurityId(securityId);
         setName(name);
-        changePrice(price);
+        setPrice(price);
     }
 
     public void setName(String name) {
@@ -29,6 +29,10 @@ public abstract class  Security implements Tradeable{
 
     public double getPrice() {
         return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public int getSecurityId() {
