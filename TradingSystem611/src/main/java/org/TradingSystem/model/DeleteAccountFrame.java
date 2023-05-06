@@ -16,11 +16,13 @@ public class DeleteAccountFrame extends JFrame {
     private final JButton deleteButton;
     private final JButton backButton;
     private final JButton refreshButton;
-    private final String[] columns = {"Account Number", "Customer Name"};
+    private final String[] columns = {"Account Number","Customer ID","Account Last Name", "Account First Name", "Account Type"};
     private final DefaultTableModel model;
     private final ArrayList<JCheckBox> checkBoxes;
+    private final PeopleDao peopleDao;
 
     public DeleteAccountFrame(Manager manager) {
+        peopleDao = new PeopleDao();
         this.manager = manager;
         setTitle("Delete Accounts");
         setSize(800, 600);
@@ -71,8 +73,27 @@ public class DeleteAccountFrame extends JFrame {
         // Create checkboxes for each account
         checkBoxes = new ArrayList<>();
 
-        add(container);
 
+
+        List<TradingAccount> activeAccounts =TradingAccount.getAllActive();
+
+        for (TradingAccount account : activeAccounts) {
+            JCheckBox checkBox = new JCheckBox();
+            checkBox.addActionListener(ev -> {
+                deleteButton.setEnabled(checkBoxes.stream().anyMatch(JCheckBox::isSelected));
+            });
+            checkBoxes.add(checkBox);
+            Customer customer = peopleDao.getCustomer(account.getPersonId());
+            Object[] row = {
+                    account.getAccountNumber(),
+                    customer.getID(),
+                    customer.getLastName(),
+                    customer.getFirstName(),
+                    "Trading Account",
+            };
+            model.addRow(row);
+        }
+        add(container);
         addActionListeners();
         setVisible(true);
     }
@@ -86,7 +107,7 @@ public class DeleteAccountFrame extends JFrame {
 
                 // Create checkboxes for each account
                 checkBoxes.clear();
-                List<TradingAccount> activeAccounts = manager.getAllActiveAccounts(manager.getID());
+                List<TradingAccount> activeAccounts =TradingAccount.getAllActive();
 
                 for (TradingAccount account : activeAccounts) {
                     JCheckBox checkBox = new JCheckBox();
@@ -94,11 +115,13 @@ public class DeleteAccountFrame extends JFrame {
                         deleteButton.setEnabled(checkBoxes.stream().anyMatch(JCheckBox::isSelected));
                     });
                     checkBoxes.add(checkBox);
-
+                    Customer customer = peopleDao.getCustomer(account.getPersonId());
                     Object[] row = {
                             account.getAccountNumber(),
-                            Manager.getCustomer(account.getPersonId()).getLastName() + " " + Manager.getCustomer(account.getPersonId()).getFirstName(),
-                            // account.getAccountType()
+                            customer.getID(),
+                            customer.getLastName(),
+                            customer.getFirstName(),
+                            "Trading Account",
                     };
                     model.addRow(row);
                 }
@@ -114,38 +137,20 @@ public class DeleteAccountFrame extends JFrame {
 
             // Add action listener for the delete button
         deleteButton.addActionListener(e -> {
-            List<Integer> selectedAccountNumbers = new ArrayList<>();
-            for (int i = 0; i < checkBoxes.size(); i++) {
-                JCheckBox checkBox = checkBoxes.get(i);
-                if (checkBox.isSelected()) {
-                    String accountNumberString = (String) model.getValueAt(i, 0);
-                    int accountNumber = Integer.parseInt(accountNumberString);
-                    selectedAccountNumbers.add(accountNumber);
+
+            int[] selectedRows = accountsTable.getSelectedRows();
+            for (int i = 0; i < selectedRows.length; i++) {
+                int accountNumber = (int) accountsTable.getValueAt(selectedRows[i], 0);
+                int customerId = (int) accountsTable.getValueAt(selectedRows[i],1);
+                System.out.println(accountNumber);
+                if (deleteAccount(accountNumber,customerId)) {
+                    System.out.println("Account " + accountNumber + " deleted successfully!");
+
+                } else {
+                    System.out.println("Failed to delete account " + accountNumber);
                 }
             }
-
-            for (int accountNumber : selectedAccountNumbers) {
-                TradingAccount account = TradingAccountDao.getInstance().getAccount(accountNumber, getPersonId());
-
-                if (account != null) {
-                    manager.deleteAccount(account);
-                    // Remove the deleted account from the table's model
-                    for (int i = 0; i < model.getRowCount(); i++) {
-                        String accountNumberString = (String) model.getValueAt(i, 0);
-                        int tableAccountNumber = Integer.parseInt(accountNumberString);
-                        if (tableAccountNumber == accountNumber) {
-                            model.removeRow(i);
-                            checkBoxes.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-
-            // Disable the delete button
-            deleteButton.setEnabled(false);
         });
-
 
         // Disable the delete button if no accounts are selected
             deleteButton.setEnabled(false);
@@ -158,18 +163,26 @@ public class DeleteAccountFrame extends JFrame {
             });
         }
 
+    public boolean deleteAccount(int accountNumber,int customerId){
+        TradingAccount account = TradingAccount.getAccount(accountNumber);
+        if (account != null) {
+            TradingAccount.delete(account);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
 
 
-
-        private int getPersonId() {
-                return manager.getID();
-            }
-
-            private int getManagerId() {
-                return getPersonId();
-            }
+//        private int getPersonId() {
+//                return manager.getID();
+//            }
+//
+//            private int getManagerId() {
+//                return getPersonId();
+//            }
 
             public static void main(String[] args) {
                 // Create a new Manager

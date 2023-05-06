@@ -13,7 +13,7 @@ public class ViewPendingAccountFrame extends JFrame {
     private final JLabel personNameLabel;
     private final JTable accountsTable;
     private final JButton backButton;
-    private final String[] columns = {"Account Number","Account Last Name", "Account First Name", "Account Type"};
+    private final String[] columns = {"Account Number","Customer ID","Account Last Name", "Account First Name", "Account Type"};
     private final DefaultTableModel model;
     private final ArrayList<JCheckBox> checkBoxes;
 
@@ -66,11 +66,12 @@ public class ViewPendingAccountFrame extends JFrame {
         for (TradingAccount account : accounts) {
             JCheckBox checkBox = new JCheckBox();
             checkBoxes.add(checkBox);
-            System.out.println(account.getPersonId());
+
             Customer customer = peopleDao.getCustomer(account.getPersonId());
-            System.out.println(customer);
+
             Object[] row = {
                     account.getAccountNumber(),
+                    customer.getID(),
                     customer.getLastName(),
                     customer.getFirstName(),
                     "Trading Account",

@@ -16,11 +16,14 @@ public class ApproveAccountFrame extends JFrame {
     private final JButton approveButton;
     private final JButton backButton;
     private final JButton refreshButton;
-    private final String[] columns = {"Account Number", "Customer Name"};
+    private final String[] columns = {"Account Number","Customer ID","Account Last Name", "Account First Name", "Account Type"};
     private final DefaultTableModel model;
     private final ArrayList<JCheckBox> checkBoxes;
+    private final PeopleDao peopleDao;
+
 
     public ApproveAccountFrame(Manager manager) {
+        peopleDao = new PeopleDao();
         this.manager = manager;
         setTitle("Approve Accounts");
         setSize(800, 600);
@@ -70,7 +73,7 @@ public class ApproveAccountFrame extends JFrame {
 
         // Create checkboxes for each pending account
         checkBoxes = new ArrayList<>();
-        List<TradingAccount> pendingAccounts = TradingAccountDao.getInstance().getAllPending(manager.getID());
+        List<TradingAccount> pendingAccounts = TradingAccount.getAllPending();
 
         for (TradingAccount account : pendingAccounts) {
             JCheckBox checkBox = new JCheckBox();
@@ -78,11 +81,13 @@ public class ApproveAccountFrame extends JFrame {
                 approveButton.setEnabled(checkBoxes.stream().anyMatch(JCheckBox::isSelected));
             });
             checkBoxes.add(checkBox);
-
+            Customer customer = peopleDao.getCustomer(account.getPersonId());
             Object[] row = {
                     account.getAccountNumber(),
-                    Manager.getCustomer(account.getPersonId()).getLastName() + " " + Manager.getCustomer(account.getPersonId()).getFirstName(),
-                    // account.getAccountType()
+                    customer.getID(),
+                    customer.getLastName(),
+                    customer.getFirstName(),
+                    "Trading Account",
             };
             model.addRow(row);
         }
@@ -101,7 +106,7 @@ public class ApproveAccountFrame extends JFrame {
 
             // Create checkboxes for each pending account
             checkBoxes.clear();
-            List<TradingAccount> pendingAccounts = TradingAccountDao.getInstance().getAllPending(manager.getID());
+            List<TradingAccount> pendingAccounts = TradingAccount.getAllPending();
 
             for (TradingAccount account : pendingAccounts) {
                 JCheckBox checkBox = new JCheckBox();
@@ -109,11 +114,13 @@ public class ApproveAccountFrame extends JFrame {
                     approveButton.setEnabled(checkBoxes.stream().anyMatch(JCheckBox::isSelected));
                 });
                 checkBoxes.add(checkBox);
-
+                Customer customer = peopleDao.getCustomer(account.getPersonId());
                 Object[] row = {
                         account.getAccountNumber(),
-                        Manager.getCustomer(account.getPersonId()).getLastName() + " " + Manager.getCustomer(account.getPersonId()).getFirstName(),
-                        // account.getAccountType()
+                        customer.getID(),
+                        customer.getLastName(),
+                        customer.getFirstName(),
+                        "Trading Account",
                 };
                 model.addRow(row);
             }
@@ -135,8 +142,10 @@ public class ApproveAccountFrame extends JFrame {
             // Loop through the selected rows and activate the accounts
             for (int i = 0; i < selectedRows.length; i++) {
                 int accountNumber = (int) accountsTable.getValueAt(selectedRows[i], 0);
-                if (activateAccount(accountNumber)) {
+                int customerId = (int) accountsTable.getValueAt(selectedRows[i],1);
+                if (activateAccount(accountNumber,customerId)) {
                     System.out.println("Account " + accountNumber + " activated successfully!");
+
                 } else {
                     System.out.println("Failed to activate account " + accountNumber);
                 }
@@ -158,19 +167,13 @@ public class ApproveAccountFrame extends JFrame {
 
 
 
-    private int getPersonId() {
-            return manager.getID();
-        }
 
-        private int getManagerId() {
-            return getPersonId();
-        }
 
-        public boolean activateAccount(int accountNumber){
-            TradingAccount account = TradingAccountDao.getInstance().getPendingAccount(accountNumber, getManagerId());
+        public boolean activateAccount(int accountNumber,int customerId){
+            TradingAccount account = TradingAccountDao.getInstance().getPendingAccount(accountNumber, customerId);
             if (account != null) {
-                TradingAccountDao.getInstance().deleteFromPending(account);
-                TradingAccountDao.getInstance().addTradingAccount(account);
+                TradingAccount.deleteFromPending(account);
+                TradingAccount.addTradingAccount(account);
                 return true;
             } else {
                 return false;
