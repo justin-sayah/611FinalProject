@@ -1,11 +1,8 @@
 package org.TradingSystem.model;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Objects;
 
 public class LoginFrame extends JFrame implements ActionListener {
 
@@ -18,6 +15,7 @@ public class LoginFrame extends JFrame implements ActionListener {
     private final JButton signupButton;
     private final JCheckBox showPassword;
     private PeopleDao peopleDao;
+    private final JButton forgetPasswordButton;
 
 //    private JRadioButton radioButton1;
 //    private JPanel panel1;
@@ -40,6 +38,7 @@ public class LoginFrame extends JFrame implements ActionListener {
         loginButton = new JButton("LOGIN");
         signupButton = new JButton("SIGN UP");
         showPassword = new JCheckBox("Show Password");
+        forgetPasswordButton  = new JButton("Reset Password");
         setLayoutManager();
         setLocationAndSize();
         addComponentsToContainer();

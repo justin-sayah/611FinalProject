@@ -19,8 +19,6 @@ public class CustomerAccountView extends JFrame implements ActionListener {
     private final JButton withdrawButton;
     private final JButton depositButton;
 
-
-
     private final JLabel balanceLabel;
     protected final JLabel balance;
     private final JLabel realizedPLLabel;
@@ -29,16 +27,12 @@ public class CustomerAccountView extends JFrame implements ActionListener {
     private final JLabel unrealizedPL;
     private final JLabel accountID;
     private final JLabel nameLabel;
-    private TradingAccountDao tradingAccountDao;
     private Customer customer;
     private TradingAccount tradingAccount;
 
     private DepositPopup depositPopup;
 
     private WithdrawPopup withdrawPopup;
-
-    private int accountNumberInt;
-    private int customerId;
 
 
 
@@ -54,17 +48,16 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         setResizable(false);
 
         container = new JPanel();
-        customerNameLabel = new JLabel("Customer Name: ");
+        customerNameLabel = new JLabel(customer.getLastName()+", "+customer.getFirstName());
         accountIDLabel = new JLabel(String.valueOf(tradingAccount.getAccountNumber()));
         accountID = new JLabel("Account Number: ");
-        nameLabel = new JLabel(customer.getLastName()+", "+customer.getFirstName());
+        nameLabel = new JLabel("Customer Name");
         backButton = new JButton("BACK");
         manageButton = new JButton("MANAGE/SELL");
         buyButton = new JButton("BUY");
         transacButton = new JButton("TRANSACTIONS");
         withdrawButton = new JButton("WITHDRAW");
         depositButton = new JButton("DEPOSIT");
-
 
 
         //TODO to implement the automatic refresh function later
@@ -148,7 +141,6 @@ public class CustomerAccountView extends JFrame implements ActionListener {
             this.setVisible(false);
         }else if(e.getSource() == transacButton){
             new TransactionHistoryFrame(tradingAccount);
-            //TODO need to implement the transaction page
             this.setVisible(true);
         }else if(e.getSource() == depositButton){ //call the deposit popup window
             if (depositPopup == null) {
@@ -171,13 +163,6 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         }
     }
 
-
-
-    public static void main(String[] args){
-        TradingAccount tradingAccount = TradingAccount.getAccount(1);
-        CustomerAccountView ca = new CustomerAccountView(tradingAccount);
-        ca.setVisible(true);
-    }
 
 
 

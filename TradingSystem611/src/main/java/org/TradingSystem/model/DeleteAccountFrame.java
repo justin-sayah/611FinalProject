@@ -176,20 +176,9 @@ public class DeleteAccountFrame extends JFrame {
 
 
 
-//        private int getPersonId() {
-//                return manager.getID();
-//            }
-//
-//            private int getManagerId() {
-//                return getPersonId();
-//            }
 
-            public static void main(String[] args) {
-                // Create a new Manager
-                Manager manager = new Manager(1, "John", "Doe", "username", "password", "1990-01-01", "123-45-6789");
-                DeleteAccountFrame deleteAccountFrame = new DeleteAccountFrame(manager);
 
-            }
+
         }
 
 

@@ -77,11 +77,7 @@ public class ViewActiveAccountFrame extends JFrame {
         });
     }
 
-    public static void main(String[] args) {
-        // Create a new Manager
-        Manager manager = new Manager(1, "John", "Doe", "username", "password", "1990-01-01", "123-45-6789");
-        new ViewActiveAccountFrame(manager);
-    }
+
 
 }
 

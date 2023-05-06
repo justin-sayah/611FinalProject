@@ -1,7 +1,6 @@
 package org.TradingSystem.model;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -113,12 +112,4 @@ public class SendMessageFrame extends JFrame implements ActionListener {
         }
     }
 
-    public static void main(String[] args){
-        // Todo
-        int ID = 1;
-        PeopleDao dao = new PeopleDao();
-        Manager manager = dao.getManager(ID);
-        SendMessageFrame frame = new SendMessageFrame(manager);
-        frame.setVisible(true);
-    }
 }

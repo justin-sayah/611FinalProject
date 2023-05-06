@@ -94,10 +94,7 @@ public class ManageAccountFrame extends JFrame implements ActionListener {
         }
     }
 
-    public static void main(String[] args) {
-        Manager manager = new Manager(1, "John", "Doe", "username", "password", "1990-01-01", "123-45-6789");
-        new ManageAccountFrame(manager);
-    }
+
 }
 
 

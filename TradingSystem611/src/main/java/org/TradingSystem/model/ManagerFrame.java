@@ -80,14 +80,6 @@ public class ManagerFrame extends JFrame implements ActionListener {
         logout.addActionListener(this);
     }
 
-    public static void main(String[] args) {
-        // Todo
-        int ID = 1;
-        PeopleDao dao = new PeopleDao();
-        Manager manager = dao.getManager(ID);
-        ManagerFrame manageFrame = new ManagerFrame(manager);
-        manageFrame.setVisible(true);
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {

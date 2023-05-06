@@ -67,7 +67,7 @@ public class CustomerHomePage extends JFrame implements ActionListener {
 
 
         //fetch the data from the dao and populate the table
-        List<TradingAccount> allActiveAccounts = tradingAccountDao.getAllActive(customer.getID());
+        List<TradingAccount> allActiveAccounts = TradingAccount.getAllActive(customer.getID());
         for (TradingAccount account : allActiveAccounts) {
             Object[] rowData = new Object[]{
                     account.getAccountNumber(),
