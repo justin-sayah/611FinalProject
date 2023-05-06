@@ -1,10 +1,8 @@
 package org.TradingSystem.model;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Objects;
 
 
@@ -170,6 +168,7 @@ public class SignUpFrame extends JFrame implements ActionListener {
                 password.setText("");
                 passwordConfirm.setText("");
             }else if(peopleDao.createCustomer(firstname, lastname,userName,pw,dob,ssnText)){
+
                 JOptionPane.showMessageDialog(this, "Sign up Successful");
                 dispose();
                 new LoginFrame();

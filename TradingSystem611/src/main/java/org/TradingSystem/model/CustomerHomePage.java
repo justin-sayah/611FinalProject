@@ -1,8 +1,6 @@
 package org.TradingSystem.model;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -23,11 +21,12 @@ public class CustomerHomePage extends JFrame implements ActionListener {
     private DefaultTableModel accountTableModel;
     private PeopleDao peopleDao;
     private TradingAccountDao tradingAccountDao;
+    private final JButton requestButton;
     //figure out how to get customerID
     private Customer customer;
     private int customerId;
 
-    public CustomerHomePage(Customer customer){
+    public CustomerHomePage(Customer customer) {
         this.customer = customer;
         //initialize the tradingAccountDao instance
         tradingAccountDao = new TradingAccountDao();
@@ -36,16 +35,16 @@ public class CustomerHomePage extends JFrame implements ActionListener {
         //set up the JFrame
         setTitle("Customer Main Page");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocation(10,10);
-        setSize(1000,800);
+        setLocation(10, 10);
+        setSize(1000, 800);
         setResizable(false);
 
         container = new JPanel();
-        container.setPreferredSize(new Dimension(1000,800));
+        container.setPreferredSize(new Dimension(1000, 800));
         container.setLayout(new BorderLayout());
 
         //set up label, message and button
-        customerNameLabel = new JLabel("Welcome Back! "+customer.getLastName() + ", " + customer.getFirstName());
+        customerNameLabel = new JLabel("Welcome Back! " + customer.getLastName() + ", " + customer.getFirstName());
         messageTextArea = new JTextArea();
         messageTextArea.setRows(5);
         messageTextArea.setColumns(50);
@@ -54,8 +53,10 @@ public class CustomerHomePage extends JFrame implements ActionListener {
         applyButton = new JButton("APPLY");
         blockedButton = new JButton("BLOCKED");
 //        applyButton.setBounds(750,700,40,20);
-        applyButton.setPreferredSize(new Dimension(100,30));
-        blockedButton.setPreferredSize(new Dimension(100,30));
+        applyButton.setPreferredSize(new Dimension(100, 30));
+        blockedButton.setPreferredSize(new Dimension(100, 30));
+        requestButton = new JButton("REQUEST");
+        requestButton.setPreferredSize(new Dimension(100, 30));
 
         //set up account table
         accountList = new JTable();
@@ -68,7 +69,7 @@ public class CustomerHomePage extends JFrame implements ActionListener {
 
         //fetch the data from the dao and populate the table
         List<TradingAccount> allActiveAccounts = tradingAccountDao.getAllActive(customer.getID());
-        for(TradingAccount account:allActiveAccounts){
+        for (TradingAccount account : allActiveAccounts) {
             Object[] rowData = new Object[]{
                     account.getAccountNumber(),
                     account.getBalance(),
@@ -81,6 +82,7 @@ public class CustomerHomePage extends JFrame implements ActionListener {
         topPanel.add(customerNameLabel, BorderLayout.WEST);
 
         JPanel buttonPanel = new JPanel();
+        buttonPanel.add(requestButton);
         buttonPanel.add(blockedButton);
         buttonPanel.add(logoutButton);
 
@@ -88,11 +90,11 @@ public class CustomerHomePage extends JFrame implements ActionListener {
 
         container.add(topPanel, BorderLayout.NORTH);
         JPanel bottomPanel = new JPanel(new BorderLayout());
-        bottomPanel.add(applyButton,BorderLayout.EAST);
+        bottomPanel.add(applyButton, BorderLayout.EAST);
 
         //set up scroll panel for account list and add it to container
         JScrollPane scrollPane = new JScrollPane(accountList);
-        scrollPane.setPreferredSize(new Dimension(300,300));
+        scrollPane.setPreferredSize(new Dimension(300, 300));
         container.add(scrollPane, BorderLayout.CENTER);
         container.add(bottomPanel, BorderLayout.SOUTH);
         container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.WEST);
@@ -108,13 +110,15 @@ public class CustomerHomePage extends JFrame implements ActionListener {
         logoutButton.addActionListener(this);
         applyButton.addActionListener(this);
         blockedButton.addActionListener(this);
+        requestButton.addActionListener(this);
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==logoutButton){
+        if (e.getSource() == logoutButton) {
             new LoginFrame();
             this.setVisible(false);
-        }else if(e.getSource() == applyButton){
+        } else if (e.getSource() == applyButton) {
             int selectedRow = accountList.getSelectedRow();
             if (selectedRow != -1) {
                 // Retrieve the selected row data
@@ -127,13 +131,18 @@ public class CustomerHomePage extends JFrame implements ActionListener {
                 dispose();
                 new CustomerAccountView(TradingAccount.getAccount((Integer) accountNumber));
                 this.setVisible(false);
-            }else{
-                JOptionPane.showMessageDialog(this,"You have not selected any account.");
+            } else {
+                JOptionPane.showMessageDialog(this, "You have not selected any account.");
             }
-        }else if(e.getSource() == blockedButton){
+        } else if (e.getSource() == blockedButton) {
             new ViewBlockedAccounts(customer);
             this.setVisible(false);
+        } else if (e.getSource() == requestButton) {
+            System.out.println(customerId);
+            TradingAccount.addPendingAccount(customerId, "tradingAccount");
         }
     }
-
 }
+
+
+
