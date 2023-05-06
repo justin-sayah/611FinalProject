@@ -38,6 +38,7 @@ public class SellManageFrame extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
+        setVisible(true);
 
         container = new JPanel();
         accountID = new JLabel(String.valueOf(tradingAccount.getAccountNumber()));
@@ -65,13 +66,20 @@ public class SellManageFrame extends JFrame implements ActionListener {
 
         scrollPane = new JScrollPane(stockTable);
 
-        List<Stock> allStocks = stockDao.getAllStocks();
-        for (Stock stock : allStocks) {
+
+        List<Position> positionList = Position.getAllPositions(tradingAccount.getAccountNumber());
+        //List<Stock> allStocks = stockDao.getAllStocks();
+        for (Position position1 : positionList) {
+//                    Position p = Position.getPosition(tradingAccount.getAccountNumber(), stock.getSecurityId());
+            // int shareCount = position1 != null ? position1.getQuantity() : 0;
+            Stock stock = stockDao.getStock(position1.getSecurityId());
             Object[] rowData = new Object[]{
                     stock.getTicker(),
                     stock.getSecurityId(),
                     stock.getName(),
                     stock.getPrice(),
+                    position1.getQuantity(),
+
             };
             stockTableModel.addRow(rowData);
         }
@@ -146,6 +154,8 @@ public class SellManageFrame extends JFrame implements ActionListener {
         container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.WEST);
         container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.EAST);
         add(container);
+
+
     }
 
 
@@ -162,6 +172,7 @@ public class SellManageFrame extends JFrame implements ActionListener {
         if (e.getSource() == backButton) {
             new CustomerAccountView(tradingAccount);
             this.setVisible(false);
+            dispose();
         } else if (e.getSource() == sellButton) {
             int selectedRow = stockTable.getSelectedRow();
             if (selectedRow != -1) {
@@ -200,24 +211,26 @@ public class SellManageFrame extends JFrame implements ActionListener {
 
                 // Sell the shares and update the position and trading account
                 position.sell(sellQuantity);
-                Position.refresh(position);
-                tradingAccountDao.update(tradingAccount);
+
 
                 // Show confirmation message
                 JOptionPane.showMessageDialog(this, String.format("Successfully sold %d shares of %s for $%.2f", sellQuantity, selectedStock.getName(), selectedStock.getPrice() * sellQuantity));
 
                 // Refresh the stock table
                 stockTableModel.setRowCount(0);
-                List<Stock> allStocks = stockDao.getAllStocks();
-                for (Stock stock : allStocks) {
-                    Position p = Position.getPosition(tradingAccount.getAccountNumber(), stock.getSecurityId());
-                    int shareCount = p != null ? p.getQuantity() : 0;
+                List<Position> positionList = Position.getAllPositions(tradingAccount.getAccountNumber());
+                //List<Stock> allStocks = stockDao.getAllStocks();
+                for (Position position1 : positionList) {
+//                    Position p = Position.getPosition(tradingAccount.getAccountNumber(), stock.getSecurityId());
+                   // int shareCount = position1 != null ? position1.getQuantity() : 0;
+                    Stock stock = stockDao.getStock(position1.getSecurityId());
                     Object[] rowData = new Object[]{
                             stock.getTicker(),
                             stock.getSecurityId(),
                             stock.getName(),
                             stock.getPrice(),
-                            shareCount
+                            position1.getQuantity(),
+
                     };
                     stockTableModel.addRow(rowData);
                 }
@@ -229,16 +242,20 @@ public class SellManageFrame extends JFrame implements ActionListener {
         } else if (e.getSource() == refreshButton) {
             // Refresh the stock table
             stockTableModel.setRowCount(0);
-            List<Stock> allStocks = stockDao.getAllStocks();
-            for (Stock stock : allStocks) {
-                Position p = Position.getPosition(tradingAccount.getAccountNumber(), stock.getSecurityId());
-                int shareCount = p != null ? p.getQuantity() : 0;
+
+            List<Position> positionList = Position.getAllPositions(tradingAccount.getAccountNumber());
+            //List<Stock> allStocks = stockDao.getAllStocks();
+            for (Position position1 : positionList) {
+//                    Position p = Position.getPosition(tradingAccount.getAccountNumber(), stock.getSecurityId());
+                // int shareCount = position1 != null ? position1.getQuantity() : 0;
+                Stock stock = stockDao.getStock(position1.getSecurityId());
                 Object[] rowData = new Object[]{
                         stock.getTicker(),
                         stock.getSecurityId(),
                         stock.getName(),
                         stock.getPrice(),
-                        shareCount
+                        position1.getQuantity(),
+
                 };
                 stockTableModel.addRow(rowData);
             }
@@ -246,11 +263,11 @@ public class SellManageFrame extends JFrame implements ActionListener {
     }
 
 
-    public static void main(String[] args) {
-        String name = "John Doe"; // replace with customer name
-        TradingAccount tradingAccount = new TradingAccount(1234, 5678, 10000.0, 0.0, 0.0);
-        SellManageFrame frame = new SellManageFrame(name, tradingAccount);
-    }
+//    public static void main(String[] args) {
+//        String name = "John Doe"; // replace with customer name
+//        TradingAccount tradingAccount = new TradingAccount(1234, 5678, 10000.0, 0.0, 0.0);
+//        SellManageFrame frame = new SellManageFrame(name, tradingAccount);
+//    }
 
 
 }

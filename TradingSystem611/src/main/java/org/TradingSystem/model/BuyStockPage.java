@@ -4,8 +4,6 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,7 +22,7 @@ public class BuyStockPage extends JFrame implements ActionListener {
     protected final JTextField buyQuantity;
     private final JTable stockTable;
     private final JLabel balanceLabel;
-    private final JLabel balance;
+    protected final JLabel balance;
     private BuyConfirmPopup buyPopup;
 
     private JTextField costLabel;

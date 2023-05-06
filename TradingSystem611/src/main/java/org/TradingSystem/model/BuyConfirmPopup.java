@@ -38,10 +38,8 @@ public class BuyConfirmPopup extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 // Perform the deposit action
                 JOptionPane.showMessageDialog(BuyConfirmPopup.this,"You have successfully bought the stock");
-                double balanceLeft = initBalance-amountCost;
-                tradingAccount.setBalance(balanceLeft);
-                Transaction.addTransaction(tradingAccount.getAccountNumber(),stockId,quantity,price,"Buy");
                 Position.buy(tradingAccount.getAccountNumber(),stockId,quantity);
+                buyStockPage.balance.setText(String.valueOf(tradingAccount.getBalance()));
                 //transactionDao.addTransaction(tradingAccount.getAccountNumber(),buyStockPage.buyQuantity);
 
                 // Add your code to process the deposit amount here

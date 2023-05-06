@@ -19,7 +19,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
     private final JButton withdrawButton;
     private final JButton depositButton;
     private final JButton refreshButton;
-    private final JButton requestButton;
+
 
     private final JLabel balanceLabel;
     private final JLabel balance;
@@ -63,7 +63,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         transacButton = new JButton("TRANSACTIONS");
         withdrawButton = new JButton("WITHDRAW");
         depositButton = new JButton("DEPOSIT");
-        requestButton = new JButton("REQUEST");
+
 
 
         //TODO to implement the automatic refresh function later
@@ -102,7 +102,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         depositButton.setBounds(200, 550, 100, 40);
         withdrawButton.setBounds(400, 550, 100, 40);
         transacButton.setBounds(600, 550, 150, 40);
-        requestButton.setBounds(500,0,100,40);
+
 
     }
 
@@ -123,7 +123,6 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         container.add(manageButton);
         container.add(buyButton);
         container.add(backButton);
-        container.add(requestButton);
 
         container.add(depositButton);
         container.add(withdrawButton);
@@ -140,7 +139,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         transacButton.addActionListener(this);
         withdrawButton.addActionListener(this);
         refreshButton.addActionListener(this);
-        requestButton.addActionListener(this);
+
 
     }
 
