@@ -267,6 +267,26 @@ public class TradingAccountDao implements AccountDao<TradingAccount>{
         return null;
     }
 
+    public List<TradingAccount> getAllPending() {
+        try{
+            String sql = "SELECT * FROM pendingAccounts WHERE"
+                    + "type = ?";
+
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, "tradingAccount");
+
+            ResultSet rs    = pstmt.executeQuery();
+            ArrayList<TradingAccount> accounts = new ArrayList<TradingAccount>();
+            while(rs.next()){
+                accounts.add(new TradingAccount(rs.getInt("accountNumber"), rs.getInt("customerId"), 0, 0, 0));
+            }
+            return accounts;
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+        return null;
+    }
+
     @Override
     public void update(TradingAccount tradingAccount) {
         updateBlocked(tradingAccount);
