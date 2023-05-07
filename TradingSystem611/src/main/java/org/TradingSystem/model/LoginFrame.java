@@ -1,12 +1,14 @@
 package org.TradingSystem.model;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginFrame extends JFrame implements ActionListener {
 
     private final JPanel container;
+    private final JLabel title;
     private final JLabel userLabel;
     private final JLabel passwordLabel;
     private final JTextField userTextField;
@@ -31,15 +33,26 @@ public class LoginFrame extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);//User cannot resize the frame
 //        container = getContentPane();
-        container = new JPanel();
+        container = new JPanel(new BorderLayout());
         userLabel = new JLabel("USERNAME");
+        userLabel.setFont(new Font("Verdana", Font.PLAIN, 20));
         passwordLabel = new JLabel("PASSWORD");
+        passwordLabel.setFont(new Font("Verdana", Font.PLAIN, 20));
         userTextField = new JTextField();
         passwordField = new JPasswordField();
+        title = new JLabel("Welcome to BU Stock Market",JLabel.CENTER);
+        title.setForeground(Color.red);
+        title.setFont(new Font("Verdana", Font.PLAIN, 50));
+        title.setBounds(0,0,1000,200);
+        title.setOpaque(true);
+        title.setBackground(Color.BLUE);
 
         loginButton = new JButton("LOGIN");
+        loginButton.setFont(new Font("Verdana", Font.PLAIN, 15));
         signupButton = new JButton("SIGN UP");
+        signupButton.setFont(new Font("Verdana", Font.PLAIN, 15));
         showPassword = new JCheckBox("Show Password");
+        showPassword.setFont(new Font("Verdana", Font.PLAIN, 12));
         forgetPasswordButton  = new JButton("Reset Password");
         setLayoutManager();
         setLocationAndSize();
@@ -54,6 +67,7 @@ public class LoginFrame extends JFrame implements ActionListener {
     }
 
     private void addComponentsToContainer() {
+        container.add(title);
         container.add(userLabel);
         container.add(passwordLabel);
         container.add(userTextField);
@@ -65,13 +79,13 @@ public class LoginFrame extends JFrame implements ActionListener {
     }
 
     private void setLocationAndSize() {
-        userLabel.setBounds(300, 250, 100, 50);
-        passwordLabel.setBounds(300, 400, 100, 50);
-        userTextField.setBounds(550, 250, 150, 40);
-        passwordField.setBounds(550, 400, 150, 40);
-        showPassword.setBounds(550, 450, 150, 40);
-        loginButton.setBounds(300, 500, 100, 40);
-        signupButton.setBounds(600, 500, 100, 40);
+        userLabel.setBounds(250, 250, 200, 50);
+        passwordLabel.setBounds(250, 400, 200, 50);
+        userTextField.setBounds(550, 250, 200, 40);
+        passwordField.setBounds(550, 400, 200, 40);
+        showPassword.setBounds(550, 450, 200, 40);
+        loginButton.setBounds(270, 600, 100, 40);
+        signupButton.setBounds(600, 600, 100, 40);
     }
 
     private void setLayoutManager() {
