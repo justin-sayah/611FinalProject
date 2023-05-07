@@ -16,6 +16,7 @@ public class SellManageFrame extends JFrame implements ActionListener {
     private final JLabel customerLabel;
     private final JButton backButton;
     private final JButton sellButton;
+    private final JButton viewTransactions;
     private final JLabel sellQuantityLabel;
     private final JTextField sellQuantity;
     private final JTable stockTable;
@@ -23,10 +24,11 @@ public class SellManageFrame extends JFrame implements ActionListener {
     private final TradingAccount tradingAccount;
     private final TradingAccountDao tradingAccountDao;
     private final StockDao stockDao;
-    private int customerId;
+    private ViewSellStockTransaction viewSellStockTransaction;
     private JButton refreshButton;
     private String name;
     private JScrollPane scrollPane;
+    private int stockId;
 
     public SellManageFrame(String name, TradingAccount tradingAccount) {
         this.tradingAccount = tradingAccount;
@@ -53,7 +55,7 @@ public class SellManageFrame extends JFrame implements ActionListener {
         backButton = new JButton("BACK");
         sellButton = new JButton("SELL");
         refreshButton = new JButton("REFRESH");
-
+        viewTransactions = new JButton("View Transactions");
 
         stockTableModel = new DefaultTableModel();
         stockTableModel.addColumn("Ticker");
@@ -70,8 +72,6 @@ public class SellManageFrame extends JFrame implements ActionListener {
         List<Position> positionList = Position.getAllPositions(tradingAccount.getAccountNumber());
         //List<Stock> allStocks = stockDao.getAllStocks();
         for (Position position1 : positionList) {
-//                    Position p = Position.getPosition(tradingAccount.getAccountNumber(), stock.getSecurityId());
-            // int shareCount = position1 != null ? position1.getQuantity() : 0;
             Stock stock = stockDao.getStock(position1.getSecurityId());
             Object[] rowData = new Object[]{
                     stock.getTicker(),
@@ -108,6 +108,7 @@ public class SellManageFrame extends JFrame implements ActionListener {
         bottomPanel.add(sellQuantityLabel);
         bottomPanel.add(sellQuantity);
         bottomPanel.add(sellButton);
+        bottomPanel.add(viewTransactions);
         container.add(bottomPanel, BorderLayout.SOUTH);
 
         container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.WEST);
@@ -140,6 +141,7 @@ public class SellManageFrame extends JFrame implements ActionListener {
 
         JPanel bottomPanel = new JPanel(new BorderLayout());
         JPanel sellPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        sellPanel.add(viewTransactions);
         sellPanel.add(sellButton);
 
         JPanel quantityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -158,13 +160,11 @@ public class SellManageFrame extends JFrame implements ActionListener {
 
     }
 
-
-
-
     private void addActionEvent() {
         backButton.addActionListener(this);
         sellButton.addActionListener(this);
         refreshButton.addActionListener(this);
+        viewTransactions.addActionListener(this);
     }
 
     @Override
@@ -219,10 +219,9 @@ public class SellManageFrame extends JFrame implements ActionListener {
                 // Refresh the stock table
                 stockTableModel.setRowCount(0);
                 List<Position> positionList = Position.getAllPositions(tradingAccount.getAccountNumber());
-                //List<Stock> allStocks = stockDao.getAllStocks();
                 for (Position position1 : positionList) {
 //                    Position p = Position.getPosition(tradingAccount.getAccountNumber(), stock.getSecurityId());
-                   // int shareCount = position1 != null ? position1.getQuantity() : 0;
+                    // int shareCount = position1 != null ? position1.getQuantity() : 0;
                     Stock stock = stockDao.getStock(position1.getSecurityId());
                     Object[] rowData = new Object[]{
                             stock.getTicker(),
@@ -259,6 +258,23 @@ public class SellManageFrame extends JFrame implements ActionListener {
                 };
                 stockTableModel.addRow(rowData);
             }
+        } else if (e.getSource() == viewTransactions) {
+            int selectedRow = stockTable.getSelectedRow();
+
+            if (selectedRow != -1) {
+                // Retrieve the selected stock
+                stockId = (int) stockTable.getValueAt(selectedRow, 1);
+                Stock selectedStock = stockDao.getStock(stockId);
+                if (selectedStock == null) {
+                    JOptionPane.showMessageDialog(this, "Failed to retrieve selected stock.");
+                    return;
+                }
+
+            }
+            if(viewSellStockTransaction == null){
+                viewSellStockTransaction = new ViewSellStockTransaction(this,stockId);
+            }
+            viewSellStockTransaction.setVisible(true);
         }
     }
 

@@ -23,15 +23,15 @@ public class BuyStockPage extends JFrame implements ActionListener {
     private final JTable stockTable;
     private final JLabel balanceLabel;
     protected final JLabel balance;
+    private final JTextField searchLabel;
+    private final JButton searchButton;
     private BuyConfirmPopup buyPopup;
 
     private JTextField costLabel;
     private StockDao stockDao;
     private DefaultTableModel stockTableModel;
     private DocumentListener quantityChangeListener;
-    private int accountNum;
     private String name;
-    private int customerId;
     private TradingAccountDao tradingAccountDao;
     private TradingAccount tradingAccount;
     private CustomerAccountView customerAccountView;
@@ -62,9 +62,11 @@ public class BuyStockPage extends JFrame implements ActionListener {
         buyQuantity = new JTextField();
 
         buyQuantity.setColumns(10);
-
         backButton = new JButton("BACK");
         buyButton = new JButton("BUY");
+        searchButton = new JButton("SEARCH");
+        searchLabel = new JTextField("");
+        searchLabel.setPreferredSize(new Dimension(200,20));
         stockTable = new JTable();
 
         stockTableModel = new DefaultTableModel();
@@ -106,6 +108,7 @@ public class BuyStockPage extends JFrame implements ActionListener {
         container.add(topPanel, BorderLayout.NORTH);
 
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
         bottomPanel.add(buyQuantityLabel);
         bottomPanel.add(buyQuantity);
         bottomPanel.add(costLabel);
@@ -120,8 +123,6 @@ public class BuyStockPage extends JFrame implements ActionListener {
         container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.EAST);
         add(container);
         pack();
-
-
 
 
         setLocationAndSize();
@@ -171,11 +172,12 @@ public class BuyStockPage extends JFrame implements ActionListener {
         customerLabel.setBounds(150, 0, 110, 40);
         stockTable.setBounds(250,150,500,500);
         costLabel.setBounds(500,700,200,40);
-        buyQuantityLabel.setBounds(200,700,100,40);
-        buyQuantity.setBounds(350,700,100,40);
+        buyQuantityLabel.setBounds(150,700,100,40);
+        buyQuantity.setBounds(200,700,100,40);
         backButton.setBounds(878,0,100,40);
-        buyButton.setBounds(600,700,100,40);
-
+        buyButton.setBounds(350,700,100,40);
+        searchLabel.setBounds(500,700,100,40);
+        searchButton.setBounds(650,700,100,40);
     }
 
 
@@ -183,6 +185,7 @@ public class BuyStockPage extends JFrame implements ActionListener {
     public void actionEvent(){
         buyButton.addActionListener(this);
         backButton.addActionListener(this);
+
     }
 
     @Override

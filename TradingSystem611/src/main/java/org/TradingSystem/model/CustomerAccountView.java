@@ -59,7 +59,6 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         withdrawButton = new JButton("WITHDRAW");
         depositButton = new JButton("DEPOSIT");
 
-
         //TODO to implement the automatic refresh function later
 
 
@@ -92,9 +91,9 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         manageButton.setBounds(600, 250, 150, 40);
         backButton.setBounds(878,0,100,40);
         buyButton.setBounds(600, 350, 100, 40);
-        depositButton.setBounds(200, 550, 100, 40);
-        withdrawButton.setBounds(400, 550, 100, 40);
-        transacButton.setBounds(600, 550, 150, 40);
+        depositButton.setBounds(150, 550, 100, 40);
+        withdrawButton.setBounds(300, 550, 100, 40);
+        transacButton.setBounds(650, 550, 150, 40);
 
 
     }
