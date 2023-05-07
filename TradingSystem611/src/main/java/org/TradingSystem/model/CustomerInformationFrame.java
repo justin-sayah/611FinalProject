@@ -13,10 +13,11 @@ public class CustomerInformationFrame extends JFrame implements ActionListener {
     private final JTable customerTable;
     private final JPanel container;
     private final JScrollPane scrollPane;
-    private final JLabel customerIDLabel;
-    private final JTextField customerIDTextField;
+    //private final JLabel customerIDLabel;
+    //private final JTextField customerIDTextField;
     private final JButton viewAllActiveAccounts;
     private final JButton viewAccountsOver10KProfit;
+    private final JButton sendMessage;
     private final JButton back;
     private Manager manager;
     private PeopleDao peopleDao;
@@ -51,8 +52,9 @@ public class CustomerInformationFrame extends JFrame implements ActionListener {
         viewAllActiveAccounts = new JButton("View All Active Accounts");
         viewAccountsOver10KProfit = new JButton("View Accounts Over 10K Profit");
         back = new JButton("Back");
-        customerIDLabel = new JLabel("Customer ID");
-        customerIDTextField = new JTextField();
+        sendMessage = new JButton("Send Message");
+        //customerIDLabel = new JLabel("Customer ID");
+        //customerIDTextField = new JTextField();
 
 
         setLocationAndSize();
@@ -61,10 +63,11 @@ public class CustomerInformationFrame extends JFrame implements ActionListener {
     }
 
     private void setLocationAndSize(){
-        customerIDLabel.setBounds(100,500,50,40);
-        customerIDTextField.setBounds(170,500,100,40);
+        //customerIDLabel.setBounds(100,500,50,40);
+        //customerIDTextField.setBounds(170,500,100,40);
         viewAllActiveAccounts.setBounds(300,450,300,40);
         viewAccountsOver10KProfit.setBounds(300,500,300,40);
+        sendMessage.setBounds(300,400,300,40);
         back.setBounds(800,500,100,40);
     }
 
@@ -72,6 +75,7 @@ public class CustomerInformationFrame extends JFrame implements ActionListener {
         container.add(viewAllActiveAccounts);
         container.add(viewAccountsOver10KProfit);
         container.add(back);
+        container.add(sendMessage);
         container.add(scrollPane, BorderLayout.CENTER);
         add(container);
     }
@@ -80,11 +84,13 @@ public class CustomerInformationFrame extends JFrame implements ActionListener {
         viewAllActiveAccounts.addActionListener(this);
         viewAccountsOver10KProfit.addActionListener(this);
         back.addActionListener(this);
+        sendMessage.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == back){
+            new ManagerFrame(manager);
             dispose();
         }else if(e.getSource() == viewAllActiveAccounts){
             // Select a row and view all active accounts of the customer
@@ -114,6 +120,18 @@ public class CustomerInformationFrame extends JFrame implements ActionListener {
                     }
                 }
                 new ViewAccountsFrame(customer, list2);
+            }
+        }else if(e.getSource() == sendMessage){
+            // Select a row and send message to the customer
+            int row = customerTable.getSelectedRow();
+            List<Customer> list = peopleDao.getAllCustomers();
+            if(row < 0){
+                JOptionPane.showMessageDialog(this, "Please choose a row!");
+            }else {
+                Customer customer = list.get(row);
+                // Send message
+                new SendMessageFrame(manager,customer);
+                dispose();
             }
         }
     }

@@ -16,10 +16,11 @@ public class SendMessageFrame extends JFrame implements ActionListener {
     private final JTextField textTextField;
     private final JButton back;
     private final JButton send;
-    private final Manager manager;
+    private Manager manager;
+    private Customer customer;
     private PeopleDao dao;
 
-    public SendMessageFrame(Manager manager){
+    public SendMessageFrame(Manager manager, Customer customer){
         setTitle("Send Message");
         setVisible(true);
         setLocation(10,10);
@@ -39,6 +40,7 @@ public class SendMessageFrame extends JFrame implements ActionListener {
         back = new JButton("Back");
         send = new JButton("Send");
         this.manager = manager;
+        this.customer = customer;
         dao = new PeopleDao();
         container.setLayout(null);
         setLocationAndSize();
@@ -65,8 +67,8 @@ public class SendMessageFrame extends JFrame implements ActionListener {
         container.add(showIDLabel);
         container.add(showNameLabel);
         container.add(textLabel);
-        container.add(customerIDLabel);
-        container.add(personIDTextField);
+        //container.add(customerIDLabel);
+        //container.add(personIDTextField);
         container.add(textTextField);
         container.add(send);
         container.add(back);
@@ -82,20 +84,16 @@ public class SendMessageFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == back) {
-            new ManagerFrame(manager);
+            new CustomerInformationFrame(manager);
             dispose();
         }else if(e.getSource() == send){
-            String customerIDText = personIDTextField.getText();
+            //String customerIDText = personIDTextField.getText();
             String textText = textTextField.getText();
-            if(customerIDText.isEmpty()){
-                JOptionPane.showMessageDialog(this, "Please enter a customer ID!");
-            }else if(textText.isEmpty()){
+            if(textText.isEmpty()){
                 JOptionPane.showMessageDialog(this, "Please enter a message!");
             }else {
                 try {
-                    int cid = Integer.parseInt(customerIDText);
-                    Customer customer = dao.getCustomer(cid);
-                    // Todo
+
                     if(customer == null){
                         JOptionPane.showMessageDialog(this, "Cannot find the customer!");
                     }else{

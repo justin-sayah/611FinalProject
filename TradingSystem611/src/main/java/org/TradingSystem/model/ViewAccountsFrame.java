@@ -10,11 +10,13 @@ import java.util.List;
 public class ViewAccountsFrame extends JFrame implements ActionListener {
 
 
-    private JTable customerTable;
+    private JTable accountTable;
     private final JPanel container;
     private JScrollPane scrollPane;
     private TradingAccountDao tDao;
     private final JButton back;
+    private final JButton viewPositions;
+    private final JButton viewTransactions;
     private Customer customer;
     private List<TradingAccount> list;
 
@@ -40,12 +42,14 @@ public class ViewAccountsFrame extends JFrame implements ActionListener {
             data[i][3] = list.get(i).getBalance();
             data[i][4] = list.get(i).getRealizedProfitLoss();
         }
-        customerTable = new JTable(data,columnNames);
-        customerTable.setRowHeight(40);
-        customerTable.setPreferredScrollableViewportSize(new Dimension(300,300));
-        scrollPane = new JScrollPane(customerTable);
+        accountTable = new JTable(data,columnNames);
+        accountTable.setRowHeight(40);
+        accountTable.setPreferredScrollableViewportSize(new Dimension(300,300));
+        scrollPane = new JScrollPane(accountTable);
         container.setLayout(new BorderLayout());
         back = new JButton("Back");
+        viewPositions = new JButton("View Positions");
+        viewTransactions = new JButton("View Transactions");
 
         setLocationAndSize();
         addComponentsToContainer();
@@ -54,23 +58,47 @@ public class ViewAccountsFrame extends JFrame implements ActionListener {
     }
 
     private void setLocationAndSize(){
-        back.setBounds(450,400,100,40);
+        back.setBounds(450,500,100,40);
+        viewPositions.setBounds(350,400,300,40);
+        viewTransactions.setBounds(350,450,300,40);
     }
 
     private void addComponentsToContainer(){
         container.add(back);
+        container.add(viewPositions);
+        container.add(viewTransactions);
         container.add(scrollPane, BorderLayout.CENTER);
         add(container);
     }
 
     private void addActionEvent(){
         back.addActionListener(this);
+        viewPositions.addActionListener(this);
+        viewTransactions.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == back){
             dispose();
+        }else if(e.getSource() == viewPositions){
+            int row = accountTable.getSelectedRow();
+            if(row < 0){
+                JOptionPane.showMessageDialog(this, "Please choose a row!");
+            }else {
+                TradingAccount account = list.get(row);
+                // View Positions of selected account
+                new ViewPositionsFrame(account);
+            }
+        }else if(e.getSource() == viewPositions){
+            int row = accountTable.getSelectedRow();
+            if(row < 0){
+                JOptionPane.showMessageDialog(this, "Please choose a row!");
+            }else {
+                TradingAccount account = list.get(row);
+                // View Positions of selected account
+                new TransactionHistoryFrame(account);
+            }
         }
     }
 }
