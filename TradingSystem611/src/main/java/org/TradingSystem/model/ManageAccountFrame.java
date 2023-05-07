@@ -16,6 +16,8 @@ public class ManageAccountFrame extends JFrame implements ActionListener {
     private final JButton activeButton;
     private final JButton backButton;
     private final Manager manager;
+    private final JButton unblockbutton;
+    private final JButton blockButton;
 
     public ManageAccountFrame(Manager manager) {
         setTitle("Manage Account");
@@ -42,16 +44,21 @@ public class ManageAccountFrame extends JFrame implements ActionListener {
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new GridLayout(2, 2));
 
+        blockButton = new JButton("Block Account");
+        unblockbutton = new JButton("Unblock Account");
         approveButton = new JButton("Approve Account");
         deleteButton = new JButton("Delete Account");
         pendingButton = new JButton("View Pending Accounts");
         activeButton = new JButton("View Active Accounts");
         backButton = new JButton("Back");
 
+
         buttonsPanel.add(approveButton);
         buttonsPanel.add(deleteButton);
         buttonsPanel.add(pendingButton);
         buttonsPanel.add(activeButton);
+        buttonsPanel.add(unblockbutton);
+        buttonsPanel.add(blockButton);
         container.add(buttonsPanel, BorderLayout.CENTER);
 
         // Back button panel
@@ -72,25 +79,40 @@ public class ManageAccountFrame extends JFrame implements ActionListener {
         pendingButton.addActionListener(this);
         activeButton.addActionListener(this);
         backButton.addActionListener(this);
+        blockButton.addActionListener(this);
+        unblockbutton.addActionListener(this);
     }
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
             new ManagerFrame(manager);
+            this.setVisible(false);
             dispose();
         } else if (e.getSource() == approveButton) {
             System.out.println("Approve Account button clicked!");
-            ApproveAccountFrame approveAccountFrame = new ApproveAccountFrame(manager);
+            new ApproveAccountFrame(manager);
+            this.setVisible(false);
             dispose();
         } else if (e.getSource() == deleteButton) {
             System.out.println("Delete Account button clicked!");
-            DeleteAccountFrame deleteAccountFrame = new DeleteAccountFrame(manager);
+            new DeleteAccountFrame(manager);
+            this.setVisible(false);
         } else if (e.getSource() == pendingButton) {
             System.out.println("View Pending Accounts button clicked!");
-            ViewPendingAccountFrame viewPendingAccountFrame = new ViewPendingAccountFrame(manager);
+            new ViewPendingAccountFrame(manager);
+            this.setVisible(false);
         } else if (e.getSource() == activeButton) {
             System.out.println("View Active Accounts button clicked!");
-            ViewActiveAccountFrame viewActiveAccountFrame = new ViewActiveAccountFrame(manager);
+            new ViewActiveAccountFrame(manager);
+            this.setVisible(false);
+        }else if(e.getSource() == blockButton){
+            System.out.println("view unblocked accounts");
+            new BlockAccountFrame(manager);
+            this.setVisible(false);
+        }else if(e.getSource() == unblockbutton){
+            System.out.println("View blocked accounts");
+            new UnblockAccountFrame(manager);
+            this.setVisible(false);
         }
     }
 

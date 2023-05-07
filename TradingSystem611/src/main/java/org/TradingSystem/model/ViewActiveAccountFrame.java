@@ -72,8 +72,8 @@ public class ViewActiveAccountFrame extends JFrame {
 
     private void addActionListeners() {
         backButton.addActionListener(e -> {
-            dispose();
-            ManageAccountFrame manageAccountFrame = new ManageAccountFrame(manager);
+            new ManageAccountFrame(manager);
+            this.setVisible(false);
         });
     }
 

@@ -62,7 +62,6 @@ public class ViewPendingAccountFrame extends JFrame {
 
         //list of all pending accounts
         List<TradingAccount> accounts = TradingAccountDao.getInstance().getAllPending();
-        System.out.println(accounts);
         for (TradingAccount account : accounts) {
             JCheckBox checkBox = new JCheckBox();
             checkBoxes.add(checkBox);
@@ -74,7 +73,7 @@ public class ViewPendingAccountFrame extends JFrame {
                     customer.getID(),
                     customer.getLastName(),
                     customer.getFirstName(),
-                    "Trading Account",
+                    account.getType(),
             };
             model.addRow(row);
         }
@@ -87,7 +86,7 @@ public class ViewPendingAccountFrame extends JFrame {
     private void addActionListeners() {
         backButton.addActionListener(e -> {
             dispose();
-            ManageAccountFrame manageAccountFrame = new ManageAccountFrame(manager);
+            new ManageAccountFrame(manager);
         });
     }
 

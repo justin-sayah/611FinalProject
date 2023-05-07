@@ -22,8 +22,10 @@ public class CustomerHomePage extends JFrame implements ActionListener {
     private PeopleDao peopleDao;
     private TradingAccountDao tradingAccountDao;
     private final JButton requestButton;
+    private final JButton messageButton;
     //figure out how to get customerID
     private Customer customer;
+    private MessagePopup messagePopup;
 
     public CustomerHomePage(Customer customer) {
         this.customer = customer;
@@ -41,7 +43,7 @@ public class CustomerHomePage extends JFrame implements ActionListener {
         container = new JPanel();
         container.setPreferredSize(new Dimension(1000, 800));
         container.setLayout(new BorderLayout());
-
+        messageButton = new JButton("View Message");
         //set up label, message and button
         customerNameLabel = new JLabel("Welcome Back! " + customer.getLastName() + ", " + customer.getFirstName());
         messageTextArea = new JTextArea();
@@ -56,7 +58,7 @@ public class CustomerHomePage extends JFrame implements ActionListener {
         blockedButton.setPreferredSize(new Dimension(100, 30));
         requestButton = new JButton("REQUEST");
         requestButton.setPreferredSize(new Dimension(100, 30));
-
+        messageButton.setPreferredSize(new Dimension(100,30));
         //set up account table
         accountList = new JTable();
         accountTableModel = new DefaultTableModel();
@@ -85,6 +87,7 @@ public class CustomerHomePage extends JFrame implements ActionListener {
         topPanel.add(customerNameLabel, BorderLayout.WEST);
 
         JPanel buttonPanel = new JPanel();
+        buttonPanel.add(messageButton);
         buttonPanel.add(requestButton);
         buttonPanel.add(blockedButton);
         buttonPanel.add(logoutButton);
@@ -114,6 +117,7 @@ public class CustomerHomePage extends JFrame implements ActionListener {
         applyButton.addActionListener(this);
         blockedButton.addActionListener(this);
         requestButton.addActionListener(this);
+        messageButton.addActionListener(this);
     }
 
     @Override
@@ -142,6 +146,12 @@ public class CustomerHomePage extends JFrame implements ActionListener {
             this.setVisible(false);
         } else if (e.getSource() == requestButton) {
             TradingAccount.addPendingAccount(customer.getID(), "tradingAccount");
+        }else if(e.getSource() == messageButton){
+
+            messagePopup = new MessagePopup(this,customer); // Create the deposit popup window if it's not already created
+
+            messagePopup.setVisible(true); // Show the deposit popup window
+
         }
     }
 }

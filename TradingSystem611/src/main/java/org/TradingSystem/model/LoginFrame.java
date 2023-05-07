@@ -15,6 +15,7 @@ public class LoginFrame extends JFrame implements ActionListener {
     private final JButton signupButton;
     private final JCheckBox showPassword;
     private PeopleDao peopleDao;
+
     private final JButton forgetPasswordButton;
 
 //    private JRadioButton radioButton1;
@@ -35,6 +36,7 @@ public class LoginFrame extends JFrame implements ActionListener {
         passwordLabel = new JLabel("PASSWORD");
         userTextField = new JTextField();
         passwordField = new JPasswordField();
+
         loginButton = new JButton("LOGIN");
         signupButton = new JButton("SIGN UP");
         showPassword = new JCheckBox("Show Password");

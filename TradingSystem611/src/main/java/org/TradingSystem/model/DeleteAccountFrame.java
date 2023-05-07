@@ -130,9 +130,8 @@ public class DeleteAccountFrame extends JFrame {
             // Add action listener for the back button
             backButton.addActionListener(e -> {
                 System.out.println("Back button clicked!");
-                ManageAccountFrame manageAccountFrame = new ManageAccountFrame(manager);
-                manageAccountFrame.setVisible(true); // make the new ManageAccountFrame visible
-                dispose(); // dispose the current frame
+                new ManageAccountFrame(manager);
+                this.setVisible(false);
             });
 
             // Add action listener for the delete button
