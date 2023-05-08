@@ -50,8 +50,6 @@ public class BlockedAccountsWithdrawPopup extends JDialog {
                 tradingAccount.refresh();
                 blockedAccountPage.balance.setText(String.valueOf(tradingAccount.getBalance()));
 
-//                updatedTradingAccount = TradingAccount.getAccount(tradingAccount.getAccountNumber());
-//                System.out.println(updatedTradingAccount);
                 dispose();
             }
         });
