@@ -23,23 +23,22 @@ public class BuyStockPage extends JFrame implements ActionListener {
     private final JTable stockTable;
     private final JLabel balanceLabel;
     protected final JLabel balance;
-    private final JTextField searchLabel;
-    private final JButton searchButton;
     private BuyConfirmPopup buyPopup;
 
     private JTextField costLabel;
     private StockDao stockDao;
     private DefaultTableModel stockTableModel;
     private DocumentListener quantityChangeListener;
-    private String name;
+
     private TradingAccountDao tradingAccountDao;
     private TradingAccount tradingAccount;
     private CustomerAccountView customerAccountView;
+    private JLabel customerBuyLabel;
 
 
     public BuyStockPage( CustomerAccountView customerAccountView,String name,TradingAccount tradingAccount) {
         this.customerAccountView = customerAccountView;
-        this.name = name;
+
         this.tradingAccount = tradingAccount;
         tradingAccountDao = new TradingAccountDao();
         setVisible(true);
@@ -50,24 +49,39 @@ public class BuyStockPage extends JFrame implements ActionListener {
         setResizable(false);
         stockDao = new StockDao();
         container = new JPanel();
+        container.setPreferredSize(new Dimension(1000,800));
         accountID = new JLabel(String.valueOf(tradingAccount.getAccountNumber()));
+        accountID.setFont(new Font("Verdana", Font.PLAIN, 20));
         accountIDLabel = new JLabel("Account Number: ");
+        accountIDLabel.setFont(new Font("Verdana", Font.PLAIN, 20));
         customerName = new JLabel(name);
+        customerName.setFont(new Font("Verdana", Font.PLAIN, 20));
         customerLabel = new JLabel("Customer Name: ");
+        customerLabel.setFont(new Font("Verdana", Font.PLAIN, 20));
         balanceLabel = new JLabel("Balance: ");
+        balanceLabel.setFont(new Font("Verdana", Font.PLAIN, 20));
         balance = new JLabel(String.valueOf(tradingAccount.getBalance()));
+        balance.setFont(new Font("Verdana", Font.PLAIN, 20));
         buyQuantityLabel = new JLabel("Enter the Quantity: ");
         costLabel = new JTextField("");
-        costLabel.setPreferredSize(new Dimension(200,20));
+        costLabel.setPreferredSize(new Dimension(150,20));
         buyQuantity = new JTextField();
 
         buyQuantity.setColumns(10);
         backButton = new JButton("BACK");
+        backButton.setPreferredSize(new Dimension(100,40));
         buyButton = new JButton("BUY");
-        searchButton = new JButton("SEARCH");
-        searchLabel = new JTextField("");
-        searchLabel.setPreferredSize(new Dimension(200,20));
+        buyButton.setPreferredSize(new Dimension(100,40));
         stockTable = new JTable();
+
+
+        customerBuyLabel = new JLabel("CUSTOMER PURCHASE CENTER",JLabel.CENTER);
+        customerBuyLabel.setFont(new Font("Verdana", Font.PLAIN, 40));
+        customerBuyLabel.setForeground(Color.red);
+        customerBuyLabel.setOpaque(true);
+        customerBuyLabel.setBackground(Color.blue);
+        customerBuyLabel.setPreferredSize(new Dimension(1000,200));
+
 
         stockTableModel = new DefaultTableModel();
         stockTableModel.addColumn("Ticker");
@@ -90,37 +104,44 @@ public class BuyStockPage extends JFrame implements ActionListener {
             stockTableModel.addRow(rowData);
         }
 
-        container.setLayout(new BorderLayout());
-        container.setPreferredSize(new Dimension(1000,800));
-        JPanel topPanel = new JPanel(new BorderLayout());
-        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        leftPanel.add(accountIDLabel);
-        leftPanel.add(accountID);
-        leftPanel.add(customerLabel);
-        leftPanel.add(customerName);
-        leftPanel.add(balanceLabel);
-        leftPanel.add(balance);
 
-        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        rightPanel.add(backButton);
-        topPanel.add(leftPanel, BorderLayout.WEST);
-        topPanel.add(rightPanel, BorderLayout.EAST);
-        container.add(topPanel, BorderLayout.NORTH);
+        //JPanel topPanel = new JPanel(new BorderLayout());
+        JPanel topPanel = new JPanel(new GridLayout(1,6));
+        topPanel.add(accountIDLabel);
+        topPanel.add(accountID);
+        topPanel.add(customerLabel);
+        topPanel.add(customerName);
+        topPanel.add(balanceLabel);
+        topPanel.add(balance);
 
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel buttonPanel = new JPanel(new GridLayout(2,1));
+        buttonPanel.add(buyButton);
+        buttonPanel.add(backButton);
 
-        bottomPanel.add(buyQuantityLabel);
-        bottomPanel.add(buyQuantity);
-        bottomPanel.add(costLabel);
-        bottomPanel.add(buyButton);
-        JPanel bottomPanelWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        bottomPanelWrapper.add(bottomPanel);
+        JPanel buyPanel = new JPanel(new GridLayout(3,1));
+        buyPanel.add(buyQuantityLabel);
+        buyPanel.add(buyQuantity);
+        buyPanel.add(costLabel);
+
+        JPanel buyAndButtonPanel = new JPanel(new BorderLayout());
+
+        buyAndButtonPanel.add(buyPanel, BorderLayout.NORTH);
+        buyAndButtonPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+
         JScrollPane scrollPane= new JScrollPane(stockTable);
-        scrollPane.setPreferredSize(new Dimension(300,300));
-        container.add(scrollPane, BorderLayout.CENTER);
-        container.add(bottomPanelWrapper, BorderLayout.SOUTH);
-        container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.WEST);
-        container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.EAST);
+        scrollPane.setPreferredSize(new Dimension(500,500));
+        stockTable.setGridColor(Color.ORANGE);
+        scrollPane.setFont(new Font("Verdana", Font.BOLD, 15));
+
+        JPanel center = new JPanel(new BorderLayout());
+        center.add(scrollPane, BorderLayout.CENTER);
+        center.add(buyAndButtonPanel,BorderLayout.EAST);
+
+        container.add(customerBuyLabel);
+        container.add(topPanel, BorderLayout.WEST);
+        container.add(center, BorderLayout.CENTER);
+
         add(container);
         pack();
 
@@ -176,8 +197,7 @@ public class BuyStockPage extends JFrame implements ActionListener {
         buyQuantity.setBounds(200,700,100,40);
         backButton.setBounds(878,0,100,40);
         buyButton.setBounds(350,700,100,40);
-        searchLabel.setBounds(500,700,100,40);
-        searchButton.setBounds(650,700,100,40);
+
     }
 
 

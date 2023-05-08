@@ -1,6 +1,8 @@
 package org.TradingSystem.model;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -26,8 +28,11 @@ public class SellManageFrame extends JFrame implements ActionListener {
     private final StockDao stockDao;
     private ViewSellStockTransaction viewSellStockTransaction;
     private JButton refreshButton;
-    private String name;
+
     private JScrollPane scrollPane;
+    private DocumentListener quantityChangeListener;
+    private JTextField costLabel;
+    private JLabel customerSellLabel;
     private int stockId;
 
     public SellManageFrame(String name, TradingAccount tradingAccount) {
@@ -38,25 +43,63 @@ public class SellManageFrame extends JFrame implements ActionListener {
         setTitle("Sell/Manage Stocks");
         setSize(1000, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
 
         container = new JPanel();
-        accountID = new JLabel(String.valueOf(tradingAccount.getAccountNumber()));
-        accountIDLabel = new JLabel("Account Number: ");
-        customerName = new JLabel(name);
-        customerLabel = new JLabel("Customer Name: ");
-        sellQuantityLabel = new JLabel("Enter the Quantity: ");
-        sellQuantity = new JTextField();
-
-        sellQuantity.setColumns(10);
-
+        container.setPreferredSize(new Dimension(1000,800));
+        customerSellLabel = new JLabel("CUSTOMER SELL CENTER",JLabel.CENTER);
+        customerSellLabel.setFont(new Font("Verdana", Font.PLAIN, 40));
+        customerSellLabel.setForeground(Color.red);
+        customerSellLabel.setOpaque(true);
+        customerSellLabel.setBackground(Color.blue);
+        customerSellLabel.setPreferredSize(new Dimension(1000,200));
         backButton = new JButton("BACK");
         sellButton = new JButton("SELL");
+        viewTransactions = new JButton("VIEW TRANSACTIONS");
         refreshButton = new JButton("REFRESH");
-        viewTransactions = new JButton("View Transactions");
+        costLabel = new JTextField();
 
+
+
+        JPanel topPanel = new JPanel(new GridLayout(1,4));
+        topPanel.setPreferredSize(new Dimension(1000,40));
+        accountIDLabel = new JLabel("Account Number: ");
+        accountIDLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+        topPanel.add(accountIDLabel);
+        accountID = new JLabel(String.valueOf(tradingAccount.getAccountNumber()));
+        accountID.setFont(new Font("Verdana", Font.PLAIN, 15));
+        topPanel.add(accountID);
+        customerLabel = new JLabel("Customer Name: ");
+        customerLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+        topPanel.add(customerLabel);
+        customerName = new JLabel(name);
+        customerName.setFont(new Font("Verdana", Font.PLAIN, 15));
+        topPanel.add(customerName);
+
+
+        JPanel buttonPanel = new JPanel(new GridLayout(4,1));
+        buttonPanel.add(viewTransactions);
+        buttonPanel.add(sellButton);
+        buttonPanel.add(refreshButton);
+        buttonPanel.add(backButton);
+
+
+
+
+        sellQuantityLabel = new JLabel("Enter the Quantity: ");
+        sellQuantity = new JTextField();
+        sellQuantity.setPreferredSize(new Dimension(150,40));
+        costLabel.setPreferredSize(new Dimension(150,40));
+        JPanel sellPanel = new JPanel(new GridLayout(3,1));
+
+        sellPanel.add(sellQuantityLabel);
+        sellPanel.add(sellQuantity);
+        sellPanel.add(costLabel);
+
+
+
+        JPanel rightPanel = new JPanel(new BorderLayout());
         stockTableModel = new DefaultTableModel();
         stockTableModel.addColumn("Ticker");
         stockTableModel.addColumn("ID");
@@ -64,13 +107,14 @@ public class SellManageFrame extends JFrame implements ActionListener {
         stockTableModel.addColumn("Price");
         stockTableModel.addColumn("Quantity");
         stockTable = new JTable(stockTableModel);
-        stockTable.setPreferredScrollableViewportSize(new Dimension(500, 300));
-
+        stockTable.setFont(new Font("Verdana", Font.PLAIN, 15));
+        stockTable.setGridColor(Color.ORANGE);
         scrollPane = new JScrollPane(stockTable);
-
+        scrollPane.setPreferredSize(new Dimension(500,500));
+        scrollPane.setFont(new Font("Verdana", Font.BOLD, 15));
+        rightPanel.add(scrollPane);
 
         List<Position> positionList = Position.getAllPositions(tradingAccount.getAccountNumber());
-        //List<Stock> allStocks = stockDao.getAllStocks();
         for (Position position1 : positionList) {
             Stock stock = stockDao.getStock(position1.getSecurityId());
             Object[] rowData = new Object[]{
@@ -84,80 +128,68 @@ public class SellManageFrame extends JFrame implements ActionListener {
             stockTableModel.addRow(rowData);
         }
 
-        setLocationAndSize();
-        setLayoutManager();
-        addComponentsToContainer();
+
+
+        JPanel sellAndButtonPanel = new JPanel(new BorderLayout());
+        sellAndButtonPanel.add(sellPanel, BorderLayout.NORTH);
+        sellAndButtonPanel.add(buttonPanel, BorderLayout.CENTER);
+
+// Create a new panel for the right panel and the sell/button panel
+        JPanel center = new JPanel(new BorderLayout());
+        center.add(rightPanel, BorderLayout.CENTER);
+        center.add(sellAndButtonPanel, BorderLayout.EAST);
+
+        container.add(customerSellLabel);
+        container.add(topPanel,BorderLayout.WEST);
+        container.add(center, BorderLayout.CENTER);
+        add(container);
+        pack();
         addActionEvent();
 
         setVisible(true);
+
+        quantityChangeListener = new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateCostLabel();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateCostLabel();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateCostLabel();
+            }
+        };
+
+        // Add the quantity change listener to the buyQuantity field
+        sellQuantity.getDocument().addDocumentListener(quantityChangeListener);
+
     }
 
-    public void setLocationAndSize() {
-        accountIDLabel.setBounds(0, 0, 110, 40);
-        accountID.setBounds(120, 0, 100, 40);
-        customerName.setBounds(270, 0, 100, 40);
-        customerLabel.setBounds(150, 0, 110, 40);
-        stockTable.setBounds(250, 150, 500, 300);
-        backButton.setBounds(878, 0, 100, 40);
-        sellButton.setBounds(600, 600, 100, 40);
-
-        // Add label and textfield for input quantity to sell
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        sellQuantityLabel.setBounds(0, 0, 150, 40);
-        sellQuantity.setBounds(150, 0, 100, 40);
-        bottomPanel.add(sellQuantityLabel);
-        bottomPanel.add(sellQuantity);
-        bottomPanel.add(sellButton);
-        bottomPanel.add(viewTransactions);
-        container.add(bottomPanel, BorderLayout.SOUTH);
-
-        container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.WEST);
-        container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.EAST);
-        add(container);
-    }
 
 
 
-    public void setLayoutManager() {
-        container.setLayout(new BorderLayout());
-    }
-
-    public void addComponentsToContainer() {
-        JPanel topPanel = new JPanel(new BorderLayout());
-        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        leftPanel.add(accountIDLabel);
-        leftPanel.add(accountID);
-        leftPanel.add(customerLabel);
-        leftPanel.add(customerName);
-
-        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        rightPanel.add(refreshButton);
-        rightPanel.add(backButton);
-        topPanel.add(leftPanel, BorderLayout.WEST);
-        topPanel.add(rightPanel, BorderLayout.EAST);
-
-        container.add(topPanel, BorderLayout.NORTH);
-        container.add(scrollPane, BorderLayout.CENTER);
-
-        JPanel bottomPanel = new JPanel(new BorderLayout());
-        JPanel sellPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        sellPanel.add(viewTransactions);
-        sellPanel.add(sellButton);
-
-        JPanel quantityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        quantityPanel.add(sellQuantityLabel);
-        quantityPanel.add(sellQuantity);
-
-        bottomPanel.add(sellPanel, BorderLayout.SOUTH);
-        bottomPanel.add(quantityPanel, BorderLayout.CENTER);
-
-        container.add(bottomPanel, BorderLayout.SOUTH);
-
-        container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.WEST);
-        container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.EAST);
-        add(container);
 
 
+
+
+
+    private void updateCostLabel() {
+        try {
+            int quantity = Integer.parseInt(sellQuantity.getText());
+            int selectedRow = stockTable.getSelectedRow();
+            if (selectedRow != -1) {
+                Object stockPrice = stockTable.getValueAt(selectedRow, 3);
+                double cost = quantity * (double) stockPrice;
+                costLabel.setText("Your total value is: $" + cost);
+            }
+        } catch (NumberFormatException ignored) {
+        }
     }
 
     private void addActionEvent() {
@@ -220,8 +252,6 @@ public class SellManageFrame extends JFrame implements ActionListener {
                 stockTableModel.setRowCount(0);
                 List<Position> positionList = Position.getAllPositions(tradingAccount.getAccountNumber());
                 for (Position position1 : positionList) {
-//                    Position p = Position.getPosition(tradingAccount.getAccountNumber(), stock.getSecurityId());
-                    // int shareCount = position1 != null ? position1.getQuantity() : 0;
                     Stock stock = stockDao.getStock(position1.getSecurityId());
                     Object[] rowData = new Object[]{
                             stock.getTicker(),

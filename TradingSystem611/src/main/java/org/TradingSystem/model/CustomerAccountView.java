@@ -1,6 +1,7 @@
 package org.TradingSystem.model;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -33,6 +34,12 @@ public class CustomerAccountView extends JFrame implements ActionListener {
     private DepositPopup depositPopup;
 
     private WithdrawPopup withdrawPopup;
+    private final JLabel customerAccountLabel;
+    private final JPanel buttonPanel;
+    private final JPanel bottomPanel;
+    private final JPanel infoPanel;
+    private final JPanel customerInfoPanel;
+    private final JPanel topPanel;
 
 
 
@@ -48,29 +55,58 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         setResizable(false);
 
         container = new JPanel();
+        container.setPreferredSize(new Dimension(1000,800));
+        topPanel = new JPanel(new BorderLayout());
+        topPanel.setPreferredSize(new Dimension(1000,170));
+        customerInfoPanel = new JPanel(new GridLayout(1,4));
+        customerInfoPanel.setPreferredSize(new Dimension(1000,20));
+        customerAccountLabel = new JLabel("ACCOUNT CENTER",JLabel.CENTER);
+        customerAccountLabel.setFont(new Font("Verdana", Font.PLAIN, 50));
+        customerAccountLabel.setPreferredSize(new Dimension(1000,150));
+        customerAccountLabel.setForeground(Color.red);
+        customerAccountLabel.setOpaque(true);
+        customerAccountLabel.setBackground(Color.blue);
+
         customerNameLabel = new JLabel(customer.getLastName()+", "+customer.getFirstName());
+        customerNameLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
         accountIDLabel = new JLabel(String.valueOf(tradingAccount.getAccountNumber()));
-        accountID = new JLabel("Account Number: ");
+        accountIDLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+        accountID = new JLabel("     Account Number: ");
+        accountID.setFont(new Font("Verdana", Font.PLAIN, 15));
         nameLabel = new JLabel("Customer Name: ");
+        nameLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
         backButton = new JButton("BACK");
+        backButton.setFont(new Font("Verdana", Font.PLAIN, 20));
         manageButton = new JButton("MANAGE/SELL");
-        buyButton = new JButton("BUY");
+        manageButton.setFont(new Font("Verdana", Font.PLAIN, 20));
+        buyButton = new JButton("PURCHASE");
+        buyButton.setFont(new Font("Verdana", Font.PLAIN, 20));
         transacButton = new JButton("TRANSACTIONS");
+        transacButton.setFont(new Font("Verdana", Font.PLAIN, 20));
         withdrawButton = new JButton("WITHDRAW");
+        withdrawButton.setFont(new Font("Verdana", Font.PLAIN, 20));
         depositButton = new JButton("DEPOSIT");
+        depositButton.setFont(new Font("Verdana", Font.PLAIN, 20));
+        buttonPanel = new JPanel(new GridLayout(6,1));
+        bottomPanel = new JPanel(new GridLayout(1,2));
+        bottomPanel.setPreferredSize(new Dimension(1000,550));
+        infoPanel = new JPanel(new GridLayout(3,2));
+        balanceLabel = new JLabel("Balance",JLabel.CENTER);
+        balanceLabel.setFont(new Font("Verdana", Font.PLAIN, 20));
+        balance = new JLabel(String.valueOf(tradingAccount.getBalance()),JLabel.CENTER);
+        balance.setFont(new Font("Verdana", Font.PLAIN, 20));
+        realizedPLLabel = new JLabel("Realized Profit/Loss",JLabel.CENTER);
+        realizedPLLabel.setFont(new Font("Verdana", Font.PLAIN, 20));
+        realizedPL = new JLabel(String.valueOf(tradingAccount.getRealizedProfitLoss()),JLabel.CENTER);
+        realizedPL.setFont(new Font("Verdana", Font.PLAIN, 20));
+        unrealizedPLLabel = new JLabel("Unrealized Profit/Loss",JLabel.CENTER);
+        unrealizedPLLabel.setFont(new Font("Verdana", Font.PLAIN, 20));
+        unrealizedPL = new JLabel(String.valueOf(tradingAccount.getUnrealizedProfitLoss()),JLabel.CENTER);
+        unrealizedPL.setFont(new Font("Verdana", Font.PLAIN, 20));
 
-        //TODO to implement the automatic refresh function later
-
-
-        balanceLabel = new JLabel("Balance");
-        balance = new JLabel(String.valueOf(tradingAccount.getBalance()));
-        realizedPLLabel = new JLabel("Realized Profit/Loss");
-        realizedPL = new JLabel(String.valueOf(tradingAccount.getRealizedProfitLoss()));
-        unrealizedPLLabel = new JLabel("Unrealized Profit/Loss");
-        unrealizedPL = new JLabel(String.valueOf(tradingAccount.getUnrealizedProfitLoss()));
-        setLocationAndSize();
-        setLayoutManager();
         addComponentsToContainer();
+        setLocationAndSize();
+
         addActionEvent();
 
 
@@ -78,49 +114,43 @@ public class CustomerAccountView extends JFrame implements ActionListener {
 //set locations for each label and button: x represents the column, y represents the row
     public void setLocationAndSize() {
 
-        accountID.setBounds(0,0,110,40);
-        accountIDLabel.setBounds(120, 0, 20, 40);
-        nameLabel.setBounds(150,0,110,40);
-        customerNameLabel.setBounds(260, 0, 200, 40);
-        balanceLabel.setBounds(150, 200, 100, 40);
-        balance.setBounds(350, 200, 100, 40);
-        realizedPLLabel.setBounds(150, 300, 200, 40);
-        realizedPL.setBounds(350, 300, 100, 40);
-        unrealizedPLLabel.setBounds(150, 400, 200, 40);
-        unrealizedPL.setBounds(350, 400, 100, 40);
-        manageButton.setBounds(600, 250, 150, 40);
-        backButton.setBounds(878,0,100,40);
-        buyButton.setBounds(600, 350, 100, 40);
-        depositButton.setBounds(150, 550, 100, 40);
-        withdrawButton.setBounds(300, 550, 100, 40);
-        transacButton.setBounds(650, 550, 150, 40);
+        customerInfoPanel.add(accountID);
+        customerInfoPanel.add(accountIDLabel);
+        customerInfoPanel.add(nameLabel);
+        customerInfoPanel.add(customerNameLabel);
+        topPanel.add(customerAccountLabel,BorderLayout.NORTH);
+        topPanel.add(customerInfoPanel,BorderLayout.SOUTH);
+
+        buttonPanel.add(depositButton);
+        buttonPanel.add(withdrawButton);
+        buttonPanel.add(manageButton);
+        buttonPanel.add(buyButton);
+        buttonPanel.add(transacButton);
+        buttonPanel.add(backButton);
+
+        infoPanel.add(balanceLabel);
+        infoPanel.add(balance);
+        infoPanel.add(realizedPLLabel);
+        infoPanel.add(realizedPL);
+        infoPanel.add(unrealizedPLLabel);
+        infoPanel.add(unrealizedPL);
+
+        bottomPanel.add(buttonPanel);
+        bottomPanel.add(infoPanel);
+
+
+
 
 
     }
 
-    public void setLayoutManager() {
-        container.setLayout(null);
-    }
+
 
     public void addComponentsToContainer(){
-        container.add(accountID);
-        container.add(accountIDLabel);
-        container.add(customerNameLabel);
-        container.add(balanceLabel);
-        container.add(balance);
-        container.add(realizedPLLabel);
-        container.add(realizedPL);
-        container.add(unrealizedPLLabel);
-        container.add(unrealizedPL);
-        container.add(manageButton);
-        container.add(buyButton);
-        container.add(backButton);
-
-        container.add(depositButton);
-        container.add(withdrawButton);
-        container.add(transacButton);
-        container.add(nameLabel);
-        add(container);
+       container.add(customerAccountLabel);
+       container.add(topPanel);
+       container.add(bottomPanel);
+       add(container);
     }
     private void addActionEvent() {
         backButton.addActionListener(this);
@@ -129,7 +159,6 @@ public class CustomerAccountView extends JFrame implements ActionListener {
         depositButton.addActionListener(this);
         transacButton.addActionListener(this);
         withdrawButton.addActionListener(this);
-
 
     }
 
@@ -155,6 +184,7 @@ public class CustomerAccountView extends JFrame implements ActionListener {
             //TODO need to implement the manage page
             SellManageFrame sellManageFrame = new SellManageFrame(customer.getLastName()+customer.getFirstName(), tradingAccount);
             sellManageFrame.setVisible(true);
+            dispose();
             this.setVisible(false);
         }else if(e.getSource() == buyButton){
             new BuyStockPage(this,customer.getLastName()+customer.getFirstName(),tradingAccount);

@@ -22,6 +22,7 @@ public class BlockAccountFrame extends JFrame {
 
     private final PeopleDao peopleDao;
 
+
     private final Manager manager;
 
     public BlockAccountFrame(Manager manager) {
@@ -36,9 +37,11 @@ public class BlockAccountFrame extends JFrame {
         container = new JPanel();
         container.setLayout(new BorderLayout());
 
+
+
         // Person information panel
         JPanel personInfoPanel = new JPanel();
-        personInfoPanel.setLayout(new GridLayout(2, 1));
+        personInfoPanel.setLayout(new GridLayout(1, 4));
         personIdLabel = new JLabel("Customer ID: ");
         personNameLabel = new JLabel("Customer Name: ");
         personInfoPanel.add(personIdLabel);
@@ -133,12 +136,7 @@ public class BlockAccountFrame extends JFrame {
                         account.getType(),
                 };
                 model.addRow(row);
-//                if (!account.isBlocked()) {
-//                    model.addRow(row);
-//                } else {
-//                    // Set the row as disabled if the account is blocked
-//                    model.addRow(new Object[]{row[0], row[1], row[2], row[3], row[4]});
-//                }
+
             }
         });
 

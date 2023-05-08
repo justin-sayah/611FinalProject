@@ -1,8 +1,6 @@
 package org.TradingSystem.model;
-import java.util.*;
+
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -27,7 +25,11 @@ public class ViewBlockedAccounts extends JFrame implements ActionListener {
     private int customerId;
     private TradingAccountDao tradingAccountDao;
     private TradingAccount tradingAccount;
+    private final JLabel accountID;
+    private final JLabel accountLabel;
+    private final JPanel customerInfoPanel;
     private Customer customer;
+    private JLabel blockAccountLabel;
 
     public ViewBlockedAccounts(Customer customer){
         this.customer = customer;
@@ -42,14 +44,42 @@ public class ViewBlockedAccounts extends JFrame implements ActionListener {
         container = new JPanel();
         customerName = new JLabel(customer.getLastName()+","+customer.getLastName());
         customerLabel = new JLabel("Customer Name: ");
+        accountLabel = new JLabel("Account Number: ");
+        accountID = new JLabel(String.valueOf(customer.getID()));
+
+        blockAccountLabel = new JLabel("BLOCK ACCOUNT CENTER",JLabel.CENTER);
+        blockAccountLabel.setFont(new Font("Verdana", Font.PLAIN, 40));
+        blockAccountLabel.setPreferredSize(new Dimension(1000,150));
+        blockAccountLabel.setForeground(Color.red);
+        blockAccountLabel.setOpaque(true);
+        blockAccountLabel.setBackground(Color.blue);
+
+        customerInfoPanel = new JPanel(new GridLayout(1,4));
+
+
+        customerInfoPanel.add(accountLabel);
+        customerInfoPanel.add(accountID);
+        customerInfoPanel.add(customerLabel);
+        customerInfoPanel.add(customerName);
+        customerInfoPanel.setPreferredSize(new Dimension(600,20));
+
 
         backButton = new JButton("BACK");
         applyButton = new JButton("APPLY");
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(applyButton);
+        buttonPanel.add(backButton);
+        JPanel buttonAll = new JPanel(new BorderLayout());
+        buttonAll.add(buttonPanel,BorderLayout.NORTH);
+
         blockedAccountsTable = new JTable();
 
         blockedAccountsTableModel = new DefaultTableModel();
         blockedAccountsTableModel.addColumn("Account Number");
         blockedAccountsTableModel.addColumn("Balance");
+        blockedAccountsTableModel.addColumn("RealizedPL");
+        blockedAccountsTableModel.addColumn("UnrealizedPL");
         blockedAccountsTable.setModel(blockedAccountsTableModel);
         blockedAccountsTable.setPreferredScrollableViewportSize(new Dimension(300, 300));
 
@@ -60,36 +90,30 @@ public class ViewBlockedAccounts extends JFrame implements ActionListener {
         for (TradingAccount blockedAccount : allblocked) {
             Object[] rowData = new Object[]{
                     blockedAccount.getAccountNumber(),
-                    blockedAccount.getBalance()
+                    blockedAccount.getBalance(),
+                    blockedAccount.getRealizedProfitLoss(),
+                    blockedAccount.getUnrealizedProfitLoss()
             };
             blockedAccountsTableModel.addRow(rowData);
         }
 
-        container.setLayout(new BorderLayout());
+
         container.setPreferredSize(new Dimension(1000,800));
-        JPanel topPanel = new JPanel(new BorderLayout());
-        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        leftPanel.add(customerLabel);
-        leftPanel.add(customerName);
-
-        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        rightPanel.add(backButton);
-        topPanel.add(leftPanel, BorderLayout.WEST);
-        topPanel.add(rightPanel, BorderLayout.EAST);
-        container.add(topPanel, BorderLayout.NORTH);
 
 
-        JPanel bottomPanel = new JPanel(new BorderLayout());
-        bottomPanel.add(applyButton,BorderLayout.EAST);
 
+
+        JPanel center = new JPanel(new BorderLayout());
 
         JScrollPane scrollPane = new JScrollPane(blockedAccountsTable);
-        scrollPane.setPreferredSize(new Dimension(300,300));
+        scrollPane.setPreferredSize(new Dimension(500,500));
 
-        container.add(scrollPane, BorderLayout.CENTER);
-        container.add(bottomPanel, BorderLayout.SOUTH);
-        container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.WEST);
-        container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.EAST);
+        center.add(scrollPane, BorderLayout.CENTER);
+        center.add(buttonAll,BorderLayout.EAST);
+        container.add(blockAccountLabel);
+        container.add(customerInfoPanel, BorderLayout.WEST);
+        container.add(center,BorderLayout.CENTER);
+
         add(container);
         pack();
 

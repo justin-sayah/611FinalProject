@@ -11,7 +11,8 @@ public class CustomerHomePage extends JFrame implements ActionListener {
 
     private final JPanel container;
     private final JLabel customerNameLabel;
-    private final JTextArea messageTextArea;
+    private final JLabel customerHomeLabel;
+
     private final JButton blockedButton;
 
     private final JButton logoutButton;
@@ -36,38 +37,50 @@ public class CustomerHomePage extends JFrame implements ActionListener {
         //set up the JFrame
         setTitle("Customer Main Page");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocation(10, 10);
+        setLocation(10,10);
         setSize(1000, 800);
         setResizable(false);
-
         container = new JPanel();
-        container.setPreferredSize(new Dimension(1000, 800));
-        container.setLayout(new BorderLayout());
-        messageButton = new JButton("View Message");
+        container.setPreferredSize(new Dimension(1000,800));
+        customerHomeLabel = new JLabel("CUSTOMER CENTER",JLabel.CENTER);
+        customerHomeLabel.setFont(new Font("Verdana", Font.PLAIN, 50));
+        customerHomeLabel.setForeground(Color.red);
+        customerHomeLabel.setOpaque(true);
+        customerHomeLabel.setBackground(Color.blue);
+        customerHomeLabel.setPreferredSize(new Dimension(1000,180));
+        messageButton = new JButton("VIEW MESSAGE");
         //set up label, message and button
-        customerNameLabel = new JLabel("Welcome Back! " + customer.getLastName() + ", " + customer.getFirstName());
-        messageTextArea = new JTextArea();
-        messageTextArea.setRows(5);
-        messageTextArea.setColumns(50);
+        customerNameLabel = new JLabel("Welcome Back! " + customer.getLastName() + ", " + customer.getFirstName(),JLabel.LEFT);
+        customerNameLabel.setFont(new Font("Verdana", Font.PLAIN, 20));
+        customerNameLabel.setForeground(Color.BLACK);
+        customerNameLabel.setOpaque(true);
+        customerNameLabel.setBackground(Color.WHITE);
+        customerNameLabel.setPreferredSize(new Dimension(1000,20));
         //messageTextArea.setPreferredSize(new Dimension(200,50));
         logoutButton = new JButton("LOGOUT");
+        logoutButton.setFont(new Font("Verdana", Font.PLAIN, 25));
         applyButton = new JButton("APPLY");
+        applyButton.setFont(new Font("Verdana", Font.PLAIN, 25));
         blockedButton = new JButton("BLOCKED");
-//        applyButton.setBounds(750,700,40,20);
-        applyButton.setPreferredSize(new Dimension(100, 30));
-        blockedButton.setPreferredSize(new Dimension(100, 30));
+        blockedButton.setFont(new Font("Verdana", Font.PLAIN, 25));
+
         requestButton = new JButton("REQUEST");
-        requestButton.setPreferredSize(new Dimension(100, 30));
-        messageButton.setPreferredSize(new Dimension(100,30));
+
+        requestButton.setFont(new Font("Verdana", Font.PLAIN, 25));
+
+        messageButton.setFont(new Font("Verdana", Font.PLAIN, 25));
         //set up account table
         accountList = new JTable();
+        accountList.setFont(new Font("Verdana", Font.PLAIN, 15));
+        accountList.setGridColor(Color.ORANGE);
         accountTableModel = new DefaultTableModel();
+
         accountTableModel.addColumn("Account Number");
         accountTableModel.addColumn("Balance");
         accountTableModel.addColumn("UnrealizedPL");
         accountTableModel.addColumn("RealizedPL");
         accountList.setModel(accountTableModel);
-        accountList.setPreferredScrollableViewportSize(new Dimension(300, 300));
+        accountList.setPreferredScrollableViewportSize(new Dimension(600, 300));
 
 
         //fetch the data from the dao and populate the table
@@ -82,29 +95,33 @@ public class CustomerHomePage extends JFrame implements ActionListener {
             accountTableModel.addRow(rowData);
         }
 
+        JScrollPane scrollPane = new JScrollPane(accountList);
+        scrollPane.setPreferredSize(new Dimension(650, 800));
+        scrollPane.setFont(new Font("Verdana", Font.BOLD, 15));
         JPanel topPanel = new JPanel(new BorderLayout());
-
-        topPanel.add(customerNameLabel, BorderLayout.WEST);
-
-        JPanel buttonPanel = new JPanel();
+        topPanel.add(customerHomeLabel,BorderLayout.NORTH);
+        topPanel.add(customerNameLabel,BorderLayout.WEST);
+        topPanel.setPreferredSize(new Dimension(1000,200));
+        JPanel buttonPanel = new JPanel(new GridLayout(5,1));
+        buttonPanel.setPreferredSize(new Dimension(350, 800));
         buttonPanel.add(messageButton);
         buttonPanel.add(requestButton);
         buttonPanel.add(blockedButton);
+        buttonPanel.add(applyButton);
         buttonPanel.add(logoutButton);
 
-        topPanel.add(buttonPanel, BorderLayout.EAST);
 
-        container.add(topPanel, BorderLayout.NORTH);
-        JPanel bottomPanel = new JPanel(new BorderLayout());
-        bottomPanel.add(applyButton, BorderLayout.EAST);
+        JPanel centerPanel = new JPanel(new GridLayout(1, 2));
+        centerPanel.setPreferredSize(new Dimension(1000, 600));
+        centerPanel.add(buttonPanel);
+        centerPanel.add(scrollPane);
+        centerPanel.setLocation(200,0);
+        container.add(topPanel);
+        container.add(centerPanel);
 
-        //set up scroll panel for account list and add it to container
-        JScrollPane scrollPane = new JScrollPane(accountList);
-        scrollPane.setPreferredSize(new Dimension(300, 300));
-        container.add(scrollPane, BorderLayout.CENTER);
-        container.add(bottomPanel, BorderLayout.SOUTH);
-        container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.WEST);
-        container.add(Box.createRigidArea(new Dimension(100, 0)), BorderLayout.EAST);
+
+
+
         add(container);
         pack();
 
@@ -153,6 +170,11 @@ public class CustomerHomePage extends JFrame implements ActionListener {
             messagePopup.setVisible(true); // Show the deposit popup window
 
         }
+    }
+
+    public static void main(String[] args){
+        CustomerHomePage cp = new CustomerHomePage(new Customer(1,"s","d","dfs","dsf","sde","dfs"));
+        cp.setVisible(true);
     }
 }
 
