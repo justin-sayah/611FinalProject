@@ -34,6 +34,7 @@ public class LoginFrame extends JFrame implements ActionListener {
         setResizable(false);//User cannot resize the frame
 //        container = getContentPane();
         container = new JPanel(new BorderLayout());
+
         userLabel = new JLabel("USERNAME");
         userLabel.setFont(new Font("Verdana", Font.PLAIN, 20));
         passwordLabel = new JLabel("PASSWORD");

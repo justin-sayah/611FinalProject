@@ -1,6 +1,7 @@
 package org.TradingSystem.model;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,57 +19,79 @@ public class ManagerFrame extends JFrame implements ActionListener {
     private final JButton logout;
     private PeopleDao peopleDao;
     private Manager manager;
+    private JPanel topPanel;
+    private JPanel customerInfoPanel;
+    private JLabel customerAccountLabel;
+    private JPanel bottomPanel;
+    private JPanel buttonPanel;
 
     public ManagerFrame(Manager manager1){
         setTitle("Manager");
         setVisible(true);
         setLocation(10,10);
         setSize(1000,700);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         container = new JPanel();
-        personIDLabel = new JLabel("PersonID");
-        nameLabel = new JLabel("Name");
+        container.setPreferredSize(new Dimension(1000,800));
+        topPanel = new JPanel(new BorderLayout());
+        topPanel.setPreferredSize(new Dimension(1000,170));
+        customerInfoPanel = new JPanel(new GridLayout(1,4));
+        customerInfoPanel.setPreferredSize(new Dimension(1000,20));
+        customerAccountLabel = new JLabel("MANAGER CENTER",JLabel.CENTER);
+        customerAccountLabel.setFont(new Font("Verdana", Font.PLAIN, 50));
+        customerAccountLabel.setPreferredSize(new Dimension(1000,150));
+        customerAccountLabel.setForeground(Color.red);
+        customerAccountLabel.setOpaque(true);
+        customerAccountLabel.setBackground(Color.blue);
+        buttonPanel = new JPanel(new GridLayout(5,1));
+        buttonPanel.setPreferredSize(new Dimension(500,450));
 
-        manageAccount = new JButton("Manage Account");
-        viewCustomerInformation = new JButton("View Customer Information");
-        manageMarket = new JButton("Manage Market");
-        sendMessage = new JButton("Send Message");
-        logout = new JButton("Logout");
+        personIDLabel = new JLabel("  PersonID");
+        personIDLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+        nameLabel = new JLabel("Name");
+        nameLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+
+        manageAccount = new JButton("MANAGE ACCOUNT");
+        manageAccount.setFont(new Font("Verdana", Font.PLAIN, 20));
+        viewCustomerInformation = new JButton("VIEW CUSTOMER INFORMATION");
+        viewCustomerInformation.setFont(new Font("Verdana", Font.PLAIN, 20));
+        manageMarket = new JButton("MANAGE MARKET");
+        manageMarket.setFont(new Font("Verdana", Font.PLAIN, 20));
+        sendMessage = new JButton("SEND MESSAGE");
+        sendMessage.setFont(new Font("Verdana", Font.PLAIN, 20));
+        logout = new JButton("LOGOUT");
+        logout.setFont(new Font("Verdana", Font.PLAIN, 20));
         peopleDao = new PeopleDao();
-        container.setLayout(null);
         manager = manager1;
         int personID = manager.getID();
         String name = manager.getFirstName()+" "+manager.getLastName();
         showIDLabel = new JLabel(personID + "");
+        showIDLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
         showNameLabel = new JLabel(name + "");
-        setLocationAndSize();
+        showNameLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+        //setLocationAndSize();
         addComponentsToContainer();
         addActionEvent();
 
     }
 
-    private void setLocationAndSize() {
-        personIDLabel.setBounds(100, 50, 100, 30);
-        nameLabel.setBounds(300, 50, 100, 30);
-        showIDLabel.setBounds(100,100,100,30);
-        showNameLabel.setBounds(300,100,100,30);
-        manageAccount.setBounds(150,250,200,40);
-        viewCustomerInformation.setBounds(150, 400, 200, 40);
-        manageMarket.setBounds(150, 500, 200, 40);
-        sendMessage.setBounds(150, 600, 200, 40);
-        logout.setBounds(800,50,100,30);
-    }
+
 
     private void addComponentsToContainer(){
-        container.add(personIDLabel);
-        container.add(nameLabel);
-        container.add(showIDLabel);
-        container.add(showNameLabel);
-        container.add(manageAccount);
-        container.add(viewCustomerInformation);
-        container.add(manageMarket);
-        //container.add(sendMessage);
-        container.add(logout);
+        topPanel.add(customerAccountLabel,BorderLayout.NORTH);
+        customerInfoPanel.add(personIDLabel);
+        customerInfoPanel.add(showIDLabel);
+        customerInfoPanel.add(nameLabel);
+        customerInfoPanel.add(showNameLabel);
+        topPanel.add(customerInfoPanel,BorderLayout.SOUTH);
+        buttonPanel.add(manageAccount);
+        buttonPanel.add(viewCustomerInformation);
+        buttonPanel.add(manageMarket);
+        buttonPanel.add(sendMessage);
+        buttonPanel.add(logout);
+        container.add(topPanel,BorderLayout.NORTH);
+        container.add(buttonPanel);
         add(container);
     }
 

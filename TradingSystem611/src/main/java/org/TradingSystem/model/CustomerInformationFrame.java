@@ -1,7 +1,6 @@
 package org.TradingSystem.model;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,14 +21,30 @@ public class CustomerInformationFrame extends JFrame implements ActionListener {
     private Manager manager;
     private PeopleDao peopleDao;
     private TradingAccountDao tDao;
+    private JPanel topPanel;
+    private JLabel customerAccountLabel;
+    private JPanel buttonPanel;
+    private JPanel bottomPanel;
     public CustomerInformationFrame(Manager manager){
         setTitle("Customer Information Page");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocation(10,10);
-        setSize(1000,600);
+        setSize(1000,800);
         setVisible(true);
         setResizable(false);
         container = new JPanel();
+        container.setPreferredSize(new Dimension(1000,800));
+        topPanel = new JPanel(new BorderLayout());
+        customerAccountLabel = new JLabel("CUSTOMER INFORMATION",JLabel.CENTER);
+        customerAccountLabel.setFont(new Font("Verdana", Font.PLAIN, 50));
+        customerAccountLabel.setPreferredSize(new Dimension(1000,170));
+        customerAccountLabel.setForeground(Color.red);
+        customerAccountLabel.setOpaque(true);
+        customerAccountLabel.setBackground(Color.blue);
+
+        buttonPanel = new JPanel(new GridLayout(4,1));
+        bottomPanel = new JPanel(new GridLayout(1,2));
+        bottomPanel.setPreferredSize(new Dimension(1000,550));
         peopleDao = new PeopleDao();
         tDao = new TradingAccountDao();
         this.manager = manager;
@@ -46,37 +61,46 @@ public class CustomerInformationFrame extends JFrame implements ActionListener {
         }
         customerTable = new JTable(data,columnNames);
         customerTable.setRowHeight(30);
-        customerTable.setPreferredScrollableViewportSize(new Dimension(300,300));
+        //customerTable.setPreferredScrollableViewportSize(new Dimension(300,300));
         scrollPane = new JScrollPane(customerTable);
-        container.setLayout(new BorderLayout());
-        viewAllActiveAccounts = new JButton("View All Active Accounts");
-        viewAccountsOver10KProfit = new JButton("View Accounts Over 10K Profit");
-        back = new JButton("Back");
-        sendMessage = new JButton("Send Message");
+        viewAllActiveAccounts = new JButton("VIEW ALL ACTIVE ACCOUNTS");
+        viewAllActiveAccounts.setFont(new Font("Verdana", Font.PLAIN, 20));
+        viewAccountsOver10KProfit = new JButton("VIEW ACCOUNTS OVER 10K PROFIT");
+        viewAccountsOver10KProfit.setFont(new Font("Verdana", Font.PLAIN, 20));;
+        back = new JButton("BACK");
+        back.setFont(new Font("Verdana", Font.PLAIN, 20));
+
+        sendMessage = new JButton("SEND MESSAGE");
+        sendMessage.setFont(new Font("Verdana", Font.PLAIN, 20));
         //customerIDLabel = new JLabel("Customer ID");
         //customerIDTextField = new JTextField();
 
 
-        setLocationAndSize();
         addComponentsToContainer();
         addActionEvent();
     }
 
-    private void setLocationAndSize(){
-        //customerIDLabel.setBounds(100,500,50,40);
-        //customerIDTextField.setBounds(170,500,100,40);
-        viewAllActiveAccounts.setBounds(300,450,300,40);
-        viewAccountsOver10KProfit.setBounds(300,500,300,40);
-        sendMessage.setBounds(300,400,300,40);
-        back.setBounds(800,500,100,40);
-    }
+//    private void setLocationAndSize(){
+//        //customerIDLabel.setBounds(100,500,50,40);
+//        //customerIDTextField.setBounds(170,500,100,40);
+//
+//        viewAllActiveAccounts.setBounds(300,450,300,40);
+//        viewAccountsOver10KProfit.setBounds(300,500,300,40);
+//        sendMessage.setBounds(300,400,300,40);
+//        back.setBounds(800,500,100,40);
+//    }
 
     private void addComponentsToContainer(){
-        container.add(viewAllActiveAccounts);
-        container.add(viewAccountsOver10KProfit);
-        container.add(back);
-        container.add(sendMessage);
-        container.add(scrollPane, BorderLayout.CENTER);
+        topPanel.add(customerAccountLabel);
+        buttonPanel.add(viewAccountsOver10KProfit);
+        buttonPanel.add(viewAllActiveAccounts);
+        buttonPanel.add(sendMessage);
+        buttonPanel.add(back);
+        bottomPanel.add(buttonPanel);
+        bottomPanel.add(scrollPane);
+
+        container.add(topPanel,BorderLayout.NORTH);
+        container.add(bottomPanel,BorderLayout.CENTER);
         add(container);
     }
 
@@ -102,7 +126,9 @@ public class CustomerInformationFrame extends JFrame implements ActionListener {
                 Customer customer = list.get(row);
                 List<TradingAccount> list1 = tDao.getAllActive(customer.getID());
                 new ViewAccountsFrame(customer, list1);
+                dispose();
             }
+
         }else if(e.getSource() == viewAccountsOver10KProfit){
             // Select a row and view the accounts over 10K profit of the customer
             int row = customerTable.getSelectedRow();
@@ -120,7 +146,9 @@ public class CustomerInformationFrame extends JFrame implements ActionListener {
                     }
                 }
                 new ViewAccountsFrame(customer, list2);
+                dispose();
             }
+
         }else if(e.getSource() == sendMessage){
             // Select a row and send message to the customer
             int row = customerTable.getSelectedRow();

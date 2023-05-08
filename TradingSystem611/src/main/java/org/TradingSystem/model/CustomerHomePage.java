@@ -64,7 +64,7 @@ public class CustomerHomePage extends JFrame implements ActionListener {
         blockedButton = new JButton("BLOCKED");
         blockedButton.setFont(new Font("Verdana", Font.PLAIN, 25));
 
-        requestButton = new JButton("REQUEST");
+        requestButton = new JButton("REQUEST ACCOUNT");
 
         requestButton.setFont(new Font("Verdana", Font.PLAIN, 25));
 

@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ViewAccountsFrame extends JFrame implements ActionListener {
@@ -24,7 +23,7 @@ public class ViewAccountsFrame extends JFrame implements ActionListener {
         setTitle("Customer Accounts");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocation(10,10);
-        setSize(1000,600);
+        setSize(1000,800);
         setVisible(true);
         setResizable(false);
         container = new JPanel();
@@ -89,8 +88,9 @@ public class ViewAccountsFrame extends JFrame implements ActionListener {
                 TradingAccount account = list.get(row);
                 // View Positions of selected account
                 new ViewPositionsFrame(account);
+                
             }
-        }else if(e.getSource() == viewPositions){
+        }else if(e.getSource() == viewTransactions){
             int row = accountTable.getSelectedRow();
             if(row < 0){
                 JOptionPane.showMessageDialog(this, "Please choose a row!");
