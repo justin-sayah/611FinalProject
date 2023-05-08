@@ -53,12 +53,14 @@ public class BlockSellPage extends JFrame implements ActionListener{
 
             container = new JPanel();
             container.setPreferredSize(new Dimension(1000,800));
+            //create sell label for the page
             customerSellLabel = new JLabel("CUSTOMER SELL CENTER",JLabel.CENTER);
             customerSellLabel.setFont(new Font("Verdana", Font.PLAIN, 40));
             customerSellLabel.setForeground(Color.red);
             customerSellLabel.setOpaque(true);
             customerSellLabel.setBackground(Color.blue);
             customerSellLabel.setPreferredSize(new Dimension(1000,200));
+
             backButton = new JButton("BACK");
             sellButton = new JButton("SELL");
             viewTransactions = new JButton("VIEW TRANSACTIONS");
@@ -66,7 +68,7 @@ public class BlockSellPage extends JFrame implements ActionListener{
             costLabel = new JTextField();
 
 
-
+            //layout the UI
             JPanel topPanel = new JPanel(new GridLayout(1,4));
             topPanel.setPreferredSize(new Dimension(1000,40));
             accountIDLabel = new JLabel("Account Number: ");
@@ -139,7 +141,7 @@ public class BlockSellPage extends JFrame implements ActionListener{
             sellAndButtonPanel.add(sellPanel, BorderLayout.NORTH);
             sellAndButtonPanel.add(buttonPanel, BorderLayout.CENTER);
 
-// Create a new panel for the right panel and the sell/button panel
+            // Create a new panel for the right panel and the sell/button panel
             JPanel center = new JPanel(new BorderLayout());
             center.add(rightPanel, BorderLayout.CENTER);
             center.add(sellAndButtonPanel, BorderLayout.EAST);
@@ -152,7 +154,7 @@ public class BlockSellPage extends JFrame implements ActionListener{
             addActionEvent();
 
             setVisible(true);
-
+//when user input a quantity number, it generates the cost in the label automatically
             quantityChangeListener = new DocumentListener() {
 
                 @Override

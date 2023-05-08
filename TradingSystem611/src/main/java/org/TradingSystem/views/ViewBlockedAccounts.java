@@ -1,7 +1,7 @@
 package org.TradingSystem.views;
 
-import org.TradingSystem.database.TradingAccountDao;
-import org.TradingSystem.model.*;
+import org.TradingSystem.model.Customer;
+import org.TradingSystem.model.TradingAccount;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -22,10 +22,6 @@ public class ViewBlockedAccounts extends JFrame implements ActionListener {
 
 
     private DefaultTableModel blockedAccountsTableModel;
-    private int accountNum;
-    private String name;
-    private int customerId;
-    private TradingAccountDao tradingAccountDao;
 
     private final JLabel accountID;
     private final JLabel accountLabel;
