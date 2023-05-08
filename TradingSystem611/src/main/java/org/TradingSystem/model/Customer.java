@@ -1,6 +1,8 @@
 package org.TradingSystem.model;
 
 
+import org.TradingSystem.database.PeopleDao;
+
 import java.util.List;
 
 public class Customer extends Person {

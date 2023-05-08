@@ -1,5 +1,7 @@
 package org.TradingSystem.model;
 
+import org.TradingSystem.database.MessageDao;
+
 import java.util.*;
 
 /*
@@ -13,7 +15,7 @@ public class MessageCenter {
     private MessageDao messageDao;
 
     private MessageCenter(){
-        messageDao = new MessageDao();
+        messageDao = MessageDao.getInstance();
     }
 
     public static MessageCenter getInstance() {

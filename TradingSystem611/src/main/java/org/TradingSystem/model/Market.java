@@ -1,5 +1,8 @@
 package org.TradingSystem.model;
 
+import org.TradingSystem.database.MessageDao;
+import org.TradingSystem.database.PeopleDao;
+
 import java.util.*;
 
 public class Market {
@@ -16,43 +19,43 @@ public class Market {
     }
 
     public List<Stock> getAllStocks(){
-        return StockDao.getInstance().getAllStocks();
+        return PeopleDao.StockDao.getInstance().getAllStocks();
     }
 
     public List<Stock> getAllUnblockedStocks(){
-        return StockDao.getInstance().getAllUnblockedStocks();
+        return PeopleDao.StockDao.getInstance().getAllUnblockedStocks();
     }
 
     public List<Stock> getAllBlockedStocks(){
-        return StockDao.getInstance().getAllBlockedStocks();
+        return PeopleDao.StockDao.getInstance().getAllBlockedStocks();
     }
 
     public void blockStock(int stockId){
-        StockDao.getInstance().blockStock(stockId);
+        PeopleDao.StockDao.getInstance().blockStock(stockId);
     }
 
     public void blockStock(Stock stock){
-        StockDao.getInstance().blockStock(stock);
+        PeopleDao.StockDao.getInstance().blockStock(stock);
     }
 
     public void unblockStock(int stockId){
-        StockDao.getInstance().unblockStock(stockId);
+        PeopleDao.StockDao.getInstance().unblockStock(stockId);
     }
 
     public void unblockStock(Stock stock){
-        StockDao.getInstance().unblockStock(stock);
+        PeopleDao.StockDao.getInstance().unblockStock(stock);
     }
 
     public boolean isBlocked(int stockId){
-        return StockDao.getInstance().isBlocked(stockId);
+        return PeopleDao.StockDao.getInstance().isBlocked(stockId);
     }
 
     public Stock getStock(int stockId){
-        return StockDao.getInstance().getStock(stockId);
+        return PeopleDao.StockDao.getInstance().getStock(stockId);
     }
 
     public List<Stock> getStocksByTickerSearch(String searchString){
-        return StockDao.getInstance().getStocks(searchString);
+        return PeopleDao.StockDao.getInstance().getStocks(searchString);
     }
 
     public void updatePrice(int stockId, double price){
@@ -64,7 +67,7 @@ public class Market {
     public static void updateAllPricesRealLife(){
         List<Stock> stocks = getInstance().getAllStocks();
         for(Stock stock: stocks){
-            Double realPrice = PriceFetcher.fetchPrice(stock.getTicker());
+            Double realPrice = MessageDao.PriceFetcher.fetchPrice(stock.getTicker());
             if(realPrice != null){
                 stock.changePrice(realPrice);
             }
@@ -72,8 +75,8 @@ public class Market {
     }
 
     public static void updatePriceRealLife(int stockId){
-        Stock stock = StockDao.getInstance().getStock(stockId);
-        Double realPrice = PriceFetcher.fetchPrice(stock.getTicker());
+        Stock stock = PeopleDao.StockDao.getInstance().getStock(stockId);
+        Double realPrice = MessageDao.PriceFetcher.fetchPrice(stock.getTicker());
         if(realPrice != null){
             stock.changePrice(realPrice);
         }
@@ -82,18 +85,18 @@ public class Market {
 
     //make sure that update is pushed to stock in either table
     public void updateStock(Stock stock){
-        StockDao.getInstance().updateStock(stock);
+        PeopleDao.StockDao.getInstance().updateStock(stock);
     }
     public void deleteStock(int stockId){
-        StockDao.getInstance().deleteStock(stockId);
+        PeopleDao.StockDao.getInstance().deleteStock(stockId);
     }
     public void deleteStock(Stock stock){
-        StockDao.getInstance().deleteStock(stock);
+        PeopleDao.StockDao.getInstance().deleteStock(stock);
     }
     public void addStock(String name, double price, String ticker){
-        StockDao.getInstance().addStock(name, price, ticker);
+        PeopleDao.StockDao.getInstance().addStock(name, price, ticker);
     }
     public void addStock(Stock stock){
-        StockDao.getInstance().addStock(stock);
+        PeopleDao.StockDao.getInstance().addStock(stock);
     }
 }

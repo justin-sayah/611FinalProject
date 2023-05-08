@@ -1,5 +1,8 @@
 package org.TradingSystem.model;
 
+import org.TradingSystem.database.PeopleDao;
+import org.TradingSystem.database.PositionDao;
+
 import java.util.List;
 
 public class    Position {
@@ -71,7 +74,7 @@ public class    Position {
     }
 
     public static void buy(int accountId, int stockId, int quantity){
-        StockDao sDao = new StockDao();
+        PeopleDao.StockDao sDao = PeopleDao.StockDao.getInstance();
         double price = sDao.getStock(stockId).getPrice() * quantity;
 
         //check if this can be afforded
@@ -226,7 +229,7 @@ public class    Position {
 
     public void refresh(){
         //get the latest stock price
-        setCurrentPrice(StockDao.getInstance().getStock(securityId).getPrice());
+        setCurrentPrice(PeopleDao.StockDao.getInstance().getStock(securityId).getPrice());
         calculateUnrealizedPl();
         PositionDao pDao = PositionDao.getInstance();
         pDao.pushToDB(this);

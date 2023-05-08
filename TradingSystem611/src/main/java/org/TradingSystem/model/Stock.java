@@ -1,5 +1,7 @@
 package org.TradingSystem.model;
 
+import org.TradingSystem.database.PeopleDao;
+
 public class Stock extends Security{
 
     private String ticker;
@@ -26,12 +28,12 @@ public class Stock extends Security{
     public void changePrice(double price) {
         super.changePrice(price);
         //push change to DB
-        StockDao.getInstance().updateStock(this);
+        PeopleDao.StockDao.getInstance().updateStock(this);
     }
 
     //gets price from database, whatever it may be
     public void refresh(){
-        StockDao.getInstance().refreshStock(this);
+        PeopleDao.StockDao.getInstance().refreshStock(this);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package org.TradingSystem.model;
 
-import java.util.ArrayList;
+import org.TradingSystem.database.PeopleDao;
+import org.TradingSystem.database.TradingAccountDao;
+
 import java.util.List;
 
 public class Manager extends Person {

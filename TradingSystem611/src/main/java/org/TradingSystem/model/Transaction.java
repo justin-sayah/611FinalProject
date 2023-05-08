@@ -1,5 +1,7 @@
 package org.TradingSystem.model;
 
+import org.TradingSystem.database.TransactionDao;
+
 import java.util.List;
 
 public class Transaction {
@@ -22,7 +24,7 @@ public class Transaction {
     }
 
     public void updateTransaction(){
-        TransactionDao tDao = new TransactionDao();
+        TransactionDao tDao = TransactionDao.getInstance();
         tDao.updateTransaction(this);
     }
 

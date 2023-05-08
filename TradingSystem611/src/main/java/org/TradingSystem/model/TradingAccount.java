@@ -1,5 +1,7 @@
 package org.TradingSystem.model;
 
+import org.TradingSystem.database.TradingAccountDao;
+
 import java.util.List;
 
 public class TradingAccount  implements Account{
