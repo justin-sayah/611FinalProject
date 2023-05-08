@@ -39,9 +39,9 @@ public class ViewBlockedAccounts extends JFrame implements ActionListener {
         setSize(1000,800);
         setResizable(false);
         container = new JPanel();
-        customerName = new JLabel(customer.getLastName()+","+customer.getLastName());
+        customerName = new JLabel(customer.getLastName()+","+customer.getFirstName());
         customerLabel = new JLabel("Customer Name: ");
-        accountLabel = new JLabel("Account Number: ");
+        accountLabel = new JLabel("Customer ID: ");
         accountID = new JLabel(String.valueOf(customer.getID()));
 
         blockAccountLabel = new JLabel("BLOCK ACCOUNT CENTER",JLabel.CENTER);
