@@ -1,5 +1,11 @@
 package org.TradingSystem.model;
 
+/*
+Date: 5/8/23
+Class: CS611 Final Project
+Author: 611 Team 4
+Purpose: Abstract class holding data and behaviors of all People classes and subclasses
+ */
 abstract class Person {
     private int id;
     private String firstName;

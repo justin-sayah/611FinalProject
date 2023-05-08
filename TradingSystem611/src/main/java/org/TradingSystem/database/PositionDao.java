@@ -39,7 +39,7 @@ public class PositionDao {
             ResultSet rs = pstmt.executeQuery();
 
             LinkedList<Position> positions = new LinkedList<Position>();
-            PeopleDao.StockDao sDao = PeopleDao.StockDao.getInstance();
+            StockDao sDao = StockDao.getInstance();
             while(rs.next()){
                 Position fetched = new Position(accountId, rs.getInt("securityId"),rs.getInt("quantity"),
                         rs.getInt("quantitySold"), sDao.getStock(rs.getInt("securityId")).getPrice(),
@@ -121,7 +121,7 @@ public class PositionDao {
 
             ResultSet rs = pstmt.executeQuery();
 
-            PeopleDao.StockDao sDao = PeopleDao.StockDao.getInstance();
+            StockDao sDao = StockDao.getInstance();
             if(rs.next()){
                 Position fetched = new Position(accountId, securityId ,rs.getInt("quantity"),
                         rs.getInt("quantitySold"), sDao.getStock(rs.getInt("securityId")).getPrice(),

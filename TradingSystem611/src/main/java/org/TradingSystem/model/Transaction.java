@@ -4,6 +4,12 @@ import org.TradingSystem.database.TransactionDao;
 
 import java.util.List;
 
+/*
+Date: 5/8/23
+Class: CS611 Final Project
+Author: Justin Sayah, jsayah@bu.edu
+Purpose: Object representing data and behaviors of TradingAccounts. implements Account
+ */
 public class Transaction {
     private int transactionId;
     private int accountId;
@@ -23,6 +29,7 @@ public class Transaction {
         setAction(action);
     }
 
+    //pushes any changes to this specific Transaction to persistent storage
     public void updateTransaction(){
         TransactionDao tDao = TransactionDao.getInstance();
         tDao.updateTransaction(this);

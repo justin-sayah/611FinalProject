@@ -1,7 +1,13 @@
 package org.TradingSystem.model;
 
-import org.TradingSystem.database.PeopleDao;
+import org.TradingSystem.database.StockDao;
 
+/*
+Date: 5/8/23
+Class: CS611 Final Project
+Author: 611 Team 4
+Purpose: Object representing data and behaviors of Stocks
+ */
 public class Stock extends Security{
 
     private String ticker;
@@ -24,16 +30,17 @@ public class Stock extends Security{
         return super.getPrice();
     }
 
+    //changes price of this Stock and pushes change to DB
     @Override
     public void changePrice(double price) {
         super.changePrice(price);
         //push change to DB
-        PeopleDao.StockDao.getInstance().updateStock(this);
+        StockDao.getInstance().updateStock(this);
     }
 
     //gets price from database, whatever it may be
     public void refresh(){
-        PeopleDao.StockDao.getInstance().refreshStock(this);
+        StockDao.getInstance().refreshStock(this);
     }
 
     @Override

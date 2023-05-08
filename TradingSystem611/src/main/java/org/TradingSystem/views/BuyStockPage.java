@@ -1,6 +1,7 @@
 package org.TradingSystem.views;
 
 import org.TradingSystem.database.PeopleDao;
+import org.TradingSystem.database.StockDao;
 import org.TradingSystem.model.*;
 
 import javax.swing.*;
@@ -29,7 +30,7 @@ public class BuyStockPage extends JFrame implements ActionListener {
     private BuyConfirmPopup buyPopup;
 
     private JTextField costLabel;
-    private PeopleDao.StockDao stockDao;
+    private StockDao stockDao;
     private DefaultTableModel stockTableModel;
     private DocumentListener quantityChangeListener;
 
@@ -48,7 +49,7 @@ public class BuyStockPage extends JFrame implements ActionListener {
         setLocation(10,10);
         setSize(1000,800);
         setResizable(false);
-        stockDao = PeopleDao.StockDao.getInstance();
+        stockDao = StockDao.getInstance();
         container = new JPanel();
         container.setPreferredSize(new Dimension(1000,800));
         accountID = new JLabel(String.valueOf(tradingAccount.getAccountNumber()));

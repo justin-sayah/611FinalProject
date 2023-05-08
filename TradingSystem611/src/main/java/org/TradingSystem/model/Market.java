@@ -2,9 +2,17 @@ package org.TradingSystem.model;
 
 import org.TradingSystem.database.MessageDao;
 import org.TradingSystem.database.PeopleDao;
+import org.TradingSystem.database.PriceFetcher;
+import org.TradingSystem.database.StockDao;
 
 import java.util.*;
 
+/*
+Date: 5/8/23
+Class: CS611 Final Project
+Author: 611 Team 4
+Purpose: Object representing Market, allows for manipulation of Stocks persistently, singleton pattern as to not overload DB connections
+ */
 public class Market {
     public static Market market;
 
@@ -19,43 +27,43 @@ public class Market {
     }
 
     public List<Stock> getAllStocks(){
-        return PeopleDao.StockDao.getInstance().getAllStocks();
+        return StockDao.getInstance().getAllStocks();
     }
 
     public List<Stock> getAllUnblockedStocks(){
-        return PeopleDao.StockDao.getInstance().getAllUnblockedStocks();
+        return StockDao.getInstance().getAllUnblockedStocks();
     }
 
     public List<Stock> getAllBlockedStocks(){
-        return PeopleDao.StockDao.getInstance().getAllBlockedStocks();
+        return StockDao.getInstance().getAllBlockedStocks();
     }
 
     public void blockStock(int stockId){
-        PeopleDao.StockDao.getInstance().blockStock(stockId);
+        StockDao.getInstance().blockStock(stockId);
     }
 
     public void blockStock(Stock stock){
-        PeopleDao.StockDao.getInstance().blockStock(stock);
+        StockDao.getInstance().blockStock(stock);
     }
 
     public void unblockStock(int stockId){
-        PeopleDao.StockDao.getInstance().unblockStock(stockId);
+        StockDao.getInstance().unblockStock(stockId);
     }
 
     public void unblockStock(Stock stock){
-        PeopleDao.StockDao.getInstance().unblockStock(stock);
+        StockDao.getInstance().unblockStock(stock);
     }
 
     public boolean isBlocked(int stockId){
-        return PeopleDao.StockDao.getInstance().isBlocked(stockId);
+        return StockDao.getInstance().isBlocked(stockId);
     }
 
     public Stock getStock(int stockId){
-        return PeopleDao.StockDao.getInstance().getStock(stockId);
+        return StockDao.getInstance().getStock(stockId);
     }
 
     public List<Stock> getStocksByTickerSearch(String searchString){
-        return PeopleDao.StockDao.getInstance().getStocks(searchString);
+        return StockDao.getInstance().getStocks(searchString);
     }
 
     public void updatePrice(int stockId, double price){
@@ -67,16 +75,19 @@ public class Market {
     public static void updateAllPricesRealLife(){
         List<Stock> stocks = getInstance().getAllStocks();
         for(Stock stock: stocks){
-            Double realPrice = MessageDao.PriceFetcher.fetchPrice(stock.getTicker());
+            Double realPrice = PriceFetcher.fetchPrice(stock.getTicker());
             if(realPrice != null){
                 stock.changePrice(realPrice);
             }
         }
     }
 
+    /*
+    updates the price of a stock from IRL price if the Ticker of that stock matches with a real stock
+     */
     public static void updatePriceRealLife(int stockId){
-        Stock stock = PeopleDao.StockDao.getInstance().getStock(stockId);
-        Double realPrice = MessageDao.PriceFetcher.fetchPrice(stock.getTicker());
+        Stock stock = StockDao.getInstance().getStock(stockId);
+        Double realPrice = PriceFetcher.fetchPrice(stock.getTicker());
         if(realPrice != null){
             stock.changePrice(realPrice);
         }
@@ -85,18 +96,18 @@ public class Market {
 
     //make sure that update is pushed to stock in either table
     public void updateStock(Stock stock){
-        PeopleDao.StockDao.getInstance().updateStock(stock);
+        StockDao.getInstance().updateStock(stock);
     }
     public void deleteStock(int stockId){
-        PeopleDao.StockDao.getInstance().deleteStock(stockId);
+        StockDao.getInstance().deleteStock(stockId);
     }
     public void deleteStock(Stock stock){
-        PeopleDao.StockDao.getInstance().deleteStock(stock);
+        StockDao.getInstance().deleteStock(stock);
     }
     public void addStock(String name, double price, String ticker){
-        PeopleDao.StockDao.getInstance().addStock(name, price, ticker);
+        StockDao.getInstance().addStock(name, price, ticker);
     }
     public void addStock(Stock stock){
-        PeopleDao.StockDao.getInstance().addStock(stock);
+        StockDao.getInstance().addStock(stock);
     }
 }

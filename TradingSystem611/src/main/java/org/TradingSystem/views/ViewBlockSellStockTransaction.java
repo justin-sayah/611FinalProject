@@ -1,6 +1,7 @@
 package org.TradingSystem.views;
 
 import org.TradingSystem.database.PeopleDao;
+import org.TradingSystem.database.StockDao;
 import org.TradingSystem.model.Stock;
 import org.TradingSystem.model.Transaction;
 
@@ -36,7 +37,7 @@ public class ViewBlockSellStockTransaction extends  JDialog{
 
             List<Transaction> transactions = Transaction.getAllTransactionsByStock(stockId);
             for (Transaction transaction : transactions) {
-                Stock stock = PeopleDao.StockDao.getInstance().getStock(transaction.getStockId());
+                Stock stock = StockDao.getInstance().getStock(transaction.getStockId());
                 String[] transactionData = {
                         stock.getName(),
                         transaction.getTimestamp(),

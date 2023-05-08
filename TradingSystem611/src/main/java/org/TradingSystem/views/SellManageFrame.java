@@ -1,6 +1,7 @@
 package org.TradingSystem.views;
 
 import org.TradingSystem.database.PeopleDao;
+import org.TradingSystem.database.StockDao;
 import org.TradingSystem.model.*;
 
 import javax.swing.*;
@@ -28,7 +29,7 @@ public class SellManageFrame extends JFrame implements ActionListener {
     private final DefaultTableModel stockTableModel;
     private final TradingAccount tradingAccount;
 
-    private final PeopleDao.StockDao stockDao;
+    private final StockDao stockDao;
     private ViewSellStockTransaction viewSellStockTransaction;
     private JButton refreshButton;
 
@@ -40,7 +41,7 @@ public class SellManageFrame extends JFrame implements ActionListener {
 
     public SellManageFrame(String name, TradingAccount tradingAccount) {
         this.tradingAccount = tradingAccount;
-        this.stockDao = PeopleDao.StockDao.getInstance();
+        this.stockDao = StockDao.getInstance();
 
         setTitle("Sell/Manage Stocks");
         setSize(1000, 800);

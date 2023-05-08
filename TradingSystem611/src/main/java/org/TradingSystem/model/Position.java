@@ -1,10 +1,17 @@
 package org.TradingSystem.model;
 
-import org.TradingSystem.database.PeopleDao;
 import org.TradingSystem.database.PositionDao;
+import org.TradingSystem.database.StockDao;
 
 import java.util.List;
 
+
+/*
+Date: 5/8/23
+Class: CS611 Final Project
+Author: 611 Team 4
+Purpose: Object representing data and behaviors of Positions
+ */
 public class    Position {
     protected int accountID;
     protected int quantity;
@@ -32,6 +39,7 @@ public class    Position {
     }
 
     //attempts to sell quantityToSell, updates PL and DB, and if quantity is 0, closes position in DB
+    //recalculates PL for both Position and Account and pushes changes as well
     public void sell(int quantityToSell){
         if(quantityToSell <= 0){
             System.out.println("Can't sell 0 or less shares.");
@@ -45,10 +53,6 @@ public class    Position {
 
             double net = quantityToSell * currentPrice;
             TradingAccount account = TradingAccount.getAccount(accountID);
-
-            //take current realized pl and add net from transaction to it, remove it from unrealized
-//            account.setRealizedProfitLoss(account.getRealizedProfitLoss() + net);
-//            account.setUnrealizedProfitLoss(account.getUnrealizedProfitLoss() - net);
 
             //add amount into balance
             account.deposit(net);
@@ -69,12 +73,15 @@ public class    Position {
         }
     }
 
+    //wrapper method for the static buy method
     public void buy(int stockId, int quantity){
         Position.buy(accountID, stockId, quantity);
     }
 
+    //attempts to buy quantity units of stockId stock if it can be afforded.
+    //will create a new Position or add to a current Position as necessary
     public static void buy(int accountId, int stockId, int quantity){
-        PeopleDao.StockDao sDao = PeopleDao.StockDao.getInstance();
+        StockDao sDao = StockDao.getInstance();
         double price = sDao.getStock(stockId).getPrice() * quantity;
 
         //check if this can be afforded
@@ -122,6 +129,8 @@ public class    Position {
         refresh();
     }
 
+    //does a recalculation of unrealizedPL based on current stock prices and pushes changes to DB
+    //also updates Account for this Customer
     private void calculateUnrealizedPl(){
         //recalculate any changes in PL and push changes to account
 
@@ -145,6 +154,8 @@ public class    Position {
         //push position change to the DB also
     }
 
+    //does a recalculation of realizedPL based on current stock prices and pushes changes to DB
+    //also updates Account for this Customer
     private void calculateRealizedPl(){
         //recalculate any changes in PL and push changes to account
         double newRealized = (quantitySold) * (currentPrice - avgBuyPrice);
@@ -227,14 +238,16 @@ public class    Position {
         return pDao.getAllPositions(accountId);
     }
 
+    //pushes this Position back into the DB, after updating stock price and PL
     public void refresh(){
         //get the latest stock price
-        setCurrentPrice(PeopleDao.StockDao.getInstance().getStock(securityId).getPrice());
+        setCurrentPrice(StockDao.getInstance().getStock(securityId).getPrice());
         calculateUnrealizedPl();
         PositionDao pDao = PositionDao.getInstance();
         pDao.pushToDB(this);
     }
 
+    //refreshes any Position into the DB
     public static void refresh(Position position){
         PositionDao pDao = PositionDao.getInstance();
         pDao.updatePosition(position);

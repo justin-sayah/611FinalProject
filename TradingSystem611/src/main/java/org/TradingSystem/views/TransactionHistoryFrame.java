@@ -72,6 +72,7 @@
 package org.TradingSystem.views;
 
 import org.TradingSystem.database.PeopleDao;
+import org.TradingSystem.database.StockDao;
 import org.TradingSystem.model.*;
 
 import javax.swing.*;
@@ -133,7 +134,7 @@ public class TransactionHistoryFrame extends JFrame {
         // Get transactions for account and add them to the table
         transactions = Transaction.getAllTransactionsByAccount(tradingAccount.getAccountNumber());
         for (Transaction transaction : transactions) {
-            Stock stock = PeopleDao.StockDao.getInstance().getStock(transaction.getStockId());
+            Stock stock = StockDao.getInstance().getStock(transaction.getStockId());
             String[] transactionData = {
                     stock.getName(),
                     transaction.getTimestamp(),

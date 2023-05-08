@@ -1,6 +1,7 @@
 package org.TradingSystem.views;
 
 import org.TradingSystem.database.PeopleDao;
+import org.TradingSystem.database.StockDao;
 import org.TradingSystem.model.*;
 
 import javax.swing.*;
@@ -32,7 +33,7 @@ public class ManageMarketFrame extends JFrame implements ActionListener {
     private JTable stockTable;
     private JScrollPane scrollPane;
     private Manager manager;
-    private PeopleDao.StockDao stockDao;
+    private StockDao stockDao;
     private JLabel stockLabel;
     private JPanel topPanel;
     private JPanel bottomPanel;
@@ -74,7 +75,7 @@ public class ManageMarketFrame extends JFrame implements ActionListener {
         updatePriceRealLife.setFont(new Font("Verdana", Font.PLAIN, 20));
         priceTextField = new JTextField();
         priceTextField.setPreferredSize(new Dimension(100,40));
-        stockDao = PeopleDao.StockDao.getInstance();
+        stockDao = StockDao.getInstance();
 
         topPanel = new JPanel(new BorderLayout());
         topPanel.setPreferredSize(new Dimension(1000,170));

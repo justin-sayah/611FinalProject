@@ -1,6 +1,7 @@
 package org.TradingSystem.views;
 
 import org.TradingSystem.database.PeopleDao;
+import org.TradingSystem.database.StockDao;
 import org.TradingSystem.model.Manager;
 import org.TradingSystem.model.Stock;
 
@@ -17,7 +18,7 @@ public class ViewBlockedStocksFrame extends JFrame implements ActionListener {
     private final JButton unblock;
     private JScrollPane scrollPane;
     private JTable stockTable;
-    private PeopleDao.StockDao stockDao;
+    private StockDao stockDao;
     private Manager manager;
 
     public ViewBlockedStocksFrame(Manager manager){
@@ -29,7 +30,7 @@ public class ViewBlockedStocksFrame extends JFrame implements ActionListener {
         container = new JPanel();
         back = new JButton("Back");
         unblock = new JButton("Unblock");
-        stockDao = PeopleDao.StockDao.getInstance();
+        stockDao = StockDao.getInstance();
         this.manager = manager;
         Object[] columnNames = {"ID", "Name", "Price", "Ticker"};
         List<Stock> list = stockDao.getAllBlockedStocks();

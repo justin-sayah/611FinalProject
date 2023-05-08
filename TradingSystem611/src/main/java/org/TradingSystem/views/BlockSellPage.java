@@ -1,6 +1,7 @@
 package org.TradingSystem.views;
 
 import org.TradingSystem.database.PeopleDao;
+import org.TradingSystem.database.StockDao;
 import org.TradingSystem.model.*;
 
 import javax.swing.*;
@@ -28,7 +29,7 @@ public class BlockSellPage extends JFrame implements ActionListener{
         private final JTable stockTable;
         private final DefaultTableModel stockTableModel;
         private final TradingAccount tradingAccount;
-        private final PeopleDao.StockDao stockDao;
+        private final StockDao stockDao;
         private ViewBlockSellStockTransaction viewBlockSellStockTransaction;
         private JButton refreshButton;
 
@@ -42,7 +43,7 @@ public class BlockSellPage extends JFrame implements ActionListener{
         public BlockSellPage(String name, TradingAccount tradingAccount) {
             customer = PeopleDao.getInstance().getCustomer(tradingAccount.getPersonId());
             this.tradingAccount = tradingAccount;
-            this.stockDao = PeopleDao.StockDao.getInstance();
+            this.stockDao = StockDao.getInstance();
 
             setTitle("Sell/Manage Stocks");
             setSize(1000, 800);

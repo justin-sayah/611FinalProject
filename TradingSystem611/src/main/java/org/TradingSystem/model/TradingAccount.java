@@ -4,6 +4,12 @@ import org.TradingSystem.database.TradingAccountDao;
 
 import java.util.List;
 
+/*
+Date: 5/8/23
+Class: CS611 Final Project
+Author: Justin Sayah, jsayah@bu.edu
+Purpose: Object representing data and behaviors of TradingAccounts. implements Account
+ */
 public class TradingAccount  implements Account{
     protected int accountNumber;
     protected int personId;
@@ -11,7 +17,7 @@ public class TradingAccount  implements Account{
     protected double unrealizedProfitLoss;
     protected double realizedProfitLoss;
 
-//Trading Account constructor with two variables: Account Number and Balance
+    //Trading Account constructor with two variables: Account Number and Balance
     public TradingAccount(int accountNumber) {
         this.accountNumber = accountNumber;
         balance = 0.0;
@@ -82,10 +88,18 @@ public class TradingAccount  implements Account{
         TradingAccountDao.getInstance().refreshTradingAccount(this);
     }
 
+    public List<Position> getAllPositions(){
+        return Position.getAllPositions(accountNumber);
+    }
+
+
+    //BEGINNING OF ALL STATIC WRAPPER METHODS FOR PERSISTENT STORAGE FETCHING AND SAVING
+
     public static TradingAccount getAccount(int accountId){
         return TradingAccountDao.getInstance().getAccount(accountId);
     }
 
+    //fetches an account without pushing it back to the DB
     public static TradingAccount getAccountNoRefresh(int accountId){
         return TradingAccountDao.getInstance().getAccountNoRefresh(accountId);
     }
@@ -109,7 +123,8 @@ public class TradingAccount  implements Account{
     public static List<TradingAccount> getAllPending(int customerId){
         return TradingAccountDao.getInstance().getAllPending(customerId);
     }
-    
+
+    //pushes changes to this TradingAccount to persistent storage
     public static void update(TradingAccount tradingAccount){
         TradingAccountDao.getInstance().update(tradingAccount);
     }
@@ -135,21 +150,19 @@ public class TradingAccount  implements Account{
         return TradingAccountDao.getInstance().getAllBlocked();
     }
 
+    //gets all blocked accounts for a specific user
     public static List<TradingAccount> getAllBlocked(int customerId){
         return TradingAccountDao.getInstance().getAllBlocked(customerId);
     }
 
+    //checks if an account is blocked or not
     public static boolean isBlocked(int accountId){
         return TradingAccountDao.getInstance().isBlocked(accountId);
     }
 
+    //checks if an account is blocked or not
     public static boolean isBlocked(TradingAccount tradingAccount){
         return TradingAccountDao.getInstance().isBlocked(tradingAccount);
-    }
-
-
-    public List<Position> getAllPositions(){
-        return Position.getAllPositions(accountNumber);
     }
 
     public String getType(){

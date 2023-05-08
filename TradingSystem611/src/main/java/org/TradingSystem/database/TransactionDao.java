@@ -9,6 +9,12 @@ import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
+/*
+Date: 4/22/23
+Class: CS611 Final Project
+Author: Justin Sayah, jsayah@bu.edu
+Purpose: Data Access Object to perform CRUD on Transactions across DB
+ */
 public class TransactionDao {
     private Connection connection;
     public static TransactionDao transactionDao;
