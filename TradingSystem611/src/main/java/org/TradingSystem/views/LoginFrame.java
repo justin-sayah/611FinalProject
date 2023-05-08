@@ -119,7 +119,7 @@ public class LoginFrame extends JFrame implements ActionListener {
                 // replace this with your own code to check the username and password
                 if(userText.equals("admin") && pwdText.equals("password")){
                     JOptionPane.showMessageDialog(this, "Login Successful");
-                    Manager manager = new Manager(0000,"ad","min","admin","password","1","1");
+                    Manager manager = new Manager(0000,"Administrator","611","admin","password","1","1");
                     new ManagerFrame(manager);
                     dispose();
                     // replace this with your own code to open the main menu or dashboard

@@ -59,6 +59,7 @@ public class CustomerInformationFrame extends JFrame implements ActionListener {
         this.manager = manager;
         Object[] columnNames = {"ID", "FirstName","LastName","Username", "Dob", "SSN"};
         List<Customer> list = peopleDao.getAllCustomers();
+        System.out.println(list);;
         Object[][] data = new Object[list.size()][6];
         for(int i = 0; i < list.size(); i++){
             data[i][0] = list.get(i).getID();

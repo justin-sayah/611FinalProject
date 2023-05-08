@@ -1,6 +1,7 @@
 package org.TradingSystem.views;
 
 import org.TradingSystem.database.PeopleDao;
+import org.TradingSystem.database.StockDao;
 import org.TradingSystem.model.Market;
 
 import javax.swing.*;
@@ -19,7 +20,7 @@ public class AddStockFrame extends JFrame implements ActionListener {
     private final JTextField stockIDTextField;
     private final JButton close;
     private final JButton add;
-    private PeopleDao.StockDao stockDao;
+    private StockDao stockDao;
 
     public AddStockFrame(){
         setTitle("Add Stock");
@@ -38,7 +39,7 @@ public class AddStockFrame extends JFrame implements ActionListener {
         priceTextField = new JTextField();
         tickerTextField = new JTextField();
         stockIDTextField = new JTextField();
-        stockDao = PeopleDao.StockDao.getInstance();
+        stockDao = StockDao.getInstance();
         container.setLayout(null);
         setLocationAndSize();
         addComponentsToContainer();

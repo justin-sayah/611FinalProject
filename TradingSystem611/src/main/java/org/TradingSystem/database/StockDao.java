@@ -1,6 +1,8 @@
 package org.TradingSystem.database;
 
+import org.TradingSystem.model.Position;
 import org.TradingSystem.model.Stock;
+import org.TradingSystem.model.TradingAccount;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -201,13 +203,11 @@ public class StockDao {
     public void unblockStock(int stockId){
         //get the stock
         Stock toUnblock = getStock(stockId);
-
         unblockStock(toUnblock);
     }
 
     //removes a stock from both blocked and unblocked list
     public void deleteStock(int stockId){
-        //TODO: Sell positions for all people that own this stock
         deleteFromUnblocked(stockId);
         deleteFromBlocked(stockId);
     }

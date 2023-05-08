@@ -56,9 +56,8 @@ public class PeopleDao {
 
             PreparedStatement pstmt = connection.prepareStatement(sql);
 
-
             ResultSet rs = pstmt.executeQuery();
-            if(rs.next()){
+            while(rs.next()){
                 list.add(new Customer(rs.getInt("personId"), rs.getString("firstName"), rs.getString("lastName"),rs.getString("username"), rs.getString("password"), rs.getString("dob"), rs.getString("ssn")));
             }
         }catch (Exception e){
