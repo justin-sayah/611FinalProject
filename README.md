@@ -100,7 +100,11 @@ SignUpFrame.java - a GUI for customer to sign up.
 
 Stock.java - a class represents a stock in the trading system.
 
+StockTradingSystem.java - launches the trading program by creating a login frame on the screen
+
 StockDao.java - DAO that provides methods for interacting with the database of Stock objects.
+
+SystemDriver.java - holds concise main to launch the program within StockTradingSystem
 
 Tradeable.java - an interface provides a contract for objects that can be traded.
 
@@ -147,4 +151,4 @@ eg.
         public static final String APIKEY = "d13a1526bcmsh558712f77440570p17c1e7jsn80e883da4050";
         public static final String APIHOST = "telescope-stocks-options-price-charts.p.rapidapi.com";
    }
-2. Build project, run the LoginFrame.java and play around.
+2. Build project, run the SystemDriver.java and play around.
