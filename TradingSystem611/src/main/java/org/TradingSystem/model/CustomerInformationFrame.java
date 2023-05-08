@@ -125,7 +125,7 @@ public class CustomerInformationFrame extends JFrame implements ActionListener {
             }else {
                 Customer customer = list.get(row);
                 List<TradingAccount> list1 = tDao.getAllActive(customer.getID());
-                new ViewAccountsFrame(customer, list1);
+                new ViewAccountsFrame(manager,customer, list1);
                 dispose();
             }
 
@@ -145,7 +145,7 @@ public class CustomerInformationFrame extends JFrame implements ActionListener {
                         list2.add(account);
                     }
                 }
-                new ViewAccountsFrame(customer, list2);
+                new ViewAccountsFrame(manager,customer, list2);
                 dispose();
             }
 

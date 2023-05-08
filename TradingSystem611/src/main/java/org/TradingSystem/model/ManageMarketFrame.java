@@ -31,34 +31,65 @@ public class ManageMarketFrame extends JFrame implements ActionListener {
     private Manager manager;
     private PeopleDao peopleDao;
     private StockDao stockDao;
+    private JLabel stockLabel;
+    private JPanel topPanel;
+    private JPanel bottomPanel;
+    private JPanel buttonPanel;
 
     public ManageMarketFrame(Manager manager){
         setTitle("Manage Unblocked Stocks");
         setVisible(true);
         setLocation(10,10);
-        setSize(1000,600);
+        setSize(1000,800);
         setResizable(false);
         container = new JPanel();
+        container.setPreferredSize(new Dimension(1000,800));
         personIDLabel = new JLabel("PersonID");
         nameLabel = new JLabel("Name");
-        priceLabel = new JLabel("Price");
+        priceLabel = new JLabel("CHANGE PRICE");
+        priceLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
         stockInfoLabel = new JLabel("Stock Info");
         this.manager = manager;
         int personID = manager.getID();
         String name = manager.getFirstName()+" "+manager.getLastName();
         showIDLabel = new JLabel(personID + "");
         showNameLabel = new JLabel(name + "");
-        back = new JButton("Back");
-        update = new JButton("Update Price");
-        addStock = new JButton("Add Stock");
-        delete = new JButton("Delete");
-        blockStock = new JButton("Block");
-        viewBlockedStocks = new JButton("View Blocked Stocks");
-        refresh = new JButton("Refresh");
-        updatePriceRealLife = new JButton("Update Price Real Life");
+        back = new JButton("BACK");
+        back.setFont(new Font("Verdana", Font.PLAIN, 20));
+        update = new JButton("UPDATE PRICE");
+        update.setFont(new Font("Verdana", Font.PLAIN, 15));
+        addStock = new JButton("ADD STOCK");
+        addStock.setFont(new Font("Verdana", Font.PLAIN, 20));
+        delete = new JButton("DELETE");
+        delete.setFont(new Font("Verdana", Font.PLAIN, 20));
+        blockStock = new JButton("BLOCK");
+        blockStock.setFont(new Font("Verdana", Font.PLAIN, 20));
+        viewBlockedStocks = new JButton("VIEW BLOCKED STOCKS");
+        viewBlockedStocks.setFont(new Font("Verdana", Font.PLAIN, 20));
+        refresh = new JButton("REFRESH");
+        refresh.setFont(new Font("Verdana", Font.PLAIN, 20));
+        updatePriceRealLife = new JButton("UPDATE REAL STOCK PRICE");
+        updatePriceRealLife.setFont(new Font("Verdana", Font.PLAIN, 20));
         priceTextField = new JTextField();
+        priceTextField.setPreferredSize(new Dimension(100,40));
         peopleDao = new PeopleDao();
         stockDao = new StockDao();
+
+        topPanel = new JPanel(new BorderLayout());
+        topPanel.setPreferredSize(new Dimension(1000,170));
+
+        stockLabel = new JLabel("STOCK CENTER",JLabel.CENTER);
+        stockLabel.setFont(new Font("Verdana", Font.PLAIN, 50));
+        stockLabel.setPreferredSize(new Dimension(1000,150));
+        stockLabel.setForeground(Color.red);
+        stockLabel.setOpaque(true);
+        stockLabel.setBackground(Color.blue);
+
+        buttonPanel = new JPanel(new GridLayout(7,1));
+        buttonPanel.setPreferredSize(new Dimension(300,550));
+        bottomPanel = new JPanel(new GridLayout(1,2));
+        bottomPanel.setPreferredSize(new Dimension(1000,550));
+
         Object[] columnNames = {"ID", "Name", "Price", "Ticker"};
         List<Stock> list = Market.getInstance().getAllUnblockedStocks();
 
@@ -75,7 +106,7 @@ public class ManageMarketFrame extends JFrame implements ActionListener {
         //stockTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         scrollPane = new JScrollPane(stockTable);
         scrollPane.setSize(new Dimension(600,200));
-        container.setLayout(new BorderLayout());
+
         setLocationAndSize();
         addComponentsToContainer();
         addActionEvent();
@@ -83,39 +114,33 @@ public class ManageMarketFrame extends JFrame implements ActionListener {
     }
 
     private void setLocationAndSize(){
-        personIDLabel.setBounds(100, 50, 100, 30);
-        nameLabel.setBounds(300, 50, 100, 30);
-        showIDLabel.setBounds(100,100,100,30);
-        showNameLabel.setBounds(300,100,100,30);
-        stockInfoLabel.setBounds(450, 210, 100, 40);
-        refresh.setBounds(650,500,100,30);
-        priceLabel.setBounds(100,500,50,30);
-        priceTextField.setBounds(170,500,100,30);
-        update.setBounds(280,500,150,30);
-        delete.setBounds(100,300,100,40);
-        back.setBounds(800,500,100,30);
-        addStock.setBounds(800,350,100,40);
-        blockStock.setBounds(100,250,100,40);
-        viewBlockedStocks.setBounds(700,300,200,40);
-        updatePriceRealLife.setBounds(100,350,200,40);
+        topPanel.add(stockLabel);
+
+        buttonPanel.add(blockStock);
+        buttonPanel.add(delete);
+        buttonPanel.add(updatePriceRealLife);
+        buttonPanel.add(viewBlockedStocks);
+        buttonPanel.add(addStock);
+        buttonPanel.add(refresh);
+        buttonPanel.add(back);
+
+        JPanel right = new JPanel(new BorderLayout());
+        JPanel updatePrice = new JPanel(new GridLayout(1,3));
+        updatePrice.add(priceLabel);
+        updatePrice.add(priceTextField);
+        updatePrice.add(update);
+        right.add(scrollPane,BorderLayout.NORTH);
+        right.add(updatePrice,BorderLayout.SOUTH);
+        bottomPanel.add(buttonPanel);
+        bottomPanel.add(right);
+//
 
     }
 
     private void addComponentsToContainer(){
 
-        container.add(stockInfoLabel);
-        container.add(priceLabel);
-        container.add(priceTextField);
-        container.add(addStock);
-        container.add(update);
-        container.add(delete);
-        container.add(back);
-        container.add(blockStock);
-        container.add(viewBlockedStocks);
-        container.add(refresh);
-        container.add(updatePriceRealLife);
-        container.add(scrollPane, BorderLayout.CENTER);
-
+       container.add(topPanel);
+       container.add(bottomPanel);
         add(container);
     }
 

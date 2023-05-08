@@ -29,7 +29,7 @@ public class ManagerFrame extends JFrame implements ActionListener {
         setTitle("Manager");
         setVisible(true);
         setLocation(10,10);
-        setSize(1000,700);
+        setSize(1000,800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         container = new JPanel();
@@ -88,7 +88,7 @@ public class ManagerFrame extends JFrame implements ActionListener {
         buttonPanel.add(manageAccount);
         buttonPanel.add(viewCustomerInformation);
         buttonPanel.add(manageMarket);
-        buttonPanel.add(sendMessage);
+//        buttonPanel.add(sendMessage);
         buttonPanel.add(logout);
         container.add(topPanel,BorderLayout.NORTH);
         container.add(buttonPanel);
@@ -115,9 +115,9 @@ public class ManagerFrame extends JFrame implements ActionListener {
         }else if(e.getSource() == manageMarket){
             new ManageMarketFrame(manager);
             dispose();
-        }else if(e.getSource() == sendMessage){
-            //new SendMessageFrame(manager);
-            dispose();
+//        }else if(e.getSource() == sendMessage){
+//            new SendMessageFrame(manager);
+//            dispose();
         }else if(e.getSource() == logout){
             new LoginFrame();
             this.setVisible(false);

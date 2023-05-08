@@ -37,8 +37,8 @@ public class ApproveAccountFrame extends JFrame {
         // Person information panel
         JPanel personInfoPanel = new JPanel();
         personInfoPanel.setLayout(new GridLayout(2, 1));
-        personIdLabel = new JLabel("Person ID: " + manager.getID());
-        personNameLabel = new JLabel("Person Name: " + manager.getFirstName() + " " + manager.getLastName());
+        personIdLabel = new JLabel("Manager ID: " + manager.getID());
+        personNameLabel = new JLabel("Manager Name: " + manager.getFirstName()+ manager.getLastName());
         personInfoPanel.add(personIdLabel);
         personInfoPanel.add(personNameLabel);
         container.add(personInfoPanel, BorderLayout.WEST);
@@ -54,20 +54,20 @@ public class ApproveAccountFrame extends JFrame {
 
         // Approve button panel
         JPanel approveButtonPanel = new JPanel();
-        approveButton = new JButton("Approve");
+        approveButton = new JButton("APPROVE");
         approveButton.setEnabled(false);
         approveButtonPanel.add(approveButton);
         container.add(approveButtonPanel, BorderLayout.SOUTH);
 
         // Refresh button panel
         JPanel refreshButtonPanel = new JPanel();
-        refreshButton = new JButton("Refresh");
+        refreshButton = new JButton("REFRESH");
         refreshButtonPanel.add(refreshButton);
         container.add(refreshButtonPanel, BorderLayout.NORTH);
 
         // Back button panel
         JPanel backButtonPanel = new JPanel();
-        backButton = new JButton("Back");
+        backButton = new JButton("BACK");
         backButtonPanel.add(backButton);
         container.add(backButtonPanel, BorderLayout.EAST);
 

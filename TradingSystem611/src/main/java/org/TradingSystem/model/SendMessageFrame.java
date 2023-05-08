@@ -1,6 +1,7 @@
 package org.TradingSystem.model;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,17 +20,25 @@ public class SendMessageFrame extends JFrame implements ActionListener {
     private Manager manager;
     private Customer customer;
     private PeopleDao dao;
+    private JLabel messageLabel;
+    private JPanel customerInfoPanel;
+    private JPanel topPanel;
+    private JLabel customerName;
+    private JPanel buttonPanel;
+    private JPanel bottomPanel;
 
     public SendMessageFrame(Manager manager, Customer customer){
         setTitle("Send Message");
         setVisible(true);
         setLocation(10,10);
-        setSize(1000,600);
+        setSize(1000,800);
         setResizable(false);
         container = new JPanel();
-        personIDLabel = new JLabel("PersonID");
-        nameLabel = new JLabel("Name");
-        customerIDLabel = new JLabel("CustomerID");
+        container.setPreferredSize(new Dimension(1000,800));
+        personIDLabel = new JLabel("   PersonID:");
+        nameLabel = new JLabel("Name:");
+        customerIDLabel = new JLabel("CustomerID:");
+        customerName = new JLabel(customer.getLastName()+", "+customer.getFirstName());
         textLabel = new JLabel("Text");
         int personID = manager.getID();
         String name = manager.getFirstName()+" "+manager.getLastName();
@@ -37,41 +46,61 @@ public class SendMessageFrame extends JFrame implements ActionListener {
         showNameLabel = new JLabel(name + "");
         personIDTextField = new JTextField();
         textTextField = new JTextField();
-        back = new JButton("Back");
-        send = new JButton("Send");
+        textTextField.setPreferredSize(new Dimension(400,400));
+        back = new JButton("BACK");
+        back.setFont(new Font("Verdana", Font.PLAIN, 20));
+        send = new JButton("SEND");
+        send.setFont(new Font("Verdana", Font.PLAIN, 20));
         this.manager = manager;
         this.customer = customer;
         dao = new PeopleDao();
-        container.setLayout(null);
+
+        topPanel = new JPanel(new BorderLayout());
+        topPanel.setPreferredSize(new Dimension(1000,170));
+        customerInfoPanel = new JPanel(new GridLayout(1,6));
+        customerInfoPanel.setPreferredSize(new Dimension(1000,20));
+
+        messageLabel = new JLabel("SEND MESSAGE",JLabel.CENTER);
+        messageLabel.setFont(new Font("Verdana", Font.PLAIN, 50));
+        messageLabel.setPreferredSize(new Dimension(1000,150));
+        messageLabel.setForeground(Color.red);
+        messageLabel.setOpaque(true);
+        messageLabel.setBackground(Color.blue);
+
+        buttonPanel = new JPanel(new GridLayout(2,1));
+        bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.setPreferredSize(new Dimension(550,550));
+
         setLocationAndSize();
         addComponentsToContainer();
         addActionEvent();
     }
 
     private void setLocationAndSize(){
-        personIDLabel.setBounds(100, 50, 100, 30);
-        nameLabel.setBounds(300, 50, 100, 30);
-        showIDLabel.setBounds(100,100,100,30);
-        showNameLabel.setBounds(300,100,100,30);
-        customerIDLabel.setBounds(150, 150, 100, 40);
-        textLabel.setBounds(150,200,50,40);
-        personIDTextField.setBounds(260,150,200,40);
-        textTextField.setBounds(210,200,600,40);
-        back.setBounds(800,50,100,40);
-        send.setBounds(800,500,100,40);
+        customerInfoPanel.add(personIDLabel);
+        customerInfoPanel.add(showIDLabel);
+        customerInfoPanel.add(nameLabel);
+        customerInfoPanel.add(showNameLabel);
+        customerInfoPanel.add(customerIDLabel);
+        customerInfoPanel.add(customerName);
+
+        topPanel.add(messageLabel,BorderLayout.NORTH);
+        topPanel.add(customerInfoPanel,BorderLayout.SOUTH);
+
+        buttonPanel.add(send);
+        buttonPanel.add(back);
+        JPanel textField = new JPanel();
+        textField.add(textLabel, BorderLayout.NORTH);
+        textField.add(textTextField, BorderLayout.CENTER);
+        bottomPanel.add(buttonPanel, BorderLayout.SOUTH);
+        bottomPanel.add(textField,BorderLayout.CENTER);
+
     }
 
     private void addComponentsToContainer(){
-        container.add(personIDLabel);
-        container.add(nameLabel);
-        container.add(showIDLabel);
-        container.add(showNameLabel);
-        container.add(textLabel);
-        //container.add(customerIDLabel);
-        //container.add(personIDTextField);
-        container.add(textTextField);
-        container.add(send);
-        container.add(back);
+
+        container.add(topPanel);
+        container.add(bottomPanel);
         add(container);
     }
 

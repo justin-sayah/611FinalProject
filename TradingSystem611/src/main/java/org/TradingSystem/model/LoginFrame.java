@@ -20,8 +20,7 @@ public class LoginFrame extends JFrame implements ActionListener {
 
     private final JButton forgetPasswordButton;
 
-//    private JRadioButton radioButton1;
-//    private JPanel panel1;
+
 
 
     public LoginFrame() {

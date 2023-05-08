@@ -14,8 +14,9 @@ public class ViewPositionsFrame extends JFrame implements ActionListener {
     private final JButton back;
     private List<Position> list;
 
+
     public ViewPositionsFrame(TradingAccount account){
-        setTitle("Customer Accounts");
+        setTitle("Positions Center");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocation(10,10);
         setSize(1000,600);
@@ -23,6 +24,9 @@ public class ViewPositionsFrame extends JFrame implements ActionListener {
         setResizable(false);
         container = new JPanel();
         tDao = new TradingAccountDao();
+
+
+
 
         Object[] columnNames = {"AccountId","SecurityId","Quantity","QuantitySold","CurrentPrice","AvgBuyPrice","RealizedProfitLoss","UnrealizedProfitLoss"};
         this.list = account.getAllPositions();
@@ -42,7 +46,7 @@ public class ViewPositionsFrame extends JFrame implements ActionListener {
         positionTable.setPreferredScrollableViewportSize(new Dimension(300,300));
         scrollPane = new JScrollPane(positionTable);
         container.setLayout(new BorderLayout());
-        back = new JButton("Back");
+        back = new JButton("BACK");
 
         setLocationAndSize();
         addComponentsToContainer();

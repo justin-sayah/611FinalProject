@@ -21,8 +21,7 @@ public class ManageAccountFrame extends JFrame implements ActionListener {
 
     public ManageAccountFrame(Manager manager) {
         setTitle("Manage Account");
-        setSize(800, 600);
-        setLocationRelativeTo(null);
+        setSize(1000, 800);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
 

@@ -18,8 +18,15 @@ public class ViewAccountsFrame extends JFrame implements ActionListener {
     private final JButton viewTransactions;
     private Customer customer;
     private List<TradingAccount> list;
+    private Manager manager;
+    private JLabel customerAccountLabel;
+    private JPanel customerInfoPanel;
+    private  JPanel topPanel;
+    private  JPanel bottomPanel;
+    private  JPanel buttonPanel;
 
-    public ViewAccountsFrame(Customer customer, List<TradingAccount> list) {
+    public ViewAccountsFrame(Manager manager,Customer customer, List<TradingAccount> list) {
+        this.manager = manager;
         setTitle("Customer Accounts");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocation(10,10);
@@ -27,11 +34,28 @@ public class ViewAccountsFrame extends JFrame implements ActionListener {
         setVisible(true);
         setResizable(false);
         container = new JPanel();
+        container.setPreferredSize(new Dimension(1000,800));
         tDao = new TradingAccountDao();
         this.customer = customer;
 
 
-        Object[] columnNames = {"Account Number", "CustomerID","Type","Balance", "RealizedProfitLoss"};
+        topPanel = new JPanel(new BorderLayout());
+        topPanel.setPreferredSize(new Dimension(1000,170));
+        customerInfoPanel = new JPanel(new GridLayout(1,4));
+        customerInfoPanel.setPreferredSize(new Dimension(1000,20));
+        customerAccountLabel = new JLabel("ACCOUNTS CENTER",JLabel.CENTER);
+        customerAccountLabel.setFont(new Font("Verdana", Font.PLAIN, 50));
+        customerAccountLabel.setPreferredSize(new Dimension(1000,150));
+        customerAccountLabel.setForeground(Color.red);
+        customerAccountLabel.setOpaque(true);
+        customerAccountLabel.setBackground(Color.blue);
+
+        buttonPanel = new JPanel(new GridLayout(3,1));
+        bottomPanel = new JPanel(new GridLayout(1,2));
+        bottomPanel.setPreferredSize(new Dimension(1000,550));
+
+
+        Object[] columnNames = {"Account Number", "CustomerID","Type","Balance", "RealizedPL"};
         this.list = list;
         Object[][] data = new Object[list.size()][5];
         for(int i = 0; i < list.size(); i++){
@@ -45,10 +69,12 @@ public class ViewAccountsFrame extends JFrame implements ActionListener {
         accountTable.setRowHeight(40);
         accountTable.setPreferredScrollableViewportSize(new Dimension(300,300));
         scrollPane = new JScrollPane(accountTable);
-        container.setLayout(new BorderLayout());
-        back = new JButton("Back");
-        viewPositions = new JButton("View Positions");
-        viewTransactions = new JButton("View Transactions");
+        back = new JButton("BACK");
+        back.setFont(new Font("Verdana", Font.PLAIN, 20));
+        viewPositions = new JButton("VIEW POSITIONS");
+        viewPositions.setFont(new Font("Verdana", Font.PLAIN, 20));
+        viewTransactions = new JButton("VIEW TRANSACTIONS");
+        viewTransactions.setFont(new Font("Verdana", Font.PLAIN, 20));
 
         setLocationAndSize();
         addComponentsToContainer();
@@ -57,16 +83,19 @@ public class ViewAccountsFrame extends JFrame implements ActionListener {
     }
 
     private void setLocationAndSize(){
-        back.setBounds(450,500,100,40);
-        viewPositions.setBounds(350,400,300,40);
-        viewTransactions.setBounds(350,450,300,40);
+
+        topPanel.add(customerAccountLabel);
+        buttonPanel.add(viewPositions);
+        buttonPanel.add(viewTransactions);
+        buttonPanel.add(back);
+
+        bottomPanel.add(buttonPanel);
+        bottomPanel.add(scrollPane);
     }
 
     private void addComponentsToContainer(){
-        container.add(back);
-        container.add(viewPositions);
-        container.add(viewTransactions);
-        container.add(scrollPane, BorderLayout.CENTER);
+        container.add(topPanel);
+        container.add(bottomPanel);
         add(container);
     }
 
@@ -79,6 +108,7 @@ public class ViewAccountsFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == back){
+            new CustomerInformationFrame(manager);
             dispose();
         }else if(e.getSource() == viewPositions){
             int row = accountTable.getSelectedRow();
@@ -88,7 +118,7 @@ public class ViewAccountsFrame extends JFrame implements ActionListener {
                 TradingAccount account = list.get(row);
                 // View Positions of selected account
                 new ViewPositionsFrame(account);
-                
+
             }
         }else if(e.getSource() == viewTransactions){
             int row = accountTable.getSelectedRow();

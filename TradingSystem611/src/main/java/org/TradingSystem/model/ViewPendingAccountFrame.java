@@ -36,8 +36,8 @@ public class ViewPendingAccountFrame extends JFrame {
         // Person information panel
         JPanel personInfoPanel = new JPanel();
         personInfoPanel.setLayout(new GridLayout(2, 1));
-        personIdLabel = new JLabel("Person ID: " + manager.getID());
-        personNameLabel = new JLabel("Person Name: " + manager.getFirstName() + " " + manager.getLastName());
+        personIdLabel = new JLabel("Manager ID: " + manager.getID());
+        personNameLabel = new JLabel("Manager Name: " + manager.getFirstName()+ manager.getLastName());
         personInfoPanel.add(personIdLabel);
         personInfoPanel.add(personNameLabel);
         container.add(personInfoPanel, BorderLayout.WEST);
@@ -53,9 +53,9 @@ public class ViewPendingAccountFrame extends JFrame {
 
         // Back button panel
         JPanel backButtonPanel = new JPanel();
-        backButton = new JButton("Back");
+        backButton = new JButton("BACK");
         backButtonPanel.add(backButton);
-        container.add(backButtonPanel, BorderLayout.NORTH);
+        container.add(backButtonPanel, BorderLayout.EAST);
 
         // Create checkboxes for each account
         checkBoxes = new ArrayList<>();

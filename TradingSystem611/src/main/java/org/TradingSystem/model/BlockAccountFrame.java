@@ -41,9 +41,9 @@ public class BlockAccountFrame extends JFrame {
 
         // Person information panel
         JPanel personInfoPanel = new JPanel();
-        personInfoPanel.setLayout(new GridLayout(1, 4));
-        personIdLabel = new JLabel("Customer ID: ");
-        personNameLabel = new JLabel("Customer Name: ");
+        personInfoPanel.setLayout(new GridLayout(2, 1));
+        personIdLabel = new JLabel("Manager ID: " +manager.getID());
+        personNameLabel = new JLabel("Manager Name: "+manager.getFirstName()+ manager.getLastName());
         personInfoPanel.add(personIdLabel);
         personInfoPanel.add(personNameLabel);
         container.add(personInfoPanel, BorderLayout.WEST);
@@ -64,7 +64,7 @@ public class BlockAccountFrame extends JFrame {
 
         // Block button panel
         JPanel blockButtonPanel = new JPanel();
-        blockButton = new JButton("Block");
+        blockButton = new JButton("BLOCK");
         blockButton.setEnabled(false); // disable the block button by default
         blockButtonPanel.add(blockButton);
         container.add(blockButtonPanel, BorderLayout.SOUTH);
@@ -73,15 +73,15 @@ public class BlockAccountFrame extends JFrame {
 
         // Refresh button panel
         JPanel refreshButtonPanel = new JPanel();
-        refreshButton = new JButton("Refresh");
+        refreshButton = new JButton("REFRESH");
         refreshButtonPanel.add(refreshButton);
-        container.add(refreshButtonPanel, BorderLayout.EAST);
+        container.add(refreshButtonPanel, BorderLayout.NORTH);
 
         // Back button panel
         JPanel backButtonPanel = new JPanel();
-        backButton = new JButton("Back");
+        backButton = new JButton("BACK");
         backButtonPanel.add(backButton);
-        container.add(backButtonPanel, BorderLayout.WEST);
+        container.add(backButtonPanel, BorderLayout.EAST);
 
         // Create checkboxes for each account
         checkBoxes = new ArrayList<>();
