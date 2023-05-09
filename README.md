@@ -38,7 +38,7 @@ ApproveAccountFrame.java - a GUI frame for the bank manager to approve pending t
 
 BlockAccountFrame.java - a GUI frame that allows a manager to block accounts for a customer.
 
-BlockedAccountPage.java -
+BlockedAccountPage.java - display all blocked trading accounts.
 
 BlockedAccountsWithdrawPopup.java - a pop-up window that allows the user to withdraw funds from a blocked trading account.
 
