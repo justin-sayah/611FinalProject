@@ -142,7 +142,9 @@ WithdrawPopup.java - a pop-up window that allows the user to withdraw funds from
 # How To Compile
 #After unzip the 611FinalProject.zip, navigate to src/main/java/org/TradingSystem/model directory
 （Recommend to run it in IntelliJ for full functions）
-1. Write a Config file that define the DBPATH, APIKEY and APIHOST
+NOTE: THERE ARE EXTERNAL DEPENDENCIES THAT MUST BE DOWNLOADED, FOR THIS REASON MUST RUN IN INTELLIJ AS MAVEN PROJECT SO MAVEN CAN GET DEPENDENCIES
+
+1. Write a Config file that define the DBPATH, APIKEY and APIHOST titled Config.java and put it in the database directory
 
 eg. 
 
@@ -151,4 +153,5 @@ eg.
         public static final String APIKEY = "d13a1526bcmsh558712f77440570p17c1e7jsn80e883da4050";
         public static final String APIHOST = "telescope-stocks-options-price-charts.p.rapidapi.com";
    }
-2. Build project, run the SystemDriver.java and play around.
+   
+2. Open Project as Maven Project, build Maven Project, run main in SystemDriver.java
