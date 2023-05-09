@@ -34,7 +34,6 @@ public class    Position {
 
         //make sure calculations on PL are up-to-date
         calculateUnrealizedPl();
-        calculateRealizedPl();
         refresh();
     }
 
@@ -61,7 +60,7 @@ public class    Position {
             TradingAccount.update(account);
 
             //recalculate local pl
-            calculateRealizedPl();
+            calculateRealizedPl(quantityToSell);
             calculateUnrealizedPl();
 
             //push position update
@@ -82,8 +81,8 @@ public class    Position {
     //will create a new Position or add to a current Position as necessary
     public static void buy(int accountId, int stockId, int quantity){
         StockDao sDao = StockDao.getInstance();
-        double price = sDao.getStock(stockId).getPrice() * quantity;
-
+        double stockPrice = sDao.getStock(stockId).getPrice();
+        double price = stockPrice * quantity;
         //check if this can be afforded
         TradingAccount account = TradingAccount.getAccount(accountId);
         if(account.getBalance() < price){
@@ -94,7 +93,7 @@ public class    Position {
         //if it not a new position, add to position
         Position p1 = getPosition(accountId, stockId);
         if(p1 == null){
-            p1 = new Position(accountId, stockId, quantity, 0, price, price,0, 0);
+            p1 = new Position(accountId, stockId, quantity, 0, stockPrice, stockPrice,0, 0);
             PositionDao pdao = PositionDao.getInstance();
             pdao.createPosition(p1);
         }
@@ -120,9 +119,8 @@ public class    Position {
             return;
         }
 
+        avgBuyPrice = ((quantity * avgBuyPrice)+(quantityToAdd * getCurrentPrice())) / (quantity + quantityToAdd);
         quantity += quantityToAdd;
-        avgBuyPrice = (avgBuyPrice + newPurchaseCost)/(quantity);
-
 
         calculateUnrealizedPl();
 
@@ -156,15 +154,12 @@ public class    Position {
 
     //does a recalculation of realizedPL based on current stock prices and pushes changes to DB
     //also updates Account for this Customer
-    private void calculateRealizedPl(){
+    private void calculateRealizedPl(int quantitySold){
         //recalculate any changes in PL and push changes to account
         double newRealized = (quantitySold) * (currentPrice - avgBuyPrice);
-        double difference = newRealized - realizedProfitLoss;
-        realizedProfitLoss = newRealized;
-
 
         TradingAccount account = TradingAccount.getAccountNoRefresh(accountID);
-        account.setRealizedProfitLoss(account.getRealizedProfitLoss() + difference);
+        account.setRealizedProfitLoss(account.getRealizedProfitLoss() + newRealized);
         TradingAccount.update(account);
     }
 
